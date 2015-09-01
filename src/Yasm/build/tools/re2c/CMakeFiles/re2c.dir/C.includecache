@@ -1,0 +1,200 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../tools/re2c/basics.h
+
+../tools/re2c/dfa.h
+stdio.h
+-
+tools/re2c/re.h
+../tools/re2c/tools/re2c/re.h
+
+../tools/re2c/globals.h
+tools/re2c/basics.h
+../tools/re2c/tools/re2c/basics.h
+
+../tools/re2c/ins.h
+tools/re2c/basics.h
+../tools/re2c/tools/re2c/basics.h
+
+../tools/re2c/parse.h
+stdio.h
+-
+tools/re2c/scanner.h
+../tools/re2c/tools/re2c/scanner.h
+tools/re2c/re.h
+../tools/re2c/tools/re2c/re.h
+
+../tools/re2c/parser.h
+
+../tools/re2c/re.h
+stdio.h
+-
+tools/re2c/token.h
+../tools/re2c/tools/re2c/token.h
+tools/re2c/ins.h
+../tools/re2c/tools/re2c/ins.h
+
+../tools/re2c/scanner.h
+stdio.h
+-
+tools/re2c/token.h
+../tools/re2c/tools/re2c/token.h
+
+../tools/re2c/substr.h
+stdio.h
+-
+stdlib.h
+-
+tools/re2c/basics.h
+../tools/re2c/tools/re2c/basics.h
+
+../tools/re2c/token.h
+substr.h
+../tools/re2c/substr.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/actions.c
+time.h
+-
+string.h
+-
+stdio.h
+-
+ctype.h
+-
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+tools/re2c/parse.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parse.h
+tools/re2c/dfa.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/dfa.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/code.c
+windows.h
+-
+io.h
+-
+stdlib.h
+-
+string.h
+-
+ctype.h
+-
+tools/re2c/substr.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/substr.h
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+tools/re2c/dfa.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/dfa.h
+tools/re2c/parse.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parse.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/dfa.c
+stdlib.h
+-
+ctype.h
+-
+string.h
+-
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+tools/re2c/substr.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/substr.h
+tools/re2c/dfa.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/dfa.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/dfa.h
+stdio.h
+-
+tools/re2c/re.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/re.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/globals.h
+tools/re2c/basics.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/basics.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/main.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/globals.h
+parse.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/parse.h
+dfa.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/dfa.h
+mbo_getopt.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/mbo_getopt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/mbo_getopt.c
+stdio.h
+-
+string.h
+-
+assert.h
+-
+stdlib.h
+-
+mbo_getopt.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/mbo_getopt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/mbo_getopt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/parse.h
+stdio.h
+-
+tools/re2c/scanner.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/scanner.h
+tools/re2c/re.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/re.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/parser.c
+time.h
+-
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+tools/re2c/parse.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parse.h
+tools/re2c/parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/scanner.c
+stdlib.h
+-
+string.h
+-
+tools/re2c/scanner.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/scanner.h
+tools/re2c/parse.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parse.h
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+tools/re2c/parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/substr.c
+string.h
+-
+tools/re2c/substr.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/substr.h
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/translate.c
+tools/re2c/globals.h
+/home/lovewei/Project/yasm/new yasm/yasm/tools/re2c/tools/re2c/globals.h
+

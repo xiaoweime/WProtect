@@ -1,0 +1,16 @@
+  401000:	55                   	push   ebp
+  401001:	89 e5                	mov    ebp,esp
+  401003:	83 ec 38             	sub    esp,0x38
+  401006:	c7 45 f0 00 00 00 00 	mov    DWORD PTR [ebp-0x10],0x0
+  40100d:	a1 00 b5 49 00       	mov    eax,ds:0x49b500
+  401012:	8d 55 f0             	lea    edx,[ebp-0x10]
+  401015:	89 54 24 10          	mov    DWORD PTR [esp+0x10],edx
+  401019:	89 44 24 0c          	mov    DWORD PTR [esp+0xc],eax
+  40101d:	8d 45 f4             	lea    eax,[ebp-0xc]
+  401020:	89 44 24 08          	mov    DWORD PTR [esp+0x8],eax
+  401024:	c7 44 24 04 04 00 4b 	mov    DWORD PTR [esp+0x4],0x4b0004
+  40102b:	00 
+  40102c:	c7 04 24 00 00 4b 00 	mov    DWORD PTR [esp],0x4b0000
+  401033:	e8 d8 88 07 00       	call   479910 <___getmainargs>
+  401038:	c9                   	leave  
+  401039:	c3                   	ret   

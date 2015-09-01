@@ -1,0 +1,560 @@
+/*
+ *
+ *   Copyright (C) Sat Jun  1 10:51:23 2013 XiaoWei
+ *
+ *                       handsomexiaowei@gmail.com
+ *
+ *
+ */
+
+#include <iostream>
+#include <vector>
+#include "SeniorVMHandle.hpp"
+#include "BuildVMCode.hpp"
+#include "VMAddressTable.hpp"
+#include "VMCodeBuffer.hpp"
+#include <WProtectConfig.h>
+
+using namespace std;
+
+#ifdef PROTECT_X64
+#define _SIZE q
+#else
+#define _SIZE d
+#endif
+
+BuildVMCode::BuildVMCode()
+{
+}
+
+BuildVMCode::~BuildVMCode()
+{
+}
+
+long BuildVMCode::get_reg(const ud_type & t)
+{
+      switch ( t )
+      {
+      case UD_R_RAX:
+        return T_RAX;
+        break;
+      case UD_R_RBX:
+        return T_RBX;
+        break;
+      case UD_R_RCX:
+        return T_RCX;
+        break;
+      case UD_R_RDX:
+        return T_RDX;
+        break;
+      case UD_R_RSP:
+        return T_RSP;
+        break;
+      case UD_R_RBP:
+        return T_RBP;
+        break;
+      case UD_R_RDI:
+        return T_RDI;
+        break;
+      case UD_R_RSI:
+        return T_RSI;
+        break;        
+      case UD_R_EAX:
+        return T_EAX;
+        break;
+      case UD_R_EBX:
+        return T_EBX;
+        break;
+      case UD_R_ECX:
+        return T_ECX;
+        break;
+      case UD_R_EDX:
+        return T_EDX;
+        break;
+      case UD_R_ESP:
+        return T_ESP;
+        break;
+      case UD_R_EBP:
+        return T_EBP;
+        break;
+      case UD_R_EDI:
+        return T_EDI;
+        break;
+      case UD_R_ESI:
+        return T_ESI;
+        break;
+      case UD_R_AL:
+        return T_AL;
+        break;
+      case UD_R_AH:
+        return T_AH;
+        break;
+      case UD_R_BL:
+        return T_BL;
+        break;
+      case UD_R_BH:
+        return T_BH;
+        break;
+      case UD_R_CL:
+        return T_CL;
+        break;
+      case UD_R_CH:
+        return T_CH;
+        break;
+      case UD_R_DL:
+        return T_DL;
+        break;
+      case UD_R_DH:
+        return T_DH;
+        break;
+      case UD_R_AX:
+        return T_AX;
+        break;
+      case UD_R_BX:
+        return T_BX;
+        break;
+      case UD_R_CX:
+        return T_CX;
+        break;
+      case UD_R_DX:
+        return T_DX;
+        break;
+      case UD_R_SP:
+        return T_SP;
+        break;
+      case UD_R_BP:
+        return T_BP;
+        break;
+      case UD_R_SI:
+        return T_SI;
+        break;
+      case UD_R_DI:
+        return T_DI;
+        break;
+      dafault:
+        return 0;
+      }
+      return 0;
+}
+
+void BuildVMCode::get_operand( SeniorVMHandle *svm,const ud_operand & op  ,bool _disable)
+{
+  long base = 0;
+  long index = 0;
+  long scale = 0;
+  long lval = 0;
+  if (op.type == UD_OP_MEM)
+  {
+    base = get_reg( op.base );
+    index = get_reg( op.index );
+    lval = op.offset == 8 ? op.lval.sbyte : op.lval.sdword;
+    scale = op.scale;
+    svm->r_get_mem( base,index,scale,index );
+  } else if (op.type == UD_OP_REG)
+  {
+    svm->push(get_reg(op.base),_disable);
+  } else if (op.type == UD_OP_IMM)
+  {
+    if ( op.size == 8 )
+      svm->b_push_imm( op.lval.sbyte );
+    else if (op.size == 16)
+      svm->w_push_imm( op.lval.sword );
+    else if ( op.size == 32 )
+      svm->d_push_imm( op.lval.sdword );
+#ifdef PROTECT_X64
+    else if (op.size == 64)
+      svm->q_push_imm(op.lval.sqword);
+#endif
+  }
+}
+
+void BuildVMCode::get_mem_data( SeniorVMHandle *svm,const ud_operand & op )
+{
+  switch ( op.size )
+  {
+  case 8:
+    svm->b_read_mem(  );
+    break;
+  case 16:
+    svm->w_read_mem(  );
+    break;
+  case 32:
+    svm->d_read_mem(  );
+    break;
+#ifdef PROTECT_X64
+  case 64:
+    svm->q_read_mem(  )  ;
+    break;
+#endif
+  }
+}
+
+void BuildVMCode::set_mem_data( SeniorVMHandle *svm,const ud_operand & op )
+{
+  switch ( op.size )
+  {
+  case 8:
+    svm->b_write_mem(  );
+    break;
+  case 16:
+    svm->w_write_mem(  );
+    break;
+  case 32:
+    svm->d_write_mem(  );
+    break;
+#ifdef PROTECT_X64
+  case 64:
+    svm->q_write_mem(  )  ;
+    break;
+#endif
+  }
+}
+
+long BuildVMCode::asm_to_vm(SeniorVMHandle *svm,ud_t *p_ud) //返回大小
+{  
+  #define GET_HANDLE(x) svm->pcode->pcode_info.handle_table.x.handle     
+  #define op1 p_ud->operand[ 0 ]
+  #define op2 p_ud->operand[ 1 ]
+  
+  switch (p_ud->mnemonic)
+  {
+  case UD_Imov:
+    {
+      if ( op1.type == UD_OP_MEM )
+      {
+        get_operand(svm,op1);
+        svm->pop( T_TMP_REGISTER1 );
+      }
+      
+      get_operand(svm, op2 ,false);
+      if ( op2.type == UD_OP_MEM )
+      {        
+        get_mem_data(svm,op2);
+      } 
+      if (op1.type == UD_OP_REG)
+      {
+        svm->pop( get_reg(op1.base) );
+      } else if (op1.type == UD_OP_MEM)
+      {
+        svm->push( T_TMP_REGISTER1 );
+        set_mem_data(svm,op1);
+      }
+    }
+    break;
+  case UD_Ipush:
+    {
+      get_operand( svm,op1 );
+      if (op1.type == UD_OP_MEM)
+      {
+        get_mem_data( svm,op1 );
+      }
+    }
+    break;
+  case UD_Ixor:
+    {
+    }
+    break;
+  case UD_Ijnz:
+    {
+  //svm->push( T_EFLAG ,false);
+      
+      svm->push_vesp(  );
+      //svm->d_push_imm( 0x40 );
+      //svm->pop( T_TMP_REGISTER1 );
+      svm->d_and( T_EFLAG,0x40,true );
+      //svm->d_and( T_EFLAG, T_TMP_REGISTER1);      
+      svm->pop( T_INVALID );
+      svm->b_push_imm( 4 );
+      svm->db( GET_HANDLE( d_shr ) );
+      svm->pop( T_INVALID );
+      svm->db( GET_HANDLE( d_add ) );
+      svm->pop( T_INVALID );
+      svm->d_read_mem();
+    }
+    break;
+  case UD_Ijz:
+    {
+      svm->push_vesp(  );
+      // svm->d_push_imm( 0x40 );
+      //svm->pop( T_TMP_REGISTER1 );
+      svm->d_and( T_EFLAG,0x40,true );
+      //svm->d_and( T_EFLAG, T_TMP_REGISTER1);
+      svm->pop( T_INVALID );
+      svm->b_push_imm( 4 );
+      svm->db( GET_HANDLE( d_shr ) );
+      svm->pop( T_INVALID );
+      svm->db( GET_HANDLE( d_add ) );
+      svm->pop( T_INVALID );
+      svm->d_read_mem();
+    }
+    break;
+  case UD_Iret:
+    svm->exit( );
+    break;
+  }
+  printf("%s\r\n",p_ud->insn_buffer);
+  return 0;
+}
+
+/*
+pCodeBufferInfo BuildVMCode::BuildPCode(VirtualMachineManage *vmmanage,pCodeBufferInfo pinfo)
+{
+  Analysis analysis;
+  analysis.disasm(pinfo);
+  VirtualMachine *vm = vmmanage->rand_virtual_machine();
+  
+  PCode *pcode_array = new PCode[analysis.block_count];
+  SeniorVMHandle *seniorvm_array = new SeniorVMHandle[analysis.block_count];
+
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    vmmanage->moc(vm,&pcode_array[i]);
+    seniorvm_array[i].link_pcode(&pcode_array[i]);
+  }
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    pAssemblerTree nowtree = analysis.get_tree(i);
+    for (std::vector<ud_t>::iterator iter = nowtree->asmpiece.begin();
+         iter != nowtree->asmpiece.end(); ++iter)
+    {
+      ud_t ud = *iter;
+      asm_to_vm(&seniorvm_array[i],&ud);
+    }
+      printf("\r\n");    
+  }
+  delete [] seniorvm_array;
+  delete [] pcode_array;
+  return pinfo;
+  }*/
+
+void rm( VMCodeBufferManage * p )
+{
+    delete p;
+}
+
+pCodeBufferInfo BuildVMCode::BuildPCode(
+                                        VirtualMachineManage *vmmanage,
+                                        pCodeBufferInfo pinfo,
+                                        VMAddressTable * address_table)
+{
+  Analysis analysis;
+  analysis.disasm(pinfo);
+  VirtualMachine *vm = vmmanage->rand_virtual_machine();
+  
+  long key ;//= m_random();
+
+  vector <long> block_vcode_addr;
+
+  //  VMCodeBufferManage **vcodebufs = new VMCodeBufferManage( vm )[ analysis.block_count ];
+  //  VMCodeBufferManage *vcodebufs = new VMCodeBufferManage[ analysis.block_count ];
+  vector <VMCodeBufferManage*>vcodebufs;
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    vcodebufs.push_back( new VMCodeBufferManage( vm ) );
+    SeniorVMHandle *senior;
+    senior = &vcodebufs[ i ]->get_generator();
+    VTable table;
+    table.key = vcodebufs[ i ]->code.get_original_key(  );
+    table.v = senior;
+    long addr = address_table->assign_address( DEFAULT_ALLOC_SIZE-0x50,table );
+    block_vcode_addr.push_back( addr );
+  }
+
+  SeniorVMHandle *sfirst = &vcodebufs[ 0 ]->get_generator(  );
+  sfirst->upset_register_array(sfirst->pcode->register_store_in);
+  sfirst->start();
+  key = vcodebufs[ 0 ]->code.get_original_key(  );
+  long addr = block_vcode_addr[ 0 ];
+  ppcode_block_info info =  vm->create_function_head(0x403000,addr,sfirst->pcode,0x401000,123456,key);
+  FILE *file;
+  file = fopen( "head","wb" );
+  fwrite( info->buf,1,info->size,file );
+  fclose( file );
+  
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    ud_t ud;
+    pAssemblerTree nowtree = analysis.get_tree(i);
+    for (std::vector<ud_t>::iterator iter = nowtree->asmpiece.begin();
+         iter != nowtree->asmpiece.end(); ++iter)
+    {
+      ud = *iter;
+      //if ( nowtree->RightChild == NULL  )
+      switch ( ud.mnemonic)
+      {
+      case UD_Ijnz:
+        break;
+      case UD_Ijz:
+        break;
+      default:
+        asm_to_vm( &vcodebufs[ i ]->get_generator(  ),&ud );  
+      }
+    }
+    //senior->upset_register_array(senior->pcode->register_store_out);
+    
+    //senior->recover_vm_context(); //push到esp
+    SeniorVMHandle *senior = &vcodebufs[ i ]->get_generator(  );
+    if (nowtree->RightChild)
+    {
+      senior->d_push_imm(block_vcode_addr[ nowtree->RightChild->id ]);
+    }
+    if (nowtree->LeftChild)
+    {
+      senior->d_push_imm(block_vcode_addr[ nowtree->LeftChild->id ]);
+    }
+
+    
+
+    if (nowtree->RightChild && nowtree->LeftChild)
+    {    
+        asm_to_vm( senior,&ud );
+        /*       VTable * vt = address_table->get_data(block_vcode_addr[ nowtree->LeftChild->id ]);
+        vt->key = vcodebufs[ i ]->code.get_current_key(  );
+        vcodebufs[ nowtree->LeftChild->id ]->code.set_key( vt->key );
+        vt = address_table->get_data(block_vcode_addr[ nowtree->RightChild->id ]);
+        vt->key = vcodebufs[ i ]->code.get_current_key(  );
+        vcodebufs[ nowtree->RightChild->id ]->code.set_key( vt->key );*/
+        
+        senior->pop( T_TMP_REGISTER1 );
+        senior->pop( T_INVALID );
+        senior->pop( T_INVALID );
+        
+        senior->upset_register_array(senior->pcode->register_store_out);
+        senior->recover_vm_context(); //push到esp
+        
+        senior->push( T_TMP_REGISTER1 );        
+        senior->set_pc(  );
+
+      vcodebufs[ nowtree->RightChild->id ]->code = vcodebufs[ i ]->code;
+      vcodebufs[ nowtree->LeftChild->id ]->code = vcodebufs[ i ]->code;
+      VTable *right_vt = address_table->get_data(block_vcode_addr[ nowtree->RightChild->id ]);
+      VTable *left_vt = address_table->get_data(block_vcode_addr[ nowtree->LeftChild->id ]);
+
+      right_vt->key_status = true;
+      left_vt->key_status = true;
+      right_vt->key = vcodebufs[ i ]->code.get_current_key(  );
+      left_vt->key = right_vt->key;
+      
+
+      //right_vt->vesp_diff = 2;
+      //left_vt->vesp_diff = 2;
+      
+      //vcodebufs[ nowtree->RightChild->id ]->get_generator(  ).pop( T_INVALID );
+      //vcodebufs[ nowtree->LeftChild->id ]->get_generator(  ).pop( T_INVALID );
+      //vcodebufs[ nowtree->RightChild->id ]->get_generator(  ).pop( T_INVALID );
+      //vcodebufs[ nowtree->LeftChild->id ]->get_generator(  ).pop( T_INVALID );
+      vcodebufs[ nowtree->RightChild->id ]->get_generator(  ).set_key( right_vt->key );
+      vcodebufs[ nowtree->RightChild->id ]->get_generator().save_vm_context(  );
+      vcodebufs[ nowtree->LeftChild->id ]->get_generator().save_vm_context(  );        
+
+    } else if (nowtree->LeftChild)
+    {
+      senior->pop( T_TMP_REGISTER1 );
+      VTable *left_vt = address_table->get_data( block_vcode_addr[ nowtree->LeftChild->id ] );
+      if (left_vt->key_status)
+      {
+        senior->pcode->register_store_out = vcodebufs[ nowtree->LeftChild->id ]->code.register_store_in;
+      }
+      senior->recover_vm_context();
+      senior->push( T_TMP_REGISTER1 );
+      if (left_vt->key_status)
+      {
+        //senior->set_key( left_vt->key );
+      }      
+      senior->set_pc(  );
+    }
+    address_table->update( senior );
+  }
+  /*
+  VMCodeBufferManage *v = NULL;
+  SeniorVMHandle * senior = NULL;
+  v = new VMCodeBufferManage( vm );
+  senior = &v->get_generator();
+  buff_manage_vec.push_back( v );
+  VTable table;
+  table.key = v->code.get_original_key(  );
+  table.v = senior;
+  senior->save_vm_context(  );
+  long addr = address_table->assign_address( DEFAULT_ALLOC_SIZE-0x50,table );
+  pinfo->addr = addr;
+
+  long key = table.key;
+  pAssemblerTree nowtree = analysis.get_tree( 0 );
+  long jmp_addr = 0;
+
+  
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    //VMCodeBufferManage *v = NULL;
+    //SeniorVMHandle * senior = NULL;
+    for (std::vector<ud_t>::iterator iter = nowtree->asmpiece.begin();
+         iter != nowtree->asmpiece.end(); ++iter)
+    {
+      ud_t ud = *iter;
+      asm_to_vm( senior , &ud );
+      address_table->update( senior );
+    }
+    if (nowtree->RightChild && nowtree->LeftChild)
+    {
+       SeniorVMHandle *oldsenior = senior;
+        VTable table;
+        table.key = v->code.get_current_key(   );
+        v = new VMCodeBufferManage( vm );
+        senior = &v->get_generator();        
+        table.v = senior;
+        buff_manage_vec.push_back( v );
+        jmp_addr = address_table->assign_address( DEFAULT_ALLOC_SIZE-0x50,table );      
+    }
+  }
+  /*
+  for (int i = 0; i < analysis.block_count; ++i)
+  {
+    pAssemblerTree nowtree = analysis.get_tree(i);
+    VMCodeBufferManage * v = NULL;
+    SeniorVMHandle * senior = NULL;
+    for (std::vector<ud_t>::iterator iter = nowtree->asmpiece.begin();
+         iter != nowtree->asmpiece.end(); ++iter)
+    {
+      ud_t ud = *iter;
+      //      asm_to_vm(&seniorvm_array[i],&ud);
+      //VMCodeBufferManage v( vm );
+      if (!v) //这是第一次进入函数头
+      {
+         v = new VMCodeBufferManage( vm );
+         senior = &v->get_generator();
+         buff_manage_vec.push_back( v );
+        VTable table;
+        key = v->code.get_original_key();
+        table.key = key;
+        table.v = senior;
+        senior->save_vm_context();
+        long addr = address_table->assign_address(DEFAULT_ALLOC_SIZE-0x50,table );
+        pinfo->addr = addr;
+        ppcode_block_info info =  vm->create_function_head(0x403000,addr,senior->pcode,0x401000,123456,key);
+        FILE *file;
+        file = fopen( "head","wb" );
+        fwrite( info->buf,1,info->size,file );
+        fclose( file );
+      }
+      if (senior->get_code_size() >= DEFAULT_ALLOC_SIZE-0x75)
+      {
+         v = new VMCodeBufferManage( vm );
+         senior = &v->get_generator();
+         buff_manage_vec.push_back( v );
+        VTable table;
+        table.key = key;
+        table.v = senior;
+        address_table->assign_address(DEFAULT_ALLOC_SIZE-0x50,table );        
+      }
+      asm_to_vm( senior , &ud );
+      address_table->update( senior );
+    }
+    printf("\r\n");
+    senior->recover_vm_context();
+   }*/
+  
+  //for_each( buff_manage_vec.begin(  ),buff_manage_vec.end(  ),rm );
+  
+  return pinfo;
+}
+

@@ -1,0 +1,18 @@
+//软件主版本号
+#define WPROTECT_VERSION_MAJOR @WPROTECT_VERSION_MAJOR@
+//软件副版本号
+#define WPROTECT_VERSION_MINOR @WPROTECT_VERSION_MINOR@
+
+//是否是DEBUG模式
+#cmakedefine DEBUG
+
+//是否是32系统
+#cmakedefine X86
+
+//是否是windows
+#cmakedefine WINDOWS
+
+//32位保护程序还是64位保护程序
+#cmakedefine PROTECT_X64
+
+

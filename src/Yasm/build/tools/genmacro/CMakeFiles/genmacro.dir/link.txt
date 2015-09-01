@@ -1,0 +1,1 @@
+/usr/bin/cc  -g    CMakeFiles/genmacro.dir/genmacro.o  -o genmacro -rdynamic 

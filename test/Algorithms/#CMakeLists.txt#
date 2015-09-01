@@ -1,0 +1,6 @@
+Project(AlgOrithmsApp)
+
+directories_include
+add_executable(TestApp AlgorithmsTest.cpp)
+
+target_link_libraries(TestApp /home/lovewei/Project/WProtect/bin/libAlgorithms_Static.a)

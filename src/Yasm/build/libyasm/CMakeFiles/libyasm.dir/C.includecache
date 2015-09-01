@@ -1,0 +1,656 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libyasm.h
+stdio.h
+-
+stdarg.h
+-
+libyasm-stdint.h
+-
+libyasm/compat-queue.h
+-
+libyasm/coretype.h
+-
+libyasm/valparam.h
+-
+libyasm/linemap.h
+-
+libyasm/errwarn.h
+-
+libyasm/intnum.h
+-
+libyasm/floatnum.h
+-
+libyasm/expr.h
+-
+libyasm/value.h
+-
+libyasm/symrec.h
+-
+libyasm/bytecode.h
+-
+libyasm/section.h
+-
+libyasm/insn.h
+-
+libyasm/arch.h
+-
+libyasm/dbgfmt.h
+-
+libyasm/objfmt.h
+-
+libyasm/listfmt.h
+-
+libyasm/parser.h
+-
+libyasm/preproc.h
+-
+libyasm/file.h
+-
+libyasm/module.h
+-
+libyasm/hamt.h
+-
+libyasm/md5.h
+-
+
+../libyasm/arch.h
+
+../libyasm/bytecode.h
+
+../libyasm/compat-queue.h
+
+../libyasm/coretype.h
+
+../libyasm/dbgfmt.h
+
+../libyasm/errwarn.h
+
+../libyasm/expr.h
+
+../libyasm/file.h
+
+../libyasm/floatnum.h
+
+../libyasm/hamt.h
+
+../libyasm/insn.h
+
+../libyasm/intnum.h
+
+../libyasm/linemap.h
+
+../libyasm/listfmt.h
+
+../libyasm/md5.h
+
+../libyasm/module.h
+
+../libyasm/objfmt.h
+
+../libyasm/parser.h
+
+../libyasm/preproc.h
+
+../libyasm/section.h
+
+../libyasm/symrec.h
+
+../libyasm/valparam.h
+
+../libyasm/value.h
+
+../util.h
+config.h
+-
+stdio.h
+-
+stdarg.h
+-
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+assert.h
+-
+strings.h
+-
+libyasm-stdint.h
+-
+libyasm/coretype.h
+-
+locale.h
+-
+libintl.h
+-
+libyasm/compat-queue.h
+-
+dmalloc.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/assocdat.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+assocdat.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/assocdat.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/assocdat.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bc-align.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bc-data.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bc-incbin.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+linemap.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+file.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bc-org.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+file.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bc-reserve.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+ctype.h
+-
+limits.h
+-
+string.h
+-
+bitvect.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/cmake-module.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+ctype.h
+-
+stdarg.h
+-
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+linemap.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+bitvect.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+floatnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+section.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.c
+util.h
+-
+unistd.h
+-
+direct.h
+-
+io.h
+-
+sys/stat.h
+-
+ctype.h
+-
+errno.h
+-
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+file.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+ctype.h
+-
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+bitvect.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+file.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+floatnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+ctype.h
+-
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+hamt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/insn.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+insn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/insn.h
+arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/insn.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+ctype.h
+-
+limits.h
+-
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+bitvect.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+file.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/file.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/inttree.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+stdlib.h
+-
+stdio.h
+-
+limits.h
+-
+math.h
+-
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+inttree.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/inttree.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/inttree.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+hamt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+linemap.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/md5.c
+util.h
+-
+md5.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/md5.h
+stdio.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/md5.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/mergesort.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+errno.h
+-
+string.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/objfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/phash.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+phash.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/phash.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/phash.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+limits.h
+-
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+hamt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.h
+valparam.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/valparam.h
+assocdat.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/assocdat.h
+linemap.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/linemap.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+section.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/dbgfmt.h
+objfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/objfmt.h
+inttree.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/inttree.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/strcasecmp.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+ctype.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/strsep.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+limits.h
+-
+ctype.h
+-
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+valparam.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/valparam.h
+hamt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/hamt.h
+assocdat.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/assocdat.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+floatnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+section.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+objfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/objfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/valparam.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+valparam.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/valparam.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+section.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/valparam.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+libyasm-stdint.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/libyasm-stdint.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+bitvect.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bitvect.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+intnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/intnum.h
+floatnum.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/floatnum.h
+expr.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/expr.h
+value.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+symrec.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/symrec.h
+bytecode.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/bytecode.h
+section.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/section.h
+arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/value.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/xmalloc.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+errwarn.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/errwarn.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/xstrdup.c
+util.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/util.h
+coretype.h
+/home/lovewei/Project/yasm/new yasm/yasm/libyasm/coretype.h
+
+config.h
+
+libyasm-stdint.h
+stdint.h
+-
+vadefs.h
+-
+

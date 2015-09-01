@@ -1,0 +1,1 @@
+/usr/bin/cc  -g    CMakeFiles/genperf.dir/genperf.o CMakeFiles/genperf.dir/perfect.o CMakeFiles/genperf.dir/__/__/libyasm/phash.o CMakeFiles/genperf.dir/__/__/libyasm/xmalloc.o CMakeFiles/genperf.dir/__/__/libyasm/xstrdup.o  -o genperf -rdynamic 

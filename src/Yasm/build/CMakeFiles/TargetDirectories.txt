@@ -1,0 +1,8 @@
+/home/lovewei/Project/yasm/new yasm/yasm/build/tools/genmacro/CMakeFiles/genmacro.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/tools/genperf/CMakeFiles/genperf.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/CMakeFiles/genversion.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/libyasm/CMakeFiles/libyasm.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/tools/re2c/CMakeFiles/re2c.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/frontends/yasm/CMakeFiles/yasm.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/CMakeFiles/yasmstd.dir
+/home/lovewei/Project/yasm/new yasm/yasm/build/frontends/tasm/CMakeFiles/ytasm.dir

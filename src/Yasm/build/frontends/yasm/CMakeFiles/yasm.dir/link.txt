@@ -1,0 +1,1 @@
+/usr/bin/cc  -g    CMakeFiles/yasm.dir/yasm.o CMakeFiles/yasm.dir/yasm-options.o CMakeFiles/yasm.dir/yasm-plugin.o  -o ../../yasm -rdynamic ../../libyasm.so -ldl -Wl,-rpath,"/home/lovewei/Project/yasm/new yasm/yasm/build:" 

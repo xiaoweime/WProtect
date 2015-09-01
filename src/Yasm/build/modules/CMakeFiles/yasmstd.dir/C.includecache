@@ -1,0 +1,688 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libyasm.h
+stdio.h
+-
+stdarg.h
+-
+libyasm-stdint.h
+-
+libyasm/compat-queue.h
+-
+libyasm/coretype.h
+-
+libyasm/valparam.h
+-
+libyasm/linemap.h
+-
+libyasm/errwarn.h
+-
+libyasm/intnum.h
+-
+libyasm/floatnum.h
+-
+libyasm/expr.h
+-
+libyasm/value.h
+-
+libyasm/symrec.h
+-
+libyasm/bytecode.h
+-
+libyasm/section.h
+-
+libyasm/insn.h
+-
+libyasm/arch.h
+-
+libyasm/dbgfmt.h
+-
+libyasm/objfmt.h
+-
+libyasm/listfmt.h
+-
+libyasm/parser.h
+-
+libyasm/preproc.h
+-
+libyasm/file.h
+-
+libyasm/module.h
+-
+libyasm/hamt.h
+-
+libyasm/md5.h
+-
+
+../libyasm/arch.h
+
+../libyasm/bitvect.h
+
+../libyasm/bytecode.h
+
+../libyasm/compat-queue.h
+
+../libyasm/coretype.h
+
+../libyasm/dbgfmt.h
+
+../libyasm/errwarn.h
+
+../libyasm/expr.h
+
+../libyasm/file.h
+
+../libyasm/floatnum.h
+
+../libyasm/hamt.h
+
+../libyasm/insn.h
+
+../libyasm/intnum.h
+
+../libyasm/linemap.h
+
+../libyasm/listfmt.h
+
+../libyasm/md5.h
+
+../libyasm/module.h
+
+../libyasm/objfmt.h
+
+../libyasm/parser.h
+
+../libyasm/phash.h
+
+../libyasm/preproc.h
+
+../libyasm/section.h
+
+../libyasm/symrec.h
+
+../libyasm/valparam.h
+
+../libyasm/value.h
+
+../modules/arch/lc3b/lc3barch.h
+
+../modules/arch/x86/x86arch.h
+libyasm/bitvect.h
+-
+
+../modules/parsers/gas/gas-parser.h
+
+../modules/parsers/nasm/nasm-parser-struct.h
+
+../modules/parsers/nasm/nasm-parser.h
+nasm-parser-struct.h
+../modules/parsers/nasm/nasm-parser-struct.h
+
+../modules/preprocs/gas/gas-eval.h
+
+../modules/preprocs/nasm/nasm.h
+
+../util.h
+config.h
+-
+stdio.h
+-
+stdarg.h
+-
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+assert.h
+-
+strings.h
+-
+libyasm-stdint.h
+-
+libyasm/coretype.h
+-
+locale.h
+-
+libintl.h
+-
+libyasm/compat-queue.h
+-
+dmalloc.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/gas-token.c
+util.h
+-
+libyasm.h
+-
+modules/parsers/gas/gas-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/parsers/gas/gas-parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/init_plugin.c
+libyasm.h
+-
+libyasm/module.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/lc3bid.c
+util.h
+-
+libyasm.h
+-
+modules/arch/lc3b/lc3barch.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/arch/lc3b/lc3barch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/nasm-token.c
+util.h
+-
+libyasm.h
+-
+modules/parsers/nasm/nasm-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/parsers/nasm/nasm-parser.h
+modules/preprocs/nasm/nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/preprocs/nasm/nasm.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/x86cpu.c
+util.h
+-
+ctype.h
+-
+libyasm.h
+-
+libyasm/phash.h
+-
+modules/arch/x86/x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/arch/x86/x86arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/x86regtmod.c
+util.h
+-
+ctype.h
+-
+libyasm.h
+-
+libyasm/phash.h
+-
+modules/arch/x86/x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/build/modules/modules/arch/x86/x86arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/lc3b/lc3barch.c
+util.h
+-
+libyasm.h
+-
+lc3barch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/lc3b/lc3barch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/lc3b/lc3barch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/lc3b/lc3bbc.c
+util.h
+-
+libyasm.h
+-
+lc3barch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/lc3b/lc3barch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86arch.c
+util.h
+-
+libyasm.h
+-
+x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86arch.h
+libyasm/bitvect.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86bc.c
+util.h
+-
+libyasm.h
+-
+x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86expr.c
+util.h
+-
+libyasm.h
+-
+x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86arch.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86id.c
+ctype.h
+-
+util.h
+-
+libyasm.h
+-
+libyasm/phash.h
+-
+modules/arch/x86/x86arch.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/modules/arch/x86/x86arch.h
+x86insns.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86insns.c
+x86insn_nasm.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86insn_nasm.c
+x86insn_gas.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/arch/x86/x86insn_gas.c
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-dbgfmt.c
+util.h
+-
+libyasm.h
+-
+cv-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-symline.c
+util.h
+-
+libyasm.h
+-
+cv-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-type.c
+util.h
+-
+libyasm.h
+-
+cv-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/codeview/cv-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-aranges.c
+util.h
+-
+libyasm.h
+-
+dwarf2-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.c
+util.h
+-
+libyasm.h
+-
+dwarf2-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-info.c
+util.h
+-
+libyasm.h
+-
+dwarf2-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-line.c
+util.h
+-
+libyasm.h
+-
+dwarf2-dbgfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/dwarf2/dwarf2-dbgfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/null/null-dbgfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/dbgfmts/stabs/stabs-dbgfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/listfmts/nasm/nasm-listfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/bin/bin-objfmt.c
+util.h
+-
+unistd.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/coff-objfmt.c
+util.h
+-
+time.h
+-
+libyasm.h
+-
+coff-objfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/coff-objfmt.h
+win64-nasm.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/win64-nasm.c
+win64-gas.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/win64-gas.c
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/coff-objfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/win64-except.c
+util.h
+-
+libyasm.h
+-
+coff-objfmt.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/coff/coff-objfmt.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/dbg/dbg-objfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-objfmt.c
+util.h
+-
+libyasm.h
+-
+elf.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+elf-machine.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-x86-amd64.c
+util.h
+-
+libyasm.h
+-
+elf.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+elf-machine.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-x86-x32.c
+util.h
+-
+libyasm.h
+-
+elf.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+elf-machine.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-x86-x86.c
+util.h
+-
+libyasm.h
+-
+elf.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+elf-machine.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.c
+util.h
+-
+libyasm.h
+-
+elf.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+elf-machine.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf-machine.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/elf/elf.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/macho/macho-objfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/rdf/rdf-objfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/objfmts/xdf/xdf-objfmt.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/gas-parse-intel.c
+util.h
+-
+libyasm.h
+-
+modules/parsers/gas/gas-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/modules/parsers/gas/gas-parser.h
+modules/parsers/nasm/nasm-parser-struct.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/modules/parsers/nasm/nasm-parser-struct.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/gas-parse.c
+util.h
+-
+libyasm.h
+-
+ctype.h
+-
+limits.h
+-
+math.h
+-
+modules/parsers/gas/gas-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/modules/parsers/gas/gas-parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/gas-parser.c
+util.h
+-
+libyasm.h
+-
+gas-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/gas-parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/gas/gas-parser.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parse.c
+util.h
+-
+libyasm.h
+-
+math.h
+-
+modules/parsers/nasm/nasm-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/modules/parsers/nasm/nasm-parser.h
+modules/preprocs/nasm/nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/modules/preprocs/nasm/nasm.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parser-struct.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parser.c
+util.h
+-
+libyasm.h
+-
+nasm-parser.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parser.h
+nasm-macros.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-macros.c
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parser.h
+nasm-parser-struct.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/parsers/nasm/nasm-parser-struct.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/cpp/cpp-preproc.c
+util.h
+-
+libyasm.h
+-
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/gas/gas-eval.c
+util.h
+-
+libyasm-stdint.h
+-
+libyasm/coretype.h
+-
+libyasm/intnum.h
+-
+libyasm/expr.h
+-
+libyasm/symrec.h
+-
+ctype.h
+-
+gas-eval.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/gas/gas-eval.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/gas/gas-eval.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/gas/gas-preproc.c
+util.h
+-
+ctype.h
+-
+libyasm.h
+-
+modules/preprocs/gas/gas-eval.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/gas/modules/preprocs/gas/gas-eval.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-eval.c
+util.h
+-
+libyasm-stdint.h
+-
+libyasm/coretype.h
+-
+libyasm/intnum.h
+-
+libyasm/expr.h
+-
+libyasm/symrec.h
+-
+ctype.h
+-
+nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm.h
+nasmlib.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.h
+nasm-eval.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-eval.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-eval.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-pp.c
+util.h
+-
+libyasm-stdint.h
+-
+libyasm/coretype.h
+-
+libyasm/intnum.h
+-
+libyasm/expr.h
+-
+libyasm/file.h
+-
+stdarg.h
+-
+ctype.h
+-
+limits.h
+-
+nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm.h
+nasmlib.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.h
+nasm-pp.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-pp.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-pp.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-preproc.c
+util.h
+-
+libyasm.h
+-
+nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm.h
+nasmlib.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.h
+nasm-pp.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-pp.h
+nasm-eval.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-eval.h
+nasm-version.c
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm-version.c
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.c
+util.h
+-
+libyasm/coretype.h
+-
+libyasm/intnum.h
+-
+ctype.h
+-
+nasm.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasm.h
+nasmlib.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/nasmlib.h
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/raw/raw-preproc.c
+util.h
+-
+libyasm.h
+-
+
+config.h
+
+libyasm-stdint.h
+stdint.h
+-
+vadefs.h
+-
+
+modules/nasm-macros.c
+stddef.h
+-
+
+modules/nasm-version.c
+stddef.h
+-
+
+modules/win64-gas.c
+stddef.h
+-
+
+modules/win64-nasm.c
+stddef.h
+-
+
+modules/x86insn_gas.c
+
+modules/x86insn_nasm.c
+
+modules/x86insns.c
+

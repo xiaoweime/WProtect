@@ -1,0 +1,1 @@
+/usr/bin/c++   -g    CMakeFiles/TestApp.dir/AlgorithmsTest.o  -o TestApp -rdynamic /home/lovewei/Project/WProtect/bin/libAlgorithms_Static.a /home/lovewei/Project/WProtect/bin/libAsmJit_Static.a 

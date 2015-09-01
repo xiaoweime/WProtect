@@ -1,0 +1,74 @@
+// By:XiaoWei 2013.3.16
+
+//build
+1. cd WProtect/build
+2. cmake ..
+3. make
+4. ../bin/WProtect
+
+
+//编译需要 cmake (gcc or vc or other) 
+
+
+note:
+2015/8/9:
+Bug:
+修正了AddressTable类 rand() % 0 出现的错误
+修正了VCombosVMCode类 里面tmp_vmregister使用的一个错误tmpvmreg|T_E32X|T_16X|T_8L
+修正了一个BuildVMByteCode类里面vm_operand()函数处理立即数的错误
+Add:
+添加了一个PCode调试输出函数set_register_name
+
+2015/8/10
+Add:
+添加了Analysis类现在把有前缀的汇编当作单独地址
+添加了VCombosVMCode类 获取寄存器函数get_cf() get_zf() get_cf() ..
+添加了VCombosVMCode类 比较函数 b_cmp() w_cmp() d_cmp()
+添加了BuildVMByteCode类 build_vmcode() 和编译前缀的build_pfx() 创建代码块的create_vm_piece()
+Bug:
+修复了VMHandle类随机生成ror rol出现的一个计算错误
+修复了VMAddressTable类 copy后没有把指针赋为空导致第二次调用的时候出现野指针导致程序崩溃 line:200
+
+
+2015/8/15
+Bug:
+修复了VCombosVMCode类 b_sub函数read_mem读取多三个字节 导致堆栈错误 714:d_read_mem -> b_read_mem  715:d_nand -> b_nand
+修复了VCombosVMCode类 w_sub函数read_mem读取多俩个字节 导致堆栈错误 752:d_read_mem -> w_read_mem  753:d_nand -> w_nand
+修复了BuildVMByteCode类 处理repne 和 scas ... 中 d_sub参数反了 d_sub(o2,o1) -> d_sub(o1,o2) 应为堆栈顶部的减下面那个值
+修复了BuildVMByteCode类 处理scas 当df为1的时候得不到正确结果的错误
+修复了AddressTable类 assign_address 申请有数据的空间 空间不够返回只有一个参数的函数 导致数据丢失 line:300,225,return assign_address(o1) -> return assign_address(o1,o2...)
+
+New:
+添加了PCode类一个Out_info函数 输出信息
+添加了PCode类 VCombosVMCode一个调试的虚拟机句柄 int3 只有在DEBUG模式才会有效
+添加了VCombosVMCode类 get_string_ins_diff() 函数 用于获取 df = 0  diff = 1 或者 df = 1  diff = -1
+添加了VCombosVMCode类 shl shr sar的处理
+添加了BuildVMByteCode类 read_vm_operand() 函数 
+添加了VCombosVMCode类 pop_vsp()函数
+添加了VMHandle一个 run_stack_code handle 用于运行堆栈代码
+添加了BuildVMByteCode类 build_fpu,copy_exec_code_to_stack函数 用于编译浮点数汇编
+完善了BuildVMByteCode类 rep repne repe的处理
+完善了浮点数处理 如果是操作数是内存 并且有寄存器之类的 就转换为 mnemonic size ptr:[ebp]
+
+2015/8/17
+New:
+添加了VMHandle一个fstsw虚拟机句柄 用于处理浮点数汇编
+添加了WProtectSDK头文件 和 解析SDK的函数 get_wprotect_sdk_address
+添加了BuildVMByteCode类 call jmp 需要退出虚拟机的处理
+添加了CPEReloc类 用于操作重定位
+添加了Analysis类 opcode_attribute函数 用于获取块属性
+重写了BuildVMByteCode类 build_vmcode函数 使目标更加明确
+添加了Analysis类 get_address_table函数 用于获取代码中的地址表
+添加了BuildVMByteCode类 var_entry_address成员 让build_vmcode处理地址表
+
+Bug:
+修复了Analysis类 把比较写成赋值的一个错误 mnemonic = UD_Iret line:311
+修复了BuildVMByteCode类 处理 push pop 当操作数是立即数并且是8位时候虚拟机也当8位来处理
+修复了BuildVMByteCode类 处理 inc dec flag不保存的问题
+修复了BuildVMByteCode类 vm_operand函数 获取内存时候 base,index,scale,imm 直接左移scale位 scale为4 8 2 1
+删除了BuildVMByteCode类 set_register_store 随机寄存器储存顺序 全部变成一个储存顺序
+
+
+2015/8/22
+New:
+初步添加ELF文件的支持 添加 CELFFile类

@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/genversion.c
+config.h
+/home/lovewei/Project/yasm/new yasm/yasm/modules/preprocs/nasm/config.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+ctype.h
+-
+
+config.h
+
