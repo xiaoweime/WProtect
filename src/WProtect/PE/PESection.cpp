@@ -184,6 +184,11 @@ BYTE* CPESection::GetSectionData(int nIndex, DWORD *rdwSize)
 	return lpBuffer;
 }
 
+WORD CPESection::GetCharacteristics(int nIndex)
+{
+    return GetSection(nIndex)->Characteristics;
+}
+
 BOOL CPESection::WriteSectionData(int nIndex, DWORD dwOffset, BYTE *lpBuffer, DWORD *dwSize)
 {
 	BOOL bIsOK=false;

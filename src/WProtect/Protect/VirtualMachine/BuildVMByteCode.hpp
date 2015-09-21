@@ -78,6 +78,9 @@ class BuildVMByteCode{
   long build_vmcode(bool b_allocator);
   std::map<ud_type,long> mapped_vm_register;
   long get_vm_register(ud_type _register);
+#ifdef DEBUG
+  bool vmdebug_out_file_directory;
+#endif
 };
 
 #endif /* end of include guard: BUILDVMBYTECODE_HPP_PTATXLUJ */

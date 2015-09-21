@@ -56,6 +56,7 @@ extern "C"{
 #include <BuildVMByteCode.hpp>
 #include "build_address.hpp"
 #include "ELFFile.h"
+#include <AdvancedAnalysis.hpp>
 
 
 static int show_version(lua_State *L)   //给lua调用的c函数必须定义成static int XXX(lua_State *L)
@@ -388,6 +389,7 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
           {
             //  printf("\n");
           }
+
           if ((unsigned char)ptr_section_data[offset] == 0xeb
                   && sdk_begin_count==0
                   && sdk_end_count==0
@@ -492,6 +494,30 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
   //throw;
 
 }
+
+void printf_user_system_info()
+{
+#ifdef linux
+    printf("it is in linux os!\n");
+#endif
+#ifdef _UNIX
+    printf("it is in unix os!\n");
+#endif
+#ifdef __WINDOWS_
+    printf("it is windows os!\n");
+#endif
+#ifdef _WIN32
+    printf("it is win32 os!\n");
+#endif
+
+#ifdef _MSC_VER
+    printf("usr msvc!\n");
+#endif
+#ifdef __GNUC__
+    printf("usr gunc!\n");
+#endif
+}
+
 void get_wprotect_sdk_address(CPESection & section,
                               BuildCodeInfo & build_info,
                               char *sz_sdk_begin_name,
@@ -506,7 +532,11 @@ void get_wprotect_sdk_address(CPESection & section,
   {
       DWORD section_size;
       BYTE * ptr_section_data = section.GetSectionData(index,&section_size);
-      printf("第%d个区段，大小%d\n",index,section_size);
+      printf("第%d个区段，大小%d,flag:%x\n",index,section_size,section.GetCharacteristics(index));
+      if (strcmp((const char*)section.GetSection(index)->Name,".text") != 0)
+      {
+          continue;
+      }
       for (int offset = 0;offset < section_size;offset++)
       {
           if (ptr_section_data[offset] == 0xeb
@@ -570,9 +600,9 @@ void get_wprotect_sdk_address(CPESection & section,
           if (sdk_begin_count == strlen(sz_sdk_begin_name) + 3)
           {
               int sdk_begin_str_size = strlen(sz_sdk_begin_name) + 1;
-              /*printf("找到SDK BEGIN offset:%x,addr:%x\n",
+              printf("找到SDK BEGIN offset:%x,addr:%x\n",
                      offset - sdk_begin_str_size,
-                     section.GetSectionVa(index,offset - sdk_begin_str_size));*/
+                     section.GetSectionVa(index,offset - sdk_begin_str_size));
               protect_begin_address = section.GetSectionVa(index,offset - sdk_begin_str_size);
               memset((void*)section.GetSectionPtr(index,offset - sdk_begin_str_size),0x90,sdk_begin_count);
               sdk_begin_count = 0;
@@ -581,7 +611,7 @@ void get_wprotect_sdk_address(CPESection & section,
           }
           if (sdk_end_count == strlen(sz_sdk_end_name) + 3)
           {
-              //printf("找到SDK END offset:%x\n",offset - strlen(sz_sdk_end_name) - 1);
+              printf("找到SDK END offset:%x\n",offset - strlen(sz_sdk_end_name) - 1);
               int sdk_end_str_size = strlen(sz_sdk_end_name) + 1;
               protect_end_address = section.GetSectionVa(index,offset - sdk_end_str_size);
               if (protect_begin_address == 0 )
@@ -602,6 +632,7 @@ void get_wprotect_sdk_address(CPESection & section,
 
               sdk_end_count = 0;
           }
+
           //printf("%x\n",offset);
           //printf("%x ",ptr_section_data[offset]);
           //if ((offset)%16==0)
@@ -789,6 +820,11 @@ void buildvmtest(BuildCodeInfo & build_info)
   if (!b)
   {
     printf("file is not find\r\n");
+    return;
+  }
+  if (!file.IsPEFile())
+  {
+    printf("executable file type error\n");
     return;
   }
   CPESection section;
@@ -1135,6 +1171,7 @@ int main(int argc, char* argv[])
 					WPROTECT_VERSION_MAJOR,
 					WPROTECT_VERSION_MINOR);
 		}
+    printf_user_system_info();
 //	printf("WProtect-%d.%d\r\n",WPROTECT_V,WPROTECT_VERSION_MINOR);
 	//
 
@@ -1143,6 +1180,7 @@ int main(int argc, char* argv[])
     
   if (argc >= 3)
   {
+
     if ( strcmp(argv[1],"-f" ) == 0)
     {
       BuildCodeInfo build_pe(argv[2]);

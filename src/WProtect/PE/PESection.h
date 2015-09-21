@@ -48,6 +48,7 @@ class CPESection : public CPEFile
     DWORD GetSectionMaxAddress();
     DWORD GetSectionMinAddress();
     BOOL CheckAddressValidity(DWORD Addr);
+    WORD GetCharacteristics(int nIndex);
 
 
 };

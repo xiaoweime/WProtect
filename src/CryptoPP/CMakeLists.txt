@@ -126,9 +126,6 @@ tigertab.cpp
 trdlocal.cpp
 ttmac.cpp
 twofish.cpp
-validat1.cpp
-validat2.cpp
-validat3.cpp
 vmac.cpp
 wait.cpp
 wake.cpp

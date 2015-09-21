@@ -457,7 +457,274 @@ void VCombosVMCode::q_shr()
     build_vm_mnemonic(get_handle(q_shr));
 }
 #endif                      
-                        
+
+
+void VCombosVMCode::b_sar()
+{
+    /*
+    * sar 10101110,2
+    * 最高位 = 1
+    * 11111111  sub 0,最高位 -> diff
+    * 11111000  shl diff << 右移位数 + 1
+    * 11111001  add diff,最高位
+    * 00000111  neg diff
+    * 11100000  shl diff,目标操作数位数(7) - 右移位数 + 1
+    * shr 目标操作数,右移位数
+    * add 目标操作数,diff
+    */
+    int dest_reg = get_tmp_vmregister();
+    int highest_bit = get_tmp_vmregister();
+    int count_reg = get_tmp_vmregister();
+    int tmp_cf_reg = get_tmp_vmregister();
+
+    pop(count_reg|T_E32X|T_16X|T_8H);//save count
+    //and o1,10000000b
+    push_vsp();
+    b_read_mem(); //copy dest
+    pop(dest_reg|T_E32X|T_16X|T_8H); //save dest
+    b_push_imm(1<<7);
+    b_and();
+    pop(T_INVALID);
+
+    b_push_imm(7);
+    b_shr();
+    pop(T_INVALID);
+
+    push_vsp();
+    b_read_mem();
+    pop(highest_bit|T_E32X|T_16X|T_8H);
+    //neg diff
+    b_neg();
+    pop(T_INVALID);
+    //add count,1
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_push_imm(1);
+    b_add();
+    pop(T_INVALID);
+    //shl diff,count+1
+    b_shl();
+    pop(T_INVALID);
+    //add diff,最高位
+    push(highest_bit|T_E32X|T_16X|T_8H);
+    b_add();
+    pop(T_INVALID);
+    //neg diff
+    b_neg();
+    pop(T_INVALID);
+    //shl diff,7 - count_reg
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_push_imm(8-1);
+    b_sub();
+    pop(T_INVALID);
+
+    b_shl();
+    pop(T_INVALID);
+    //shr dest_reg,count_reg
+    push(dest_reg|T_E32X|T_16X|T_8H);
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_shr();
+
+    //pop(T_INVALID);
+    //get_cf();
+    //d_push_imm(1);
+    b_push_imm_zx(1);
+    d_and();   //获取shr的cf标志位
+    pop(T_INVALID);
+    pop(tmp_cf_reg);
+
+    //or dest_reg,diff
+    b_or();
+
+    push(tmp_cf_reg);
+    d_or(); //合并shr的cf和or的其他标志位
+    pop(T_INVALID);
+
+    unlock_tmp_vmregister(count_reg);
+    unlock_tmp_vmregister(dest_reg);
+    unlock_tmp_vmregister(highest_bit);
+    unlock_tmp_vmregister(tmp_cf_reg);
+}
+
+void VCombosVMCode::w_sar()
+{
+    /*
+    * sar 10101110,2
+    * 最高位 = 1
+    * 11111111  sub 0,最高位 -> diff
+    * 11111000  shl diff << 右移位数 + 1
+    * 11111001  add diff,最高位
+    * 00000111  neg diff
+    * 11100000  shl diff,目标操作数位数(7) - 右移位数 + 1
+    * shr 目标操作数,右移位数
+    * add 目标操作数,diff
+    */
+    int dest_reg = get_tmp_vmregister();
+    int highest_bit = get_tmp_vmregister();
+    int count_reg = get_tmp_vmregister();
+    int tmp_cf_reg = get_tmp_vmregister();
+    pop(count_reg|T_E32X|T_16X|T_8H);//save count
+    //and o1,10000000b
+    push_vsp();
+    w_read_mem(); //copy dest
+    pop(dest_reg|T_E32X|T_16X); //save dest
+    w_push_imm(1<<15);
+    w_and();
+    pop(T_INVALID);
+
+    b_push_imm(15);
+    w_shr();
+    pop(T_INVALID);
+
+    push_vsp();
+    w_read_mem();
+    pop(highest_bit|T_E32X|T_16X);
+    //neg diff
+    w_neg();
+    pop(T_INVALID);
+    //add count,1
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_push_imm(1);
+    b_add();
+    pop(T_INVALID);
+    //shl diff,count+1
+    w_shl();
+    pop(T_INVALID);
+    //add diff,最高位
+    push(highest_bit|T_E32X|T_16X);
+    w_add();
+    pop(T_INVALID);
+    //neg diff
+    w_neg();
+    pop(T_INVALID);
+    //shl diff,7 - count_reg
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_push_imm(16-1);
+    b_sub();
+    pop(T_INVALID);
+
+    w_shl();
+    pop(T_INVALID);
+    //shr dest_reg,count_reg
+    push(dest_reg|T_E32X|T_16X);
+    push(count_reg|T_E32X|T_16X|T_8H);
+    w_shr();
+    //pop(T_INVALID);
+    //get_cf();
+    //d_push_imm(1);
+    b_push_imm_zx(1);
+    d_and();   //获取shr的cf标志位
+    pop(T_INVALID);
+    pop(tmp_cf_reg);
+
+    //or dest_reg,diff
+    w_or();
+
+    push(tmp_cf_reg);
+    d_or(); //合并shr的cf和or的其他标志位
+    pop(T_INVALID);
+    unlock_tmp_vmregister(count_reg);
+    unlock_tmp_vmregister(dest_reg);
+    unlock_tmp_vmregister(highest_bit);
+    unlock_tmp_vmregister(tmp_cf_reg);
+}
+
+void VCombosVMCode::d_sar()
+{
+    /*
+    * sar 10101110,2
+    * 最高位 = 1
+    * 11111111  sub 0,最高位 -> diff
+    * 11111000  shl diff << 右移位数 + 1
+    * 11111001  add diff,最高位
+    * 00000111  neg diff
+    * 11100000  shl diff,目标操作数位数(7) - 右移位数 + 1
+    * shr 目标操作数,右移位数
+    * add 目标操作数,diff
+    */
+    int dest_reg = get_tmp_vmregister();
+    int highest_bit = get_tmp_vmregister();
+    int count_reg = get_tmp_vmregister();
+    int tmp_cf_reg = get_tmp_vmregister();
+    pop(count_reg|T_E32X|T_16X|T_8H);//save count
+    //and o1,10000000b
+    push_vsp();
+    d_read_mem(); //copy dest
+    pop(dest_reg|T_E32X); //save dest
+    d_push_imm(1<<31);
+    d_and();
+    pop(T_INVALID);
+
+    b_push_imm(31);
+    d_shr();
+    pop(T_INVALID);
+    //int3();
+
+    push_vsp();
+    d_read_mem();
+    pop(highest_bit|T_E32X);
+    //neg diff
+    d_neg();
+    pop(T_INVALID);
+    //int3();
+    //add count,1
+    push(count_reg|T_E32X|T_16X|T_8H);
+    d_shl(); //new
+    pop(T_INVALID);
+
+    b_push_imm(1);
+    d_shl();
+    //b_add();
+    pop(T_INVALID);
+    //int3();
+    //shl diff,count+1
+    /*d_shl();
+    pop(T_INVALID);
+    int3();*/
+    //add diff,最高位
+    push(highest_bit|T_E32X);
+    d_add();
+    pop(T_INVALID);
+    //neg diff
+    d_neg();
+    pop(T_INVALID);
+    //int3();
+
+    //shl diff,7 - count_reg
+    push(count_reg|T_E32X|T_16X|T_8H);
+    b_push_imm(32-1);
+    b_sub();
+    pop(T_INVALID);
+    //int3();
+
+    d_shl();
+    pop(T_INVALID);
+    //int3();
+    //shr dest_reg,count_reg
+    push(dest_reg|T_E32X);
+    push(count_reg|T_E32X|T_16X|T_8H);
+    d_shr();
+    //pop(T_INVALID);
+    //get_cf();
+    //d_push_imm(1);
+    b_push_imm_zx(1);
+    d_and();   //获取shr的cf标志位
+    pop(T_INVALID);
+    pop(tmp_cf_reg);
+
+    //or dest_reg,diff
+    d_or();
+    //int3();
+
+
+    push(tmp_cf_reg);
+    d_or(); //合并shr的cf和or的其他标志位
+    pop(T_INVALID);
+    unlock_tmp_vmregister(count_reg);
+    unlock_tmp_vmregister(dest_reg);
+    unlock_tmp_vmregister(highest_bit);
+    unlock_tmp_vmregister(tmp_cf_reg);
+}
+
 
 void VCombosVMCode::ret()
 {

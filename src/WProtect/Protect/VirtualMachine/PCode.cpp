@@ -597,7 +597,7 @@ void PCode::db(unsigned char b)
       if (b >= REG_NUMBER * 4)
       {
           printf("虚拟寄存器引索超过边界\n");
-          __asm("int3");
+          debugbreakpoint();
       }
       //printf("寄存器数量：%d \n",REG_NUMBER);
       strcpy(reg_name,"");
@@ -1033,7 +1033,7 @@ void PCode::v_push_register(long _register,bool _disable)
 #ifndef PROTECT_X64
 #ifdef DEBUG
         printf("保护32位程序却要push 64位寄存器\n");
-        __asm("int3");
+        debugbreakpoint();
 #endif
 #endif     
 #ifdef PROTECT_X64
@@ -1153,7 +1153,7 @@ void PCode::v_pop_register(long _register)
 #ifndef PROTECT_X64
 #ifdef DEBUG
         printf("保护32位程序却要pop 64位寄存器\n");
-        __asm("int3");
+        debugbreakpoint();
 #endif 
 #endif
 #ifdef PROTECT_X64

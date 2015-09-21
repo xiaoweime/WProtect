@@ -216,7 +216,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
             }
             else
             {
-                __asm("int3");
+                debugbreakpoint();
             }
         }
 
@@ -236,6 +236,13 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
 #ifdef DEBUG
             char file_name[256];
             memset(&file_name,0,256);
+            if (vmdebug_out_file_directory == false)
+            {
+                vmdebug_out_file_directory = true;
+                //system("rm -r ./virtual_machine_assembly");
+                //system("mkdir virtual_machine_assembly");
+            }
+            //_mkdir("virtual_machine_assembly");
             sprintf(file_name,"virtual_machine_assembly/Label%d,%08x\n", iter->get_label(),var_map_label_vmcode_addr[iter->get_label()]);
             var_pcode.out_log_file(file_name);
 #endif
@@ -262,7 +269,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                         *addr = create_vm_entry(var_cur_label);
                     else
                     {
-                        asm("int3");
+                        debugbreakpoint();
                         printf("没有找到地址%x\n",*addr);
                     }
                 }
@@ -307,7 +314,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                     break;
                 case OPCODE_ATTRIBUTE_CALL: //虚拟机内部call
                 {
-                    asm("int3");
+                    debugbreakpoint();
                 }
                     break;
                 case OPCODE_ATTRIBUTE_EXTERNAL_JMP: //跳转到虚拟机外部
@@ -347,7 +354,8 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                     break;
                 case OPCODE_ATTRIBUTE_EXTERNAL_JCC:
                 {
-                    asm("int3");
+                   printf("没有处理跳转到外部的jcc\n");
+                   debugbreakpoint();
                 }
                     break;
                 case OPCODE_ATTRIBUTE_NORMAL:
@@ -462,6 +470,9 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
         VMAddressTable *ptr_address_table,
         std::vector<long*> & entry_address)
     :newlabel_count(0)
+#ifdef DEBUG
+     ,vmdebug_out_file_directory(false)
+#endif
 {
    var_entry_address = entry_address;
    if (!ptr_info->size)
@@ -510,6 +521,10 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
         pCodeBufferInfo ptr_info,
         VMAddressTable *ptr_address_table)
     :newlabel_count(0)
+#ifdef DEBUG
+     ,vmdebug_out_file_directory(false)
+#endif
+
 {
     if (!ptr_info->size)
         return;
@@ -675,7 +690,7 @@ void BuildVMByteCode::vm_operand(
             if (mapped_vm_register.find(var_operand.base) == mapped_vm_register.end())
             {
                  printf("没有寄存器\n");
-                 __asm("int3");
+                 debugbreakpoint();
             }
             else
             {
@@ -1675,7 +1690,27 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
         * add 目标操作数,diff
         */
          var_combos_vm_code.impact_vmregister(false);
+         read_vm_operand(var_combos_vm_code,get_operand1(var_ud));
+         read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
+         switch (get_operand1(var_ud).size) {
+         case 8:
+             var_combos_vm_code.b_sar();
+             break;
+         case 16:
+             var_combos_vm_code.w_sar();
+             break;
+         case 32:
+             var_combos_vm_code.d_sar();
+             break;
+         default:
+             printf("没有支持这个操作数\n");
+             debugbreakpoint();
+             break;
+         }
+         var_combos_vm_code.popf();
+         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
 
+         /*
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
          read_mem(get_operand1(var_ud));
          int dest_reg = var_combos_vm_code.get_tmp_vmregister();
@@ -1887,9 +1922,34 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
          var_combos_vm_code.unlock_tmp_vmregister(count_reg);
          var_combos_vm_code.unlock_tmp_vmregister(dest_reg);
          var_combos_vm_code.unlock_tmp_vmregister(highest_bit);
+         var_combos_vm_code.unlock_tmp_vmregister(tmp_cf_reg);
+         */
          var_combos_vm_code.impact_vmregister(true);
      }
      break;
+    case UD_Icdq:
+     {
+       var_combos_vm_code.impact_vmregister(false);
+       var_combos_vm_code.push(T_EAX);
+       var_combos_vm_code.b_push_imm(31);
+       var_combos_vm_code.d_sar();
+       var_combos_vm_code.pop(T_INVALID);
+       var_combos_vm_code.pop(T_EDX);
+       var_combos_vm_code.impact_vmregister(true);
+     }
+       break;
+    case UD_Icwd:
+    {
+       var_combos_vm_code.impact_vmregister(false);
+       var_combos_vm_code.push(T_AX);
+       var_combos_vm_code.b_push_imm(15);
+       var_combos_vm_code.w_sar();
+       var_combos_vm_code.pop(T_INVALID);
+       var_combos_vm_code.pop(T_DX);
+
+       var_combos_vm_code.impact_vmregister(true);
+    }
+       break;
     case UD_Iscasb: //edi - ~df + df
      {
        /*
@@ -2470,6 +2530,33 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
 
      }
      break;
+    case UD_Imovzx:
+     {
+       for (int i = get_operand2(var_ud).size; i < get_operand1(var_ud).size;i+=8)
+       {
+           var_combos_vm_code.b_push_imm(0);
+       }
+       read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
+
+       write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
+     }
+     break;
+    case UD_Imovsx:
+     {
+       read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
+
+       for (int i = get_operand2(var_ud).size; i < get_operand1(var_ud).size;i+=8)
+       {
+           int r = rand();
+           r = r ? r%0xff : 0;
+           var_combos_vm_code.b_push_imm(r);
+       }
+       var_combos_vm_code.b_push_imm(get_operand1(var_ud).size - get_operand2(var_ud).size);
+       var_combos_vm_code.d_sar();
+       var_combos_vm_code.pop(T_INVALID);
+       write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
+     }
+     break;
     case UD_If2xm1:
      build_fpu(var_combos_vm_code,var_ud);
      break;
@@ -2773,6 +2860,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
 
    default:
        printf("没有处理%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+       debugbreakpoint();
        break;
    }
 }/*}}}*/

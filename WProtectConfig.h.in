@@ -10,9 +10,27 @@
 #cmakedefine X86
 
 //是否是windows
-#cmakedefine WINDOWS
+//#cmakedefine WINDOWS
 
 //32位保护程序还是64位保护程序
 #cmakedefine PROTECT_X64
+
+
+#ifdef _MSC_VER
+#define debugbreakpoint() asm { int 3;}
+#endif
+
+#ifdef __GNUC__
+#define debugbreakpoint() __asm("int3")
+#endif
+
+#ifdef _WIN32
+#define WINDOWS
+#endif
+
+#ifdef __WINDOWS_
+#define WINDOWS
+#endif
+
 
 

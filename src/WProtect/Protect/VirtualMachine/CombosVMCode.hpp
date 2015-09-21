@@ -214,6 +214,12 @@ class VCombosVMCode{
         void w_shl();
         void d_shl();
         void q_shl(); 
+
+        void b_sar();
+        void w_sar();
+        void d_sar();
+        void q_sar();
+
         
         void ret();
 
