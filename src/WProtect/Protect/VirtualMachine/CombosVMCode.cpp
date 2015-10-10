@@ -24,7 +24,7 @@ VCombosVMCode::VCombosVMCode(PCode * p)
     :super_protect(false),ptr_pcode(NULL),change_vmregister_flag(true)
 {
     if (ptr_pcode)
-        printf("ptr_pcode为空,需从新手动挂接");
+        printf("ptr_pcode is Empty");
     ptr_pcode = p;
     memset(&tmp_vmregister_status,false,sizeof(tmp_vmregister_status));  
 }

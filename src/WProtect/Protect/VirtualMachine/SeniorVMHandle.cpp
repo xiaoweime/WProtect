@@ -642,7 +642,7 @@ char SeniorVMHandle::push_operand( pVOperand o )
     return 0;
   }
   else {
-    cout << "未知操作数\r\n" << endl;
+    cout << "Unknow OP\r\n" << endl;
     throw;
     return -1;
   }
@@ -699,7 +699,7 @@ char SeniorVMHandle::pop_operand( pVOperand o )
     return 0;
   }
   else {
-    cout << "未知操作数\r\n" << endl;
+    cout << "Unknow OP\r\n" << endl;
     throw;
     return -1;
   }
@@ -1089,7 +1089,7 @@ char SeniorVMHandle::v_shl( pVOperand o1,pVOperand o2 )
   char s2 = push_operand(o2);
   if ( s2 > 1 )
   {
-    cout << "shl第二个操作数不可能大于cl" << endl;
+    cout << "shl Second param is greater than cl" << endl;
     throw;
   }
   
@@ -1175,7 +1175,7 @@ char SeniorVMHandle::v_shr( pVOperand o1,pVOperand o2 )
   char s2 = push_operand(o2);
   if ( s2 > 1 )
   {
-    cout << "shr第二个操作数不可能大于cl" << endl;
+    cout << "shr p2 is greater than cl" << endl;
     throw;
   }
   
