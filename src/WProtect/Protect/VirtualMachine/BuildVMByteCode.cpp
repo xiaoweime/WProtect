@@ -1629,7 +1629,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
      }/*}}}*/
      break;
     case UD_Ishl:
-     {
+     {/*{{{*/
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
          read_mem(get_operand1(var_ud));
          vm_operand(var_combos_vm_code, get_operand2(var_ud));
@@ -1650,10 +1650,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
          //var_combos_vm_code.popf();
          var_combos_vm_code.popf();
          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }
+     }/*}}}*/
      break;
     case UD_Ishr:
-     {
+     {/*{{{*/
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
          read_mem(get_operand1(var_ud));
          vm_operand(var_combos_vm_code, get_operand2(var_ud));
@@ -1674,10 +1674,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
          //var_combos_vm_code.popf();
          var_combos_vm_code.popf();
          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }
+     }/*}}}*/
      break;
     case UD_Isar:
-     {
+     {/*{{{*/
        /*
         * sar 10101110,2
         * 最高位 = 1
@@ -1925,10 +1925,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
          var_combos_vm_code.unlock_tmp_vmregister(tmp_cf_reg);
          */
          var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
      break;
     case UD_Icdq:
-     {
+     {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EAX);
        var_combos_vm_code.b_push_imm(31);
@@ -1936,10 +1936,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDX);
        var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
        break;
     case UD_Icwd:
-    {
+    {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_AX);
        var_combos_vm_code.b_push_imm(15);
@@ -1948,10 +1948,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        var_combos_vm_code.pop(T_DX);
 
        var_combos_vm_code.impact_vmregister(true);
-    }
+    }/*}}}*/
        break;
     case UD_Iscasb: //edi - ~df + df
-     {
+     {/*{{{*/
        /*
         *
         * df = 1
@@ -2024,10 +2024,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        //var_combos_vm_code.int3(); //sub edi,~df
       */
        var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
      break;
     case UD_Iscasw: //edi - ~df + df
-     {
+     {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EDI);
        //var_combos_vm_code.pushf();
@@ -2048,10 +2048,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
 
        //var_combos_vm_code.int3(); //sub edi,~df
        var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
      break;
     case UD_Iscasd: //edi - ~df + df
-     {
+     {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EDI);
        //var_combos_vm_code.pushf();
@@ -2071,10 +2071,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
      break;
     case UD_Imovsb:
-     {
+     {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_ESI);
        var_combos_vm_code.b_read_mem();
@@ -2098,10 +2098,10 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
-     }
+     }/*}}}*/
      break;
     case UD_Imovsd:
-     {
+     {/*{{{*/
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_ESI);
        var_combos_vm_code.d_read_mem();
@@ -2127,8 +2127,366 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
+     }/*}}}*/
+     break;
+    case UD_Isetz: // zf = 1
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
      }
      break;
+    case UD_Isetnz: // zf = 0
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();  //
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isets: // sf = 1
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetns: // sf = 0
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetnp: // pf = 0
+     {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_pf();  //
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+
+        var_combos_vm_code.d_not();     
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetp: // pf = 1
+     {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_pf();  //这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
+        var_combos_vm_code.b_push_imm(2); //这里把刚刚获取的那个数据右移三位
+        var_combos_vm_code.d_shr();    //右移
+        var_combos_vm_code.pop(T_INVALID);//删除shr那个eflag我们并不需要
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位 
+        var_combos_vm_code.pop(T_INVALID | T_16X);//上面用了8位还剩24位(这24位都为0)先删除16位
+        var_combos_vm_code.pop(T_INVALID | T_8H);//在删除8位 
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;                     
+    case UD_Iseto: // of = 1
+     {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();  //这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
+        var_combos_vm_code.b_push_imm(2); //这里把刚刚获取的那个数据右移三位
+        var_combos_vm_code.d_shr();    //右移
+        var_combos_vm_code.pop(T_INVALID);//删除shr那个eflag我们并不需要
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位
+        var_combos_vm_code.pop(T_INVALID | T_16X);//上面用了8位还剩24位(这24位都为0)先删除16位
+        var_combos_vm_code.pop(T_INVALID | T_8H);//在删除8位
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetno: // of = 0
+     {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();  //
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetb: // cf = 1
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_cf();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetae: // cf = 0
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_cf();  //
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Iseta: // cf = 0 && zf = 0
+     {
+        var_combos_vm_code.impact_vmregister(false);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_cf();
+        var_combos_vm_code.b_push_imm(2);
+        var_combos_vm_code.d_shr();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();
+        var_combos_vm_code.b_push_imm(2);
+        var_combos_vm_code.d_shr();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetbe: // cf = 1 && zf = 1
+     {
+        var_combos_vm_code.impact_vmregister(false);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_cf();
+        var_combos_vm_code.b_push_imm(2);
+        var_combos_vm_code.d_shr();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();
+        var_combos_vm_code.b_push_imm(2);
+        var_combos_vm_code.d_shr();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+     break;
+    case UD_Isetg:  // zf = 0 && sf = of
+    {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();  //
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        var_combos_vm_code.d_xor();
+        var_combos_vm_code.pop(T_INVALID);
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.b_push_imm_zx(1);
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+    }
+       break;
+   case UD_Isetle:   // zf = 1 && sf != of
+       {
+         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();
+
+        var_combos_vm_code.d_xor();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_zf();
+
+        var_combos_vm_code.d_and();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+
+       }
+       break;
+    case UD_Isetl: // sf != of
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();
+
+        var_combos_vm_code.d_xor();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+       break;
+    case UD_Isetge: // sf = of
+     {
+        var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_sf();  //
+
+        var_combos_vm_code.pushf();
+        var_combos_vm_code.get_of();
+
+        var_combos_vm_code.d_xor();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.d_not();
+        var_combos_vm_code.pop(T_INVALID);
+
+        var_combos_vm_code.b_push_imm(2); //
+        var_combos_vm_code.d_shr();    //
+        var_combos_vm_code.pop(T_INVALID);//
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); //
+        var_combos_vm_code.pop(T_INVALID | T_16X);//
+        var_combos_vm_code.pop(T_INVALID | T_8H);//
+        var_combos_vm_code.impact_vmregister(true);
+     }
+       break;
     case UD_Ijnz: //ZF = 0
      {/*{{{*/
         var_combos_vm_code.impact_vmregister(false);
