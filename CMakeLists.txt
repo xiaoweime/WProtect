@@ -3,7 +3,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb ")#就是这两行�
 SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")#
 project(WProtect)
 
-#set (LIBRARY_TYPE_SHARED 1)  #是否生成共享链接库
+#set (LIBRARY_TYPE_SHARED 0)  #是否生成共享链接库
 #set (LIBRARY_TYPE_STATIC 1)  #是否生成静态链接库
 
 set(WPROTECT_VERSION_MAJOR 1)

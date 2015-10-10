@@ -1,17 +1,4 @@
-// [AsmJit]
-// Complete JIT Assembler for C++ Language.
-//
-// [License]
-// Zlib - See COPYING file in this package.
-
-// This file is only included as an example and simple test if jit
-// compiler works.
-
 #include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-
-//#include <WProtect.h>
 #ifndef WPROTECT_CONFIG_H
 #define WPROTECT_CONFIG_H
 #include <WProtectConfig.h>
@@ -20,14 +7,11 @@
 #ifndef ASMJIT_H
 #define ASMJIT_H
 #include <Assembl.h>
-//#include <AsmJit.h>
 #endif
 
-//#ifndef UDIS86_H
-//#define UDIS86_H
+
 #include <udis86.h>
-//#endif
-//#include <udis86.h>
+
 
 #include <OutOfOrder.hpp>
 // This is type of functionwe will generate
@@ -61,12 +45,8 @@ extern "C"{
 
 static int show_version(lua_State *L)   //给lua调用的c函数必须定义成static int XXX(lua_State *L)
 {
- //   char   path[MAX_PATH];
-//    GetCurrentDirectory(MAX_PATH,path);
- //   lua_pushstring(L,path);
     lua_pushstring(L,"\r\nlua_5.1.1\r\n");
-    return 1;   //为什么要返回1？这是有依据的，该函数把结果压入了栈，lua调用该函数将从栈中
-//取1个结果
+    return 1;
 }
 
 
@@ -74,19 +54,12 @@ int run_lua ()
 {
     int sum;
     lua_State* L;
-    //创建一个指向lua解释器的指针
     L = luaL_newstate();
-    //加载lua标准库
     luaL_openlibs(L);
-         //注册C++函数
     lua_register(L,"show_version",show_version);
-    //加载脚本
     luaL_dofile(L,"info.lua");
-    //调用函数
     lua_getglobal(L,"run");
-         //运行函数并把结果压入栈
     lua_pcall(L,0,0,0);
-    //关闭并释放资源
     lua_close(L);
     return 0;
 }
@@ -381,7 +354,7 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
 
       size_t section_size;
       unsigned char * ptr_section_data = (unsigned char*)section.GetSectionData(index,&section_size);
-      printf("\n第%d个区段，大小%d\n",index,section_size);
+      printf("\nSection No.%02d Size0x%04X\n",index,section_size);
       for (int offset = 0;offset < section_size;offset++)
       {
           //printf("%x ",(unsigned char)ptr_section_data[offset]);
@@ -451,7 +424,7 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
           if (sdk_begin_count == strlen(sz_sdk_begin_name) + 3)
           {
               int sdk_begin_str_size = strlen(sz_sdk_begin_name) + 1;
-              printf("找到SDK BEGIN offset:%x,addr:%x\n",
+              printf("Found WProtect Begin offset:%08X, va:%08X\n",
                      offset - sdk_begin_str_size,
                      section.GetSectionVa(index,offset - sdk_begin_str_size));
               protect_begin_address = section.GetSectionVa(index,offset - sdk_begin_str_size);
@@ -462,19 +435,19 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
           }
           if (sdk_end_count == strlen(sz_sdk_end_name) + 3)
           {
-              printf("找到SDK END offset:%x\n",offset - strlen(sz_sdk_end_name) - 1);
+              printf("Found WProtect End   offset:%08X\n",offset - strlen(sz_sdk_end_name) - 1);
               int sdk_end_str_size = strlen(sz_sdk_end_name) + 1;
               protect_end_address = section.GetSectionVa(index,offset - sdk_end_str_size);
               if (protect_begin_address == 0 )
               {
-                  printf("%x这个WProtect End没有匹配的WProtect Begin\n",protect_end_address);
+                  printf("%08X Can not find a mathing WProtect Begin\n",protect_end_address);
               }
               else
               {
                   build_piece piece;
                   piece.build_exec_addr = protect_begin_address;
                   piece.build_exec_size = protect_end_address - protect_begin_address + sdk_end_str_size + 2;
-                  printf("保护地址%x - %x\n",piece.build_exec_addr,piece.build_exec_addr+piece.build_exec_size);
+                  printf("Protect Address: %08X - %08X\n",piece.build_exec_addr,piece.build_exec_addr+piece.build_exec_size);
                   build_info.push_back(piece);
               }
               protect_begin_address = 0;
@@ -497,24 +470,25 @@ void get_wprotect_sdk_address_elf(CELFFile & section,
 
 void printf_user_system_info()
 {
+    printf("Build Under: ");
 #ifdef linux
-    printf("it is in linux os!\n");
+    printf("Linux!\n");
 #endif
 #ifdef _UNIX
-    printf("it is in unix os!\n");
+    printf("Unix!\n");
 #endif
 #ifdef __WINDOWS_
-    printf("it is windows os!\n");
+    printf("Windows!\n");
 #endif
 #ifdef _WIN32
-    printf("it is win32 os!\n");
+    printf("Win32!\n");
 #endif
-
+    printf("Using Compilor: ");
 #ifdef _MSC_VER
-    printf("usr msvc!\n");
+    printf("MSVC!\n");
 #endif
 #ifdef __GNUC__
-    printf("usr gunc!\n");
+    printf("GNU C!\n");
 #endif
 }
 
@@ -532,7 +506,7 @@ void get_wprotect_sdk_address(CPESection & section,
   {
       DWORD section_size;
       BYTE * ptr_section_data = section.GetSectionData(index,&section_size);
-      printf("第%d个区段，大小%d,flag:%x\n",index,section_size,section.GetCharacteristics(index));
+      printf("\nSection No.%02d Size0x%04X\n",index,section_size,section.GetCharacteristics(index));
       if (strcmp((const char*)section.GetSection(index)->Name,".text") != 0)
       {
           continue;
@@ -600,7 +574,7 @@ void get_wprotect_sdk_address(CPESection & section,
           if (sdk_begin_count == strlen(sz_sdk_begin_name) + 3)
           {
               int sdk_begin_str_size = strlen(sz_sdk_begin_name) + 1;
-              printf("找到SDK BEGIN offset:%x,addr:%x\n",
+              printf("Found WProtect Begin offset:%08X, va:%08X\n",
                      offset - sdk_begin_str_size,
                      section.GetSectionVa(index,offset - sdk_begin_str_size));
               protect_begin_address = section.GetSectionVa(index,offset - sdk_begin_str_size);
@@ -611,19 +585,19 @@ void get_wprotect_sdk_address(CPESection & section,
           }
           if (sdk_end_count == strlen(sz_sdk_end_name) + 3)
           {
-              printf("找到SDK END offset:%x\n",offset - strlen(sz_sdk_end_name) - 1);
+              printf("Found WProtect End   offset:%08X\n",offset - strlen(sz_sdk_end_name) - 1);
               int sdk_end_str_size = strlen(sz_sdk_end_name) + 1;
               protect_end_address = section.GetSectionVa(index,offset - sdk_end_str_size);
               if (protect_begin_address == 0 )
               {
-                  printf("%x这个WProtect End没有匹配的WProtect Begin\n",protect_end_address);
+                  printf("%08X Can not find a mathing WProtect Begin\n",protect_end_address);
               }
               else
               {
                   build_piece piece;
                   piece.build_exec_addr = protect_begin_address;
                   piece.build_exec_size = protect_end_address - protect_begin_address + sdk_end_str_size + 2;
-                  printf("保护地址%x - %x\n",piece.build_exec_addr,piece.build_exec_addr+piece.build_exec_size);
+                  printf("Protect Address: %08X - %08X\n",piece.build_exec_addr,piece.build_exec_addr+piece.build_exec_size);
                   build_info.push_back(piece);
               }
               protect_begin_address = 0;
@@ -726,7 +700,7 @@ void buildvmtest_elf(BuildCodeInfo & build_info)
     info.size = build_exec_size;
     if (info.size < 5)
     {
-      printf("编译内容不能小于5Byte,容不下一个跳转\n");
+      printf("Protect Size less than 5 Byte\n");
       return;
     }
 //#define VM_DEBUG_BUILD
@@ -878,7 +852,7 @@ void buildvmtest(BuildCodeInfo & build_info)
     info.size = build_exec_size;
     if (info.size < 5)
     {
-      printf("编译内容不能小于5Byte,容不下一个跳转\n");
+      printf("Protect Size less than 5 Byte\n");
       return;
     }
 //#define VM_DEBUG_BUILD
@@ -1161,9 +1135,6 @@ void parse_commandline_options(int argc,char * argv[])
 
 int main(int argc, char* argv[])
 {
-//	Assembl ss;
-//	ss.Assemble("hello:");
-	// 显示版本号
 	if (argc < 2)
 		{
 			fprintf(stdout,"%s Version %d.%d\n",
@@ -1172,8 +1143,6 @@ int main(int argc, char* argv[])
 					WPROTECT_VERSION_MINOR);
 		}
     printf_user_system_info();
-//	printf("WProtect-%d.%d\r\n",WPROTECT_V,WPROTECT_VERSION_MINOR);
-	//
 
 
   using namespace AsmJit;
@@ -1190,7 +1159,8 @@ int main(int argc, char* argv[])
   }
   else
   {
-    printf("输入错误,WProtect -f 文件名\n");
+    printf("Input Format:\n"
+           "WProtect -f {filename}\n");
     return -1;
   }
     
