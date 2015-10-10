@@ -31,7 +31,7 @@
               switch (x.size)\
               {\
                  case 0:\
-                    printf("大小为0\n");\
+                    printf("Size is 0\n");\
                     break;\
                  case 8:\
                     var_combos_vm_code.b_read_mem();\
@@ -119,7 +119,7 @@ void printf_map_register_store(std::map<int,RegisterStore> & _p_map_in,
     int i = 0;
     while (_p_map_in.find(i) != _p_map_in.end())
     {
-        printf("标签:%x\n",i);
+        printf("Label :%x\n",i);
         printf("In Key:%08x\n",_p_map_in[i].get_key());
         OutDI di;
         di.set_begin_text("");
@@ -143,7 +143,7 @@ void printf_map_register_store(std::map<int,RegisterStore> & _p_map,
     std::map<int,RegisterStore>::iterator iter = _p_map.begin();
     for (iter; iter!=_p_map.end();iter++)
     {
-        printf("标签:%x\n",iter->first);
+        printf("Label :%x\n",iter->first);
         printf("%s Key:%08x\n\n",sz,iter->second.get_key());
         OutDI di;
         di.set_begin_text(sz);
@@ -183,7 +183,7 @@ long BuildVMByteCode::create_vm_entry(int _piece_label)
                             init_de_key); //pcode位置有问题
     ptr_addr_table->copy(head_address,info->buf,info->size);
 #ifdef DEBUG
-    printf("VM入口点地址:%x\n",head_address);
+    printf("VM EntryAddress:%x\n",head_address);
 #endif
     return head_address;
 }
@@ -270,7 +270,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                     else
                     {
                         debugbreakpoint();
-                        printf("没有找到地址%x\n",*addr);
+                        printf("Address Not Found%x\n",*addr);
                     }
                 }
             }
@@ -354,7 +354,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                     break;
                 case OPCODE_ATTRIBUTE_EXTERNAL_JCC:
                 {
-                   printf("没有处理跳转到外部的jcc\n");
+                   printf("jcc to out of VM\n");
                    debugbreakpoint();
                 }
                     break;
@@ -401,7 +401,7 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
         {
             size_t vm_piece_size = var_pcode.count_vmcode_end();
 #ifdef DEBUG
-            printf("标签%d,大小:%d\n",iter->get_label(),vm_piece_size);
+            printf("Label %d,Size:%d\n",iter->get_label(),vm_piece_size);
 #endif
             long t_byte_code_addr = ptr_addr_table->assign_address(vm_piece_size,var_vmcode_info);
             //long t_byte_code_addr = ptr_addr_table->assign_address(vm_piece_size);
@@ -409,12 +409,12 @@ long BuildVMByteCode::build_vmcode(bool b_allocator)
                 vm_byte_code_head = t_byte_code_addr;
 #ifdef DEBUG
             if (ptr_addr_table->get_sign())
-                printf("分配到的PCODE地址%08x - %08x,标志:%d\n",
+                printf("Alloced PCODE Address %08x - %08x Flags:%d\n",
                        t_byte_code_addr,
                        t_byte_code_addr + vm_piece_size,
                        ptr_addr_table->get_sign());
             else
-                printf("分配到的PCODE地址%08x - %08x,标志:%d\n",
+                printf("Alloced PCODE Address %08x - %08x Flags:%d\n",
                        t_byte_code_addr - vm_piece_size,
                        t_byte_code_addr,
                        ptr_addr_table->get_sign());
@@ -689,7 +689,7 @@ void BuildVMByteCode::vm_operand(
          {
             if (mapped_vm_register.find(var_operand.base) == mapped_vm_register.end())
             {
-                 printf("没有寄存器\n");
+                 printf("No Register\n");
                  debugbreakpoint();
             }
             else
@@ -708,7 +708,7 @@ long BuildVMByteCode::get_vm_register(ud_type _register)
    long result = T_INVALID;
    if (mapped_vm_register.find(_register) == mapped_vm_register.end())
    {
-      printf("无法识别的寄存器\n");
+      printf("Can not identify Register\n");
    }
    else
    {
@@ -785,7 +785,7 @@ void BuildVMByteCode::build_fpu(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                         break;
                     default:
 #ifdef DEBUG
-                        printf("未知的FPU指令操作数大小%d\n",get_operand1(var_ud).size);
+                        printf("Unknown FPU OP Size%d\n",get_operand1(var_ud).size);
 #endif
                         break;
                     }
@@ -797,7 +797,7 @@ void BuildVMByteCode::build_fpu(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                 }
             }
             if (find == false)
-                printf("没有找到%s指令\n",mnemonic_name);
+                printf("Instruction Not Found: %s\n",mnemonic_name);
             else
                 write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
         }
@@ -1090,12 +1090,12 @@ void BuildVMByteCode::build_pfx(VCombosVMCode & var_combos_vm_code,ud_t &var_ud,
       var_map_newlabel_vmcode_addr.insert(std::make_pair<int,long>(get_newvm_cur_label(),new_pcode_addr));
       //printf("NewLabel分配到PCODE地址:%x - %x\n",new_pcode_addr - new_pcode_size,new_pcode_addr);
            if (ptr_addr_table->get_sign())
-               printf("分配到的NEWPCODE地址%08x - %08x,标志:%d\n",
+               printf("NEWPCODE Address:%08x - %08x, Flags:%d\n",
                   new_pcode_addr,
                   new_pcode_addr + new_pcode_size,
                   ptr_addr_table->get_sign());
            else
-               printf("分配到的NEWPCODE地址%08x - %08x,标志:%d\n",
+               printf("NEWPCODE Address:%08x - %08x, Flags:%d\n",
                   new_pcode_addr - new_pcode_size,
                   new_pcode_addr,
                   ptr_addr_table->get_sign());
@@ -1703,7 +1703,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
              var_combos_vm_code.d_sar();
              break;
          default:
-             printf("没有支持这个操作数\n");
+             printf("OP NotSupported\n");
              debugbreakpoint();
              break;
          }
@@ -2859,7 +2859,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
      break;
 
    default:
-       printf("没有处理%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+       printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
        debugbreakpoint();
        break;
    }
@@ -3118,7 +3118,7 @@ void BuildVMByteCode::set_register_store(std::vector<CodePiece> &var_list_code_p
     //for (lastpiece_iter; lastpiece_iter != var_map_lastpiece_vmreg_store.end();)//lastpiece_iter++)
     while (!var_map_lastpiece_vmreg_store.empty())
     {
-        printf("第%d次进入循环,var_map_lastpiece_vmreg_store大小:%d\n",i++,var_map_lastpiece_vmreg_store.size());
+        printf("No.%d Entry Loop,var_map_lastpiece_vmreg_store Size:%d\n",i++,var_map_lastpiece_vmreg_store.size());
         std::map<int,RegisterStore>::iterator var_iter_map_t = lastpiece_iter;
         std::vector<CodePiece>::iterator codepiece_iter = var_list_code_piece.begin(); 
         /*if (i > 100)

@@ -618,7 +618,7 @@ void BuildVMCode::update_key_data(Analysis *analysis)
     long size = senior->pcode->count_vmcode_end();
     long addr = address_table->assign_address(size,table);
 #ifdef DEBUG
-    printf("分配到PCODE地址%x,大小%d\r\n",addr,size);
+    printf("Alloc PCODE Address%08x Size:%d\r\n",addr,size);
 #endif    
     nowtree->reloc_address = addr;
 
@@ -754,7 +754,7 @@ pCodeBufferInfo BuildVMCode::BuildPCode(
   address_table->set_sign(t_sign);
 
 #ifdef DEBUG
-  printf("vm入口地址:%x\r\n",head_address);
+  printf("vmEntryAddress:%x\r\n",head_address);
 #endif
   ppcode_block_info info =  vm->create_function_head(head_address,first_pcode_addr,sfirst->pcode,pinfo->addr + pinfo->size,123456,key); //pcode位置有问题
 
@@ -794,7 +794,7 @@ pCodeBufferInfo BuildVMCode::BuildPCode(
         asm_to_vm( &vcodebufs[ i ]->get_generator(  ),&ud );
       }
     }
-    printf("当前key:%x\r\n",nowtree->key);
+    printf("Currentkey:%x\r\n",nowtree->key);
     if (i+1 < analysis.block_count    )
     {
       senior->recover_vm_context();
