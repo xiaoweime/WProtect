@@ -19,9 +19,10 @@
 #ifndef _ELF_H
 #define	_ELF_H 1
 
-#include "features.h"
 
-#if defined(__cplusplus)
+#include "wp_features.h"
+
+#if defined(__cplusplus) 
        #define __BEGIN_DECLS extern "C" {
        #define __END_DECLS }
        #else
