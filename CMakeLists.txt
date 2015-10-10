@@ -15,7 +15,7 @@ option(PROTECT_X64 "protect 64 binrary" OFF)
 option(DEBUG "the is debug" OFF)
 
 option(X86 "the is X86" ON)
-#option(WINDOWS "the is windows" OFF)
+#option(WINDOWS "the is windows" ON)
 option(STATIC_LIBRARY "the is static library" ON)
 option(LIBRARY_TYPE_STATIC "static lib" ON)
 option(LIBRARY_TYPE_SHARED "share lib" ON)
