@@ -25,14 +25,14 @@ Set (
 VIRTUALMACHINE_LIBS
 AsmJit_Static
 Algorithms_Static
-CryptoPP_Static
+#CryptoPP_Static
 )
 else()
 Set (
 VIRTUALMACHINE_LIBS
 AsmJit
 Algorithms
-CryptoPP
+#CryptoPP
 )
 endif()
 

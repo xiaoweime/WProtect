@@ -19,7 +19,7 @@ using namespace std;
 #include "VMHandle.h"
 //#include "VirtualMachine.h"
 #include <VOperand.hpp>
-#include "CryptoPP/crc.h"
+//#include "CryptoPP/crc.h"
 
 typedef struct V_HANDLE_CONTEXT_
 {
@@ -201,15 +201,16 @@ typedef struct _REGISTER_STORE_
   }
   long get_key()
   {
-      CryptoPP::CRC32 crc;
+
+    //  CryptoPP::CRC32 crc;
 
     int _key = 0;
     for (int i = 0; i < register_count; i++)
     {
-        crc.Update((byte*)&register_array[i],4);
-       //_key = (register_array[i] << i) ^ _key;
+        //crc.Update((byte*)&register_array[i],4);
+       _key = (register_array[i] << i) ^ _key;
     }
-    crc.Final((byte*)&_key);
+    //crc.Final((byte*)&_key);
     return _key;
   }
 }RegisterStore,*pRegisterStore;

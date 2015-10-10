@@ -1,4 +1,0 @@
-        int3
-        nop
-        ; Must be able to step back into the main file.
-

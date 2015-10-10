@@ -37,7 +37,7 @@ include_directories(WProtect/DataStruct)
 include_directories(WProtect/Protect/Algorithms)
 include_directories(WProtect/Protect/VirtualMachine)
 include_directories(WProtect/Analysis)
-include_directories(WProtect/CryptoPP)
+#include_directories(WProtect/CryptoPP)
 #add_subdirectory(Yasm)
 
 #添加执行目录
@@ -46,7 +46,7 @@ add_subdirectory(AsmJit)
 add_subdirectory(Libudis86)  
 add_subdirectory(WProtect)
 add_subdirectory(Lua)
-add_subdirectory(CryptoPP)
+#add_subdirectory(CryptoPP)
 #add_subdirectory(Yasm)
 
 if (QT_GUI)
