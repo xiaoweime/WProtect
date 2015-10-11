@@ -554,12 +554,32 @@ void register_build_vm_bytecode_lua()
 
          //lua_pushnumber(build_vm_code_lua,T_AL);
          //lua_setglobal(build_vm_code_lua,"al");
-
-         if (luaL_dofile(build_vm_code_lua,"./build_vm_handle.lua") == 1)
+         switch (luaL_loadfile(build_vm_code_lua,"./build_vm_handle.lua"))
          {
-             printf("没有找到build_vm_handle.lua将不加载这个脚本\n");
+         case LUA_ERRSYNTAX:
+             printf("Lua虚拟机指令模块预编译时碰到语法错误\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
+             break;
+         case LUA_ERRMEM:
+             printf("Lua虚拟机指令编译模块内存分配错误\n");
+             lua_close(build_vm_code_lua);
+             build_vm_code_lua = NULL;
+             break;
+         case LUA_ERRGCMM:
+             printf("Lua虚拟机指令编译模块运行__GC元方法时出错\n");
+             lua_close(build_vm_code_lua);
+             build_vm_code_lua = NULL;
+             break;
+         case LUA_OK:
+             printf("Lua虚拟机指令编译模块加载成功\n");
+             lua_pcall(build_vm_code_lua, 0, LUA_MULTRET, 0);
+             break;
+         default:
+             printf("没有找到build_vm_handle.lua,将不加载Lua虚拟机编译模块\n");
+             lua_close(build_vm_code_lua);
+             build_vm_code_lua = NULL;
+             break;
          }
     }
 }
