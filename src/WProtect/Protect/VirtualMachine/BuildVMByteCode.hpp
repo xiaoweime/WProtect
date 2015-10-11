@@ -81,6 +81,12 @@ class BuildVMByteCode{
 #ifdef DEBUG
   bool vmdebug_out_file_directory;
 #endif
+  //lua interface 
 };
 
+extern BuildVMByteCode * ptr_build_vm_bytecode;
+
+extern VCombosVMCode * ptr_combos_vm_code;
+
+extern ud_t  * ptr_ud;
 #endif /* end of include guard: BUILDVMBYTECODE_HPP_PTATXLUJ */

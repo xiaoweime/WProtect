@@ -22,6 +22,22 @@
 #include <opcode_table.h>
 
 
+#ifndef LUA_H
+#define LUA_H
+extern "C"{
+#include "Lua/lua.h"
+#include "Lua/lualib.h"
+#include "Lua/lauxlib.h"
+}
+#endif
+
+
+BuildVMByteCode * ptr_build_vm_bytecode;
+VCombosVMCode * ptr_combos_vm_code;
+ud_t * ptr_ud;
+lua_State * build_vm_code_lua;
+
+
 #define get_operand1_type(x) x.operand[0].type
 #define get_operand2_type(x) x.operand[1].type
 #define get_operand1(x) x.operand[0]
@@ -54,9 +70,9 @@
                     var_combos_vm_code.push(low_tmp_addr | T_E32X);\
                     var_combos_vm_code.d_read_mem();\
                     var_combos_vm_code.unlock_tmp_vmregister(low_tmp_addr);\
-                    break;\ 
-              }\        
-        }    
+                    break;\
+              }\
+        }
 
 
 #define write_mem(x) if(x.type == UD_OP_MEM)\
@@ -84,9 +100,9 @@
                     var_combos_vm_code.push(higt_tmp_addr | T_E32X);\
                     var_combos_vm_code.d_write_mem();\
                     var_combos_vm_code.unlock_tmp_vmregister(higt_tmp_addr);\
-                    break;\  
-              }\        
-        }    
+                    break;\
+              }\
+        }
 #define set_imm_operand_size(dst,src) if (dst.type == UD_OP_IMM)\
         {\
             switch (src.size)\
@@ -110,6 +126,458 @@
             }\
             dst.size = src.size;\
         }
+
+
+#define luai_def(name) \
+static int luai_ ##name(lua_State * L)\
+{\
+    ptr_combos_vm_code->impact_vmregister(false);\
+    ptr_combos_vm_code->name();\
+    ptr_combos_vm_code->impact_vmregister(true);\
+    return 0;\
+}\
+
+#define luai_def1(name)\
+static int luai_ ##name(lua_State * L)\
+{\
+    ptr_combos_vm_code->impact_vmregister(false);\
+    int count = lua_gettop(build_vm_code_lua);\
+    if (count == 1)\
+    {\
+        if (!lua_isnumber(build_vm_code_lua,1))\
+        {\
+            lua_pushstring(build_vm_code_lua,"不是一个整型\n");\
+            lua_error(build_vm_code_lua);\
+        }\
+        else\
+            ptr_combos_vm_code->name(lua_tonumber(build_vm_code_lua,1));\
+    }\
+    else\
+    {\
+        printf("%s函数调用需要一个参数\n",#name);\
+        debugbreakpoint();\
+    }\
+    ptr_combos_vm_code->impact_vmregister(true);\
+    return 0;\
+}\
+
+
+/*
+static int luai_b_push_imm(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    if (count == 1)
+    {
+        if (!lua_isnumber(build_vm_code_lua,1))
+        {
+            lua_pushstring(build_vm_code_lua, "不是一个整型\n");
+            lua_error(build_vm_code_lua);
+        }
+        ptr_combos_vm_code->b_push_imm(lua_tonumber(build_vm_code_lua,1));
+    }
+    else
+    {
+        printf("函数需要一个参数\n");
+    }
+}*/
+
+luai_def(run_stack)
+luai_def(pushf)
+luai_def(popf)
+
+luai_def(push_vsp)
+luai_def(pop_vsp)
+
+luai_def(set_pc)
+
+luai_def(b_read_mem)
+luai_def(w_read_mem)
+luai_def(d_read_mem)
+//luai_def(q_read_mem)
+
+luai_def(b_write_mem)
+luai_def(w_write_mem)
+luai_def(d_write_mem)
+//luai_def(q_write_mem)
+
+luai_def(b_nand)
+luai_def(w_nand)
+luai_def(d_nand)
+//luai_def(q_nand)
+
+luai_def(b_not)
+luai_def(w_not)
+luai_def(d_not)
+//luai_def(q_not)
+
+luai_def(b_neg)
+luai_def(w_neg)
+luai_def(d_neg)
+//luai_def(q_neg)
+
+luai_def(b_and)
+luai_def(w_and)
+luai_def(d_and)
+//luai_def(q_and)
+
+luai_def(b_or)
+luai_def(w_or)
+luai_def(d_or)
+//luai_def(q_or)
+
+luai_def(b_xor)
+luai_def(w_xor)
+luai_def(d_xor)
+//luai_def(q_xor)
+
+luai_def(b_add)
+luai_def(w_add)
+luai_def(d_add)
+//luai_def(q_add)
+
+luai_def(b_sub)
+luai_def(w_sub)
+luai_def(d_sub)
+//luai_def(q_sub)
+
+luai_def(b_cmp)
+luai_def(w_cmp)
+luai_def(d_cmp)
+//luai_def(q_cmp)
+
+luai_def(b_test)
+luai_def(w_test)
+luai_def(d_test)
+//luai_def(q_test)
+
+/*
+luai_def(b_div)
+luai_def(w_div)
+luai_def(d_div)
+//luai_def(q_div)
+
+luai_def(b_mult)
+luai_def(w_mult)
+luai_def(d_mult)
+//luai_def(q_mult)
+*/
+
+luai_def(b_shr)
+luai_def(w_shr)
+luai_def(d_shr)
+//luai_def(q_shr)
+
+luai_def(b_shl)
+luai_def(w_shl)
+luai_def(d_shl)
+//luai_def(q_shl)
+
+luai_def(b_sar)
+luai_def(w_sar)
+luai_def(d_sar)
+//luai_def(q_sar)
+
+luai_def(ret)
+
+luai_def(fstsw)
+luai_def(get_cf)
+luai_def(get_pf)
+luai_def(get_af)
+luai_def(get_zf)
+luai_def(get_sf)
+luai_def(get_of)
+luai_def(get_df)
+#ifdef DEBUG
+luai_def(int3)
+#endif
+luai_def(get_string_ins_diff)
+
+luai_def1(b_push_imm)
+luai_def1(w_push_imm)
+luai_def1(d_push_imm)
+
+luai_def1(b_push_imm_zx)
+luai_def1(w_push_imm_zx)
+luai_def1(b_push_imm_sx)
+luai_def1(w_push_imm_sx)
+
+luai_def1(push)
+luai_def1(pop)
+
+static int luai_read_vm_operand(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    if (count == 1)
+    {
+        if (!lua_isnumber(build_vm_code_lua,1))
+        {
+            lua_pushstring(build_vm_code_lua, "不是一个整型\n");
+            lua_error(build_vm_code_lua);
+        }
+        int o = lua_tonumber(build_vm_code_lua,1);
+        switch (o)
+        {
+        case 1:
+            ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,get_operand1((*ptr_ud)));
+            break;
+        case 2:
+            ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,get_operand2((*ptr_ud)));
+            break;
+        case 3:
+            ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,ptr_ud->operand[2]);
+            break;
+        }
+    }
+    else
+    {
+        printf("pop_operand函数需要一个参数\n");
+        debugbreakpoint();
+    }
+}
+
+static int luai_write_vm_operand(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    if (count == 1)
+    {
+        if (!lua_isnumber(build_vm_code_lua,1))
+        {
+            lua_pushstring(build_vm_code_lua, "不是一个整型\n");
+            lua_error(build_vm_code_lua);
+        }
+        int o = lua_tonumber(build_vm_code_lua,1);
+        switch (o)
+        {
+        case 1:
+            ptr_build_vm_bytecode->write_vm_operand(*ptr_combos_vm_code,get_operand1((*ptr_ud)));
+            break;
+        case 2:
+            ptr_build_vm_bytecode->write_vm_operand(*ptr_combos_vm_code,get_operand2((*ptr_ud)));
+            break;
+        case 3:
+            ptr_build_vm_bytecode->write_vm_operand(*ptr_combos_vm_code,ptr_ud->operand[2]);
+            break;
+        }
+    }
+    else
+    {
+        printf("push_operand函数需要一个参数\n");
+        debugbreakpoint();
+    }
+}
+
+#define luai_reg(name) lua_register(build_vm_code_lua,#name,luai_##name);
+
+void register_build_vm_bytecode_lua()
+{
+    if (build_vm_code_lua == NULL)
+    {
+         build_vm_code_lua = luaL_newstate();
+         luaL_openlibs(build_vm_code_lua);
+         //lua_register(build_vm_code_lua,"b_not",luai_b_not);
+         //luai_reg(b_not);
+
+         luai_reg(run_stack)
+         luai_reg(pushf)
+         luai_reg(popf)
+
+         luai_reg(push_vsp)
+         luai_reg(pop_vsp)
+
+         luai_reg(set_pc)
+
+         luai_reg(b_read_mem)
+         luai_reg(w_read_mem)
+         luai_reg(d_read_mem)
+         //luai_reg(q_read_mem)
+
+         luai_reg(b_write_mem)
+         luai_reg(w_write_mem)
+         luai_reg(d_write_mem)
+         //luai_reg(q_write_mem)
+
+         luai_reg(b_nand)
+         luai_reg(w_nand)
+         luai_reg(d_nand)
+         //luai_reg(q_nand)
+
+         luai_reg(b_not)
+         luai_reg(w_not)
+         luai_reg(d_not)
+         //luai_reg(q_not)
+
+         luai_reg(b_neg)
+         luai_reg(w_neg)
+         luai_reg(d_neg)
+         //luai_reg(q_neg)
+
+         luai_reg(b_and)
+         luai_reg(w_and)
+         luai_reg(d_and)
+         //luai_reg(q_and)
+
+         luai_reg(b_or)
+         luai_reg(w_or)
+         luai_reg(d_or)
+         //luai_reg(q_or)
+
+         luai_reg(b_xor)
+         luai_reg(w_xor)
+         luai_reg(d_xor)
+         //luai_reg(q_xor)
+
+         luai_reg(b_add)
+         luai_reg(w_add)
+         luai_reg(d_add)
+         //luai_reg(q_add)
+
+         luai_reg(b_sub)
+         luai_reg(w_sub)
+         luai_reg(d_sub)
+         //luai_reg(q_sub)
+
+         luai_reg(b_cmp)
+         luai_reg(w_cmp)
+         luai_reg(d_cmp)
+         //luai_reg(q_cmp)
+
+         luai_reg(b_test)
+         luai_reg(w_test)
+         luai_reg(d_test)
+         //luai_reg(q_test)
+
+         /*
+         luai_reg(b_div)
+         luai_reg(w_div)
+         luai_reg(d_div)
+         //luai_reg(q_div)
+
+         luai_reg(b_mult)
+         luai_reg(w_mult)
+         luai_reg(d_mult)
+         //luai_reg(q_mult)
+         */
+
+         luai_reg(b_shr)
+         luai_reg(w_shr)
+         luai_reg(d_shr)
+         //luai_reg(q_shr)
+
+         luai_reg(b_shl)
+         luai_reg(w_shl)
+         luai_reg(d_shl)
+         //luai_reg(q_shl)
+
+         luai_reg(b_sar)
+         luai_reg(w_sar)
+         luai_reg(d_sar)
+         //luai_reg(q_sar)
+
+
+         luai_reg(ret)
+
+         luai_reg(fstsw)
+         luai_reg(get_cf)
+         luai_reg(get_pf)
+         luai_reg(get_af)
+         luai_reg(get_zf)
+         luai_reg(get_sf)
+         luai_reg(get_of)
+         luai_reg(get_df)
+#ifdef DEBUG
+         luai_reg(int3)
+#endif
+         luai_reg(get_string_ins_diff)
+
+         luai_reg(b_push_imm)
+         luai_reg(w_push_imm)
+         luai_reg(d_push_imm)
+
+         luai_reg(b_push_imm_zx)
+         luai_reg(w_push_imm_zx)
+         luai_reg(b_push_imm_sx)
+         luai_reg(w_push_imm_sx)
+
+         luai_reg(push)
+         luai_reg(pop)
+         lua_register(build_vm_code_lua,"push_operand",luai_read_vm_operand);
+         lua_register(build_vm_code_lua,"pop_operand",luai_write_vm_operand);
+
+#define luai_setglobalnumber(name) lua_pushnumber(build_vm_code_lua,T_##name);\
+    lua_setglobal(build_vm_code_lua,#name);
+
+         luai_setglobalnumber(AL);
+         luai_setglobalnumber(BL);
+         luai_setglobalnumber(CL);
+         luai_setglobalnumber(DL);
+         luai_setglobalnumber(AH);
+         luai_setglobalnumber(BH);
+         luai_setglobalnumber(CH);
+         luai_setglobalnumber(DH);
+         luai_setglobalnumber(AX);
+         luai_setglobalnumber(BX);
+         luai_setglobalnumber(CX);
+         luai_setglobalnumber(DX);
+         luai_setglobalnumber(SP);
+         luai_setglobalnumber(BP);
+         luai_setglobalnumber(SI);
+         luai_setglobalnumber(DI);
+         luai_setglobalnumber(EAX);
+         luai_setglobalnumber(EBX);
+         luai_setglobalnumber(ECX);
+         luai_setglobalnumber(EDX);
+         luai_setglobalnumber(ESP);
+         luai_setglobalnumber(EBP);
+         luai_setglobalnumber(ESI);
+         luai_setglobalnumber(EDI);
+         luai_setglobalnumber(RAX);
+         luai_setglobalnumber(RBX);
+         luai_setglobalnumber(RCX);
+         luai_setglobalnumber(RDX);
+         luai_setglobalnumber(RSP);
+         luai_setglobalnumber(RBP);
+         luai_setglobalnumber(RSI);
+         luai_setglobalnumber(RDI);
+         lua_pushnumber(build_vm_code_lua,T_FLAG);
+         lua_setglobal(build_vm_code_lua,"FLAG");
+         lua_pushnumber(build_vm_code_lua,T_INVALID);
+         lua_setglobal(build_vm_code_lua,"INVALID");
+         lua_pushnumber(build_vm_code_lua,T_8L);
+         lua_setglobal(build_vm_code_lua,"8L");
+         lua_pushnumber(build_vm_code_lua,T_8H);
+         lua_setglobal(build_vm_code_lua,"8H");
+         lua_pushnumber(build_vm_code_lua,T_16X);
+         lua_setglobal(build_vm_code_lua,"16X");
+         lua_pushnumber(build_vm_code_lua,T_E32X);
+         lua_setglobal(build_vm_code_lua,"E32X");
+
+
+         //lua_pushnumber(build_vm_code_lua,T_AL);
+         //lua_setglobal(build_vm_code_lua,"al");
+
+         if (luaL_dofile(build_vm_code_lua,"./build_vm_handle.lua") == 1)
+         {
+             printf("没有找到build_vm_handle.lua将不加载这个脚本\n");
+             lua_close(build_vm_code_lua);
+             build_vm_code_lua = NULL;
+         }
+    }
+}
+
+/*
+static int luai_b_not(lua_State * L)
+{
+    ptr_combos_vm_code->b_not();
+    return 0;
+}
+
+static int luai_b_and(lua_State * L)
+{
+    ptr_combos_vm_code->b_and();
+    return 0;
+}*/
+
+
 
  
 void printf_map_register_store(std::map<int,RegisterStore> & _p_map_in,
@@ -465,6 +933,9 @@ void BuildVMByteCode::register_mapped_init()
 
 }
 
+
+
+
 BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
         pCodeBufferInfo ptr_info,
         VMAddressTable *ptr_address_table,
@@ -474,6 +945,7 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
      ,vmdebug_out_file_directory(false)
 #endif
 {
+   register_build_vm_bytecode_lua();
    var_entry_address = entry_address;
    if (!ptr_info->size)
         return;
@@ -526,6 +998,9 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
 #endif
 
 {
+
+    register_build_vm_bytecode_lua();
+
     if (!ptr_info->size)
         return;
     register_mapped_init();
@@ -3217,8 +3692,57 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
      break;
 
    default:
-       printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
-       debugbreakpoint();
+       {
+           if (build_vm_code_lua)
+           {
+            ptr_build_vm_bytecode = this;
+           ptr_combos_vm_code = &var_combos_vm_code;
+           ptr_ud = &var_ud;
+
+           //lua_getglobal(L,"run");
+           lua_getglobal(build_vm_code_lua,ud_lookup_mnemonic(var_ud.mnemonic));
+           //printf("调用Lua里面的%s函数\n",ud_lookup_mnemonic(var_ud.mnemonic));
+           /*if (!lua_isstring(build_vm_code_lua,1))
+           {
+               lua_pushstring(build_vm_code_lua,"lua中也没有处理这个指令\n");
+               lua_error(build_vm_code_lua);
+               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               debugbreakpoint();
+           }*/
+           //printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+
+           switch (lua_pcall(build_vm_code_lua,0,0,0))
+           {
+           case LUA_ERRRUN:
+               printf("Lua脚本运行时错误\n");
+               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               debugbreakpoint();
+               break;
+           case LUA_ERRMEM:
+               printf("Lua脚本内存分配错误\n");
+               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               debugbreakpoint();
+               break;
+           case LUA_ERRERR:
+               printf("Lua脚本运行处理函数时发生错误\n");
+               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               debugbreakpoint();
+               break;
+           default:
+               //printf("运行成功\n");
+               break;
+           }
+
+           //lua_close(build_vm_code_lua);
+
+           }
+           else
+           {
+               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               debugbreakpoint();
+           }
+       }
+
        break;
    }
 }/*}}}*/
