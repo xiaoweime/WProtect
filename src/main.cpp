@@ -506,8 +506,8 @@ void get_wprotect_sdk_address(CPESection & section,
   {
       DWORD section_size;
       BYTE * ptr_section_data = section.GetSectionData(index,&section_size);
-      printf("\nSection No.%02d Size0x%04X\n",index,section_size,section.GetCharacteristics(index));
-      if (strcmp((const char*)section.GetSection(index)->Name,".text") != 0)
+      printf("\nSection No.%02d Size 0x%04X Flags 0x%8X IsExecute: %s\n",index,section_size,section.GetCharacteristics(index),(section.GetCharacteristics(index) & 0x20000000)?"true":"false");
+      if (! (section.GetCharacteristics(index) & 0x20000000))
       {
           continue;
       }
