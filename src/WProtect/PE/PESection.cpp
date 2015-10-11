@@ -184,7 +184,7 @@ BYTE* CPESection::GetSectionData(int nIndex, DWORD *rdwSize)
 	return lpBuffer;
 }
 
-WORD CPESection::GetCharacteristics(int nIndex)
+DWORD CPESection::GetCharacteristics(int nIndex)
 {
     return GetSection(nIndex)->Characteristics;
 }
