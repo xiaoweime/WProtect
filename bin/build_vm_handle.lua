@@ -120,3 +120,8 @@ function xchg()
     pop_operand(2)
     pop_operand(1)
 end
+
+function lea()
+    push_operand(2,true)
+    pop_operand(1)
+end
