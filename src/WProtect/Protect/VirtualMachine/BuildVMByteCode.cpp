@@ -328,10 +328,10 @@ static int luai_read_vm_operand(lua_State * L)
             break;
         }
     }
-    if(count == 2)
+    else if(count == 2)
     {
         int o = lua_tonumber(build_vm_code_lua,1);
-        bool b = lua_tobool(build_vm_code,2);
+        bool b = lua_tonumber(build_vm_code_lua,2);
         if (b)
         {
             /* ReadAddress */
@@ -347,8 +347,6 @@ static int luai_read_vm_operand(lua_State * L)
                 ptr_build_vm_bytecode->vm_operand(*ptr_combos_vm_code,ptr_ud->operand[2]);
                 break;
             }
-            return;
-            
         }else
         {
             switch (o)
@@ -401,6 +399,40 @@ static int luai_write_vm_operand(lua_State * L)
         printf("push_operand need 1 parameter\n");
         debugbreakpoint();
     }
+}
+
+static int luai_get_operand_size(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    int size = 0;
+    if (count == 1)
+    {
+        if (!lua_isnumber(build_vm_code_lua,1))
+        {
+            lua_pushstring(build_vm_code_lua, "is not an integer\n");
+            lua_error(build_vm_code_lua);
+        }
+        int o = lua_tonumber(build_vm_code_lua,1);
+        switch (o)
+        {
+            case 1:
+            size = get_operand1((*ptr_ud)).size;
+            break;
+            case 2:
+            size = get_operand2((*ptr_ud)).size;
+            break;
+            case 3:
+            size = ptr_ud->operand[2].size;
+            break;
+        }
+    }
+    else
+    {
+        printf("push_operand need 1 parameter\n");
+        debugbreakpoint();
+    } 
+    lua_pushnumber(build_vm_code_lua,size);
+    return 1;
 }
 
 #define luai_reg(name) lua_register(build_vm_code_lua,#name,luai_##name);
@@ -539,6 +571,7 @@ void register_build_vm_bytecode_lua()
          luai_reg(pop)
          lua_register(build_vm_code_lua,"push_operand",luai_read_vm_operand);
          lua_register(build_vm_code_lua,"pop_operand",luai_write_vm_operand);
+         lua_register(build_vm_code_lua,"get_operand_size",luai_get_operand_size);
 
 #define luai_setglobalnumber(name) lua_pushnumber(build_vm_code_lua,T_##name);\
     lua_setglobal(build_vm_code_lua,#name);
