@@ -2121,7 +2121,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      }
      break;
 
-
+     /*
     case UD_Ishl:
      {
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
@@ -2259,15 +2259,14 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      }
      break;
     case UD_Iscasd: //edi - ~df + df
-     {/*{{{*/
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EDI);
-       //var_combos_vm_code.pushf();
+
        var_combos_vm_code.d_read_mem();
        var_combos_vm_code.push(T_EAX);
        var_combos_vm_code.d_cmp();
        var_combos_vm_code.popf();
-
 
        var_combos_vm_code.get_string_ins_diff();
        var_combos_vm_code.b_push_imm(2);
@@ -2279,10 +2278,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Imovsb:
-     {/*{{{*/
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_ESI);
        var_combos_vm_code.b_read_mem();
@@ -2292,9 +2291,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.get_string_ins_diff();
        var_combos_vm_code.push_vsp();
        var_combos_vm_code.d_read_mem();
-       //var_combos_vm_code.b_push_imm(0);
-       //var_combos_vm_code.d_shl();
-       //var_combos_vm_code.pop(T_INVALID);
 
        var_combos_vm_code.push(T_ESI);
        var_combos_vm_code.d_add();
@@ -2306,10 +2302,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Imovsd:
-     {/*{{{*/
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_ESI);
        var_combos_vm_code.d_read_mem();
@@ -2320,7 +2316,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.b_push_imm(2);
        var_combos_vm_code.d_shl();
        var_combos_vm_code.pop(T_INVALID);
-       //var_combos_vm_code.int3();
        var_combos_vm_code.push_vsp();
        var_combos_vm_code.d_read_mem();
 
@@ -2335,9 +2330,9 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
-    /*case UD_Isetz: // zf = 1
+     case UD_Isetz: // zf = 1
      {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.pushf();
@@ -2433,7 +2428,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      break;
     case UD_Isetp: // pf = 1
      {
-         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.pushf();
         var_combos_vm_code.get_pf();  //这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
         var_combos_vm_code.b_push_imm(2); //这里把刚刚获取的那个数据右移三位
@@ -2447,7 +2442,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      break;                     
     case UD_Iseto: // of = 1
      {
-         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.pushf();
         var_combos_vm_code.get_of();  //这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
         var_combos_vm_code.b_push_imm(2); //这里把刚刚获取的那个数据右移三位
@@ -2461,7 +2456,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      break;
     case UD_Isetno: // of = 0
      {
-         var_combos_vm_code.impact_vmregister(false);
+        var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.pushf();
         var_combos_vm_code.get_of();  //
 
@@ -2480,7 +2475,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID | T_8H);//
         var_combos_vm_code.impact_vmregister(true);
      }
-     break;*/
+     break;
     case UD_Isetb: // cf = 1
      {
         var_combos_vm_code.impact_vmregister(false);
@@ -2696,7 +2691,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      }
        break;
     case UD_Ijnz: //ZF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2718,10 +2713,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Ijz:  //ZF != 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_JMPINSADDR);
         var_combos_vm_code.push(T_NEXTINSADDR);
@@ -2743,10 +2738,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;  
     case UD_Ija: //CF = 0 && ZF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2767,10 +2762,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijae:  // CF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2787,12 +2782,11 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true); 
-     }/*}}}*/
+     }
      break;
     case UD_Ijb://CF = 1
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
-        //var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
         var_combos_vm_code.push(T_NEXTINSADDR);
 
@@ -2808,12 +2802,11 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijbe: //CF = 1 || ZF = 1
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
-        //var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
         var_combos_vm_code.push(T_NEXTINSADDR);
 
@@ -2835,10 +2828,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);   
-     }/*}}}*/
+     }
      break;
     case UD_Ijcxz:  //CX = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_JMPINSADDR);
 
@@ -2857,10 +2850,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijg:  //ZF = 0 && SF = OF
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2887,10 +2880,11 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true); 
-     }/*}}}*/
+     }
      break;
+     */
     case UD_Ijge: //SF = OF
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
