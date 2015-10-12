@@ -1731,7 +1731,7 @@ void BuildVMByteCode::read_vm_operand(VCombosVMCode & var_combos_vm_code,ud_oper
 }
 
 void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
-{/*{{{*/
+{
    if(get_operand1(var_ud).base == UD_R_ESP ||
          get_operand1(var_ud).index == UD_R_ESP ||
          get_operand2(var_ud).base == UD_R_ESP ||
@@ -1742,54 +1742,17 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
    }
    switch(ud_insn_mnemonic(&var_ud))
    {
+    //Comment ones are the ones processed by lua
+
     case UD_Inop:
        break;
-
-//    case UD_Imov:
-//       {/*{{{*/
-//         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
-
-          //vm_operand(var_combos_vm_code,get_operand2(var_ud));
-          //read_mem(get_operand2(var_ud));
-//          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
-//          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-          /* vm_operand(var_combos_vm_code,get_operand2(var_ud));
-           if (get_operand2_type(var_ud) == UD_OP_MEM)
-           {
-              switch (get_operand2(var_ud).size)
-              {
-                 case 8:
-                    var_combos_vm_code.b_read_mem();
-                    break;
-                 case 16:
-                    var_combos_vm_code.w_read_mem();
-                    break;
-                 case 32:
-                    var_combos_vm_code.d_read_mem();
-                    break;
-              }        
-           }
-           if (get_operand1_type(var_ud) == UD_OP_REG)
-           {
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud).base));
-           } else if (get_operand1_type(var_ud) == UD_OP_MEM)
-           {
-              vm_operand(var_combos_vm_code,get_operand1(var_ud));
-              switch (get_operand1(var_ud).size)
-              {
-                 case 8:
-                    var_combos_vm_code.b_write_mem();
-                    break;
-                 case 16:
-                    var_combos_vm_code.w_write_mem();
-                    break;
-                 case 32:
-                    var_combos_vm_code.d_write_mem();
-                    break;
-              }
-           }*/
- //      }/*}}}*/
-//     break;
+    case UD_Imov:
+        {
+          set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
+          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
+          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
+        }
+        break;
 
     case UD_Ixchg:
        {
@@ -1801,50 +1764,23 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        }
        break;
     case UD_Ilea:
-     {/*{{{*/
+     {
         vm_operand(var_combos_vm_code,get_operand2(var_ud));
-        
-        //var_combos_vm_code.pop(mapped_vm_register[get_operand1(var_ud).base]);
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;
     case UD_Ipush:
-     {/*{{{*/
+     {
         ud_operand o;
         o.size = 32; //默认用32位
         set_imm_operand_size(get_operand1(var_ud),o);
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        /*if (get_operand1_type(var_ud) == UD_OP_MEM)
-        {
-              switch (get_operand1(var_ud).size)
-              {
-                 case 8:
-                    var_combos_vm_code.b_read_mem();
-                    break;
-                 case 16:
-                    var_combos_vm_code.w_read_mem();
-                    break;
-                 case 32:
-                    var_combos_vm_code.d_read_mem();
-                    break;
-              }        
-        }*/
         read_mem(get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;   
     case UD_Icmp:
-     {/*{{{*/
-/*操作
-temp  SRC1 - SignExtend(SRC2); 
-ModifyStatusFlags; (* Modify status flags in the same manner as the SUB instruction*)
-影响的标志
-CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
-*/      set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
-
-        /*vm_operand(var_combos_vm_code,get_operand2(var_ud));
-        read_mem(get_operand2(var_ud));
-        vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        read_mem(get_operand1(var_ud));*/
+     {
+       set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
        read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
        read_vm_operand(var_combos_vm_code,get_operand1(var_ud));
         switch (get_operand1(var_ud).size)
@@ -1866,20 +1802,18 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
               break;
         }
         
-     }/*}}}*/
+     }
      break;     
     case UD_Iret:
-     {/*{{{*/
+     {
         var_combos_vm_code.ret();
-     }/*}}}*/
+     }
      break;
     case UD_Iadd:
-     {/*{{{*/
+     {
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
-
         vm_operand(var_combos_vm_code,get_operand2(var_ud));
         read_mem(get_operand2(var_ud));
-
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
         read_mem(get_operand1(var_ud));
         switch (get_operand1(var_ud).size)
@@ -1895,21 +1829,8 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
               break;
         }
         var_combos_vm_code.popf();
-
-        /*
-        switch (get_operand1_type(var_ud))
-        {
-           case UD_OP_MEM:
-              vm_operand(var_combos_vm_code,get_operand1(var_ud));  
-              write_mem(get_operand1(var_ud));
-              break;
-           case UD_OP_REG:
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud).base));
-              break;
-        }*/
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        //write_mem(get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;
     case UD_Isub:
      {/*{{{*/
