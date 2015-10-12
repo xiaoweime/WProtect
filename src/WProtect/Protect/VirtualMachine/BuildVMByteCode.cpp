@@ -2053,7 +2053,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
      }
      break;
-     */
     case UD_Iinc:
      {
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
@@ -2120,8 +2119,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
      }
      break;
-
-     /*
     case UD_Ishl:
      {
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
@@ -2882,7 +2879,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.impact_vmregister(true); 
      }
      break;
-     */
     case UD_Ijge: //SF = OF
      {
         var_combos_vm_code.impact_vmregister(false);
@@ -2905,10 +2901,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijl:  // OF != SF
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2930,10 +2926,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);   
-     }/*}}}*/
+     }
      break;
     case UD_Ijle:  // ZF = 1 || SF != OF
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2961,10 +2957,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);    
-     }/*}}}*/
+     }
      break;
     case UD_Ijno: // OF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -2981,10 +2977,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true); 
-     }/*}}}*/
+     }
      break;
     case UD_Ijnp: // PF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -3001,10 +2997,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijns: // SF = 0
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -3021,12 +3017,11 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijo:  // OF = 1
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
-        //var_combos_vm_code.push(T_NEXTINSADDR);
         var_combos_vm_code.push(T_JMPINSADDR);
         var_combos_vm_code.push(T_NEXTINSADDR);
 
@@ -3042,10 +3037,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);  
-     }/*}}}*/
+     }
      break;
     case UD_Ijp:  // PF = 1
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         var_combos_vm_code.push(T_JMPINSADDR);
         var_combos_vm_code.push(T_NEXTINSADDR); 
@@ -3062,10 +3057,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);   
-     }/*}}}*/
+     }
      break;
     case UD_Ijs:  // SF = 1
-     {/*{{{*/
+     {
         var_combos_vm_code.impact_vmregister(false);
         
         var_combos_vm_code.push(T_JMPINSADDR);
@@ -3083,7 +3078,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.impact_vmregister(true);   
-     }/*}}}*/
+     }
      break;
     case UD_Ijmp:
      {
@@ -3101,6 +3096,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
      }
      break;
+     */
     case UD_Imovsx:
      {
        read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
@@ -3425,14 +3421,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                ptr_build_vm_bytecode = this;
                ptr_combos_vm_code = &var_combos_vm_code;
                ptr_ud = &var_ud;
-
-               //lua_getglobal(L,"run");
-               lua_getglobal(build_vm_code_lua,ud_lookup_mnemonic(var_ud.mnemonic));
-               //printf("调用Lua里面的%s函数\n",ud_lookup_mnemonic(var_ud.mnemonic));
-               //printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               char luafunc[255] = "vm_";
+               strcat(luafunc, ud_lookup_mnemonic(var_ud.mnemonic));
+               lua_getglobal(build_vm_code_lua,luafunc);
                if (lua_isfunction(build_vm_code_lua,1) == 0)
                {
-                   printf("Lua Has Not Declare Function %s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                   printf("Lua Has Not Declare Function %s\n",luafunc);
                    printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                    debugbreakpoint();
                }
@@ -3459,11 +3453,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                        //printf("运行成功\n");
                        break;
                    }
-
-
                }
-               //lua_close(build_vm_code_lua);
-
            }
            else
            {
@@ -3474,24 +3464,19 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
 
        break;
    }
-}/*}}}*/
+}
 
 
 void BuildVMByteCode::full_vmregister_store(std::vector<CodePiece> & var_list_code_piece,
       std::map<int,RegisterStore> & var_map_label_vmreg_store_in,
       std::map<int,RegisterStore> & var_map_label_vmreg_store_out)
-{/*{{{*/
+{
    size_t var_list_size = var_list_code_piece.size();
    for (size_t i = 0; i < var_list_size; i++)
    {
       set_vmregister_store(var_list_code_piece,var_map_label_vmreg_store_in,var_map_label_vmreg_store_out,i);
    }
-   //set_vmregister_store(var_list_code_piece,var_map_label_vmreg_store_in,var_map_label_vmreg_store_out,0); 
-   //printf("In size %d,Out size %d\n",var_map_label_vmreg_store_in.size(),var_map_label_vmreg_store_out.size());
-   // set_vmregister_store(var_list_code_piece,var_map_label_vmreg_store_in,var_map_label_vmreg_store_out,0x38); 
-   //  set_vmregister_store(var_list_code_piece,var_map_label_vmreg_store_in,var_map_label_vmreg_store_out,0x1);  
-
-}/*}}}*/
+}
 
 void BuildVMByteCode::set_vmregister_store(std::vector<CodePiece> & var_list_code_piece,
       std::map<int,RegisterStore> & var_map_label_vmreg_store_in,

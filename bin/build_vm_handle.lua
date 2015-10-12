@@ -33,39 +33,58 @@ function size_pop_invalid( op )
 end
 
 --Common Instructions
-function nop()
+function vm_nop()
     push_operand(1)
     pop_operand(1)
 end
 
-function mov()
+function vm_mov()
     push_operand(2)
     pop_operand(1)
 end
 
-function xchg()
+function vm_movzx()
+    for i =  get_operand_size(2), get_operand_size(1)-1, 8 do
+        b_push_imm(0)
+    end
+    push_operand(2)
+    pop_operand(1)
+end
+
+function vm_movsx()
+    push_operand(2)
+    for i =  get_operand_size(2), get_operand_size(1)-1, 8 do
+        b_push_imm(0)
+    end
+    b_push_imm(get_operand_size(1) - get_operand_size(2))
+    d_sar()
+    pop(T_INVALID)
+    pop_operand(1)
+end
+
+function vm_xchg()
     push_operand(2)
     push_operand(1)
     pop_operand(2)
     pop_operand(1)
 end
 
-function lea()
+function vm_lea()
     push_operand(2,true)
     pop_operand(1)
 end
 
-function push()
+function vm_push()
     resize_imm_operand(1)
     push_operand(1)
 end
 
-function pop()
+function vm_pop()
     resize_imm_operand(1)
     pop_operand(1)
 end
 
-function cmp()
+function vm_cmp()
     push_operand(2)
     push_operand(1)
     size_func(1, b_sub, w_sub, d_sub)
@@ -73,7 +92,7 @@ function cmp()
     size_pop_invalid(1)
 end
 
-function test()
+function vm_test()
     resize_imm_operand(2, get_operand_size(1))
     push_operand(1)
     push_operand(2)
@@ -82,7 +101,7 @@ function test()
     size_pop_invalid(1)   
 end
 
-function add()
+function vm_add()
     resize_imm_operand(2, get_operand_size(1))
     push_operand(2)
     push_operand(1)
@@ -91,7 +110,7 @@ function add()
     pop_operand(1)
 end
 
-function sub()
+function vm_sub()
     resize_imm_operand(2,get_operand_size(1))
     push_operand(2)
     push_operand(1)
@@ -100,46 +119,69 @@ function sub()
     pop_operand(1)
 end
 
-function inc()
+function vm_inc()
     push_operand(1)
-    size_func1(1, b_push_imm, w_push_imm, d_push_imm, i)
-    --to be added
-
+    size_func1(1, b_push_imm, w_push_imm, d_push_imm, 1)
+    d_add()
+    d_push_imm(~((1 << 0) | (1 << 10)))
+    d_and()
+    pop(T_INVALID)
+    pushf()
+    d_push_imm((1 << 0) | (1 << 10))
+    d_and()
+    pop(T_INVALID)
+    d_or()
+    pop(T_INVALID)
+    popf()
+    pop_operand(1)
 end
 
-function dec()
-    --TODO:   
+function vm_dec()
+    push_operand(1)
+    size_func1(1, b_push_imm, w_push_imm, d_push_imm, 1)
+    d_sub()
+    d_push_imm(~((1 << 0) | (1 << 10)))
+    d_and()
+    pop(T_INVALID)
+    pushf()
+    d_push_imm((1 << 0) | (1 << 10))
+    d_and()
+    pop(T_INVALID)
+    d_or()
+    pop(T_INVALID)
+    popf()
+    pop_operand(1) 
 end
 
-function cnot()
+function vm_not()
     push_operand(1)
     size_func(1, b_not, w_not, d_not)
     popf()
     pop_operand(1)    
 end
 
-function cand()
+function vm_and()
     push_operand(1)
     size_func(1, b_and, w_and, d_and)
     popf()
     pop_operand(1)    
 end
 
-function cor()
+function vm_or()
     push_operand(1)
     size_func(1, b_or, w_or, d_or)
     popf()
     pop_operand(1)    
 end
 
-function xor()
+function vm_xor()
     push_operand(1)
     size_func(1, b_xor, w_xor, d_xor)   
     popf()
     pop_operand(1)    
 end
 
-function shl()
+function vm_shl()
     push_operand(1) 
     push_operand(2)
     size_func1(1, b_shl, w_shl, d_shl, 1)
@@ -147,7 +189,7 @@ function shl()
     pop_operand(1)       
 end
 
-function shr()
+function vm_shr()
     push_operand(1) 
     push_operand(2)
     size_func1(1, b_shr, w_shr, d_shr, 1)
@@ -155,7 +197,7 @@ function shr()
     pop_operand(1)   
 end
 
-function sar()
+function vm_sar()
     push_operand(1)
     push_operand(2)
     size_func1(1, b_sar, w_sar, d_sar, 1)
@@ -163,7 +205,7 @@ function sar()
     pop_operand(1)
 end
 
-function cdq()
+function vm_cdq()
     push(T_EAX)
     b_push_imm(31)
     d_sar()
@@ -171,7 +213,7 @@ function cdq()
     pop(T_EDX)
 end
 
-function cwd()
+function vm_cwd()
     push(T_AX)
     b_push_imm(15)
     w_sar()
@@ -179,7 +221,7 @@ function cwd()
     pop(T_EDX)
 end
 
-function scasb()
+function vm_scasb()
     push(T_EDI)
     b_read_mem()
     push(T_AL)
@@ -196,7 +238,7 @@ function scasb()
     pop(T_EDI)
 end
 
-function scasw()
+function vm_scasw()
     push(T_EDI)
     b_read_mem()
     push(T_AX)
@@ -213,7 +255,7 @@ function scasw()
     pop(T_EDI)
 end
 
-function scasd()
+function vm_scasd()
     push(T_EDI)
     b_read_mem()
     push(T_EAX)
@@ -230,7 +272,7 @@ function scasd()
     pop(T_EDI)
 end
 
-function movsb()
+function vm_movsb()
     push(T_ESI)
     b_read_mem()
     push(T_EDI)
@@ -251,7 +293,7 @@ function movsb()
     pop(T_EDI)
 end
 
-function movsd()
+function vm_movsd()
     push(T_ESI)
     b_read_mem()
     push(T_EDI)
@@ -276,7 +318,7 @@ function movsd()
 end
 
 --jcc
-function jnz()
+function vm_jnz()
     push(T_NEXTINSADDR)
     push(T_JMPINSADDR)
     push_vsp()
@@ -295,7 +337,7 @@ function jnz()
     pop(T_INVALID)
 end
 
-function jz()
+function vm_jz()
     push(T_JMPINSADDR)
     push(T_NEXTINSADDR)
     push_vsp()
@@ -314,7 +356,7 @@ function jz()
     pop(T_INVALID) 
 end
 
-function ja()
+function vm_ja()
     push(T_NEXTINSADDR)
     push(T_JMPINSADDR)
     push_vsp()
@@ -332,7 +374,7 @@ function ja()
     pop(T_INVALID)
 end
 
-function jae()
+function vm_jae()
     push(T_NEXTINSADDR)
     push(T_JMPINSADDR)
     push_vsp()
@@ -346,7 +388,7 @@ function jae()
     pop(T_INVALID)
 end
 
-function jb( ... )
+function vm_jb( ... )
     push(T_JMPINSADDR)
     push(T_NEXTINSADDR)
     push_vsp()
@@ -360,7 +402,7 @@ function jb( ... )
     pop(T_INVALID)
 end
 
-function jbe()
+function vm_jbe()
     push(T_JMPINSADDR)
     push(T_NEXTINSADDR)
     push_vsp()
@@ -378,7 +420,7 @@ function jbe()
     pop(T_INVALID)
 end
 
-function jcxz()
+function vm_jcxz()
     push(T_JMPINSADDR)
     push(T_NEXTINSADDR)
     push_vsp()
@@ -394,7 +436,7 @@ function jcxz()
     pop(T_INVALID)
 end
 
-function jg()
+function vm_jg()
     push(T_NEXTINSADDR)
     push(T_JMPINSADDR)
     push_vsp()
@@ -416,8 +458,179 @@ function jg()
     pop(T_INVALID)
 end
 
+function vm_jge()
+    push(T_NEXTINSADDR)
+    push(T_JMPINSADDR)
+    push_vsp()
+    pushf()
+    get_sf()
+    pushf()
+    get_of()
+    d_xor()
+    pop(T_INVALID)
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jl()
+    push(T_JMPINSADDR)
+    push(T_NEXTINSADDR) 
+
+    push_vsp()
+
+    pushf()
+    get_of()
+    pushf()
+    get_sf()
+    d_xor()
+    pop(T_INVALID)
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jle()
+    push(T_JMPINSADDR)
+    push(T_NEXTINSADDR) 
+
+    push_vsp()
+
+    pushf()
+    get_zf()
+
+    pushf()
+    get_sf()
+    pushf()
+    get_of()
+    d_xor()
+    pop(T_INVALID)
+
+    d_or()
+    pop(T_INVALID)
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jo()
+    push(T_JMPINSADDR)
+    push(T_NEXTINSADDR)
+
+    push_vsp()
+
+    pushf()
+    get_of()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jno()
+    push(T_NEXTINSADDR)
+    push(T_JMPINSADDR)
+
+    push_vsp()
+
+    pushf()
+    get_of()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jp()
+    push(T_JMPINSADDR)
+    push(T_NEXTINSADDR) 
+
+    push_vsp()
+
+    pushf()
+    get_pf()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jnp()
+    push(T_NEXTINSADDR)
+    push(T_JMPINSADDR)
+
+    push_vsp()
+
+    pushf()
+    get_pf()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_js()
+    push(T_JMPINSADDR)
+    push(T_NEXTINSADDR) 
+
+    push_vsp()
+
+    pushf()
+    get_sf()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID)
+end
+
+function vm_jns()
+    push(T_NEXTINSADDR)
+    push(T_JMPINSADDR)
+
+    push_vsp()
+
+    pushf()
+    get_sf()
+
+    d_add()
+    pop(T_INVALID)
+    d_read_mem()
+    pop(T_NEXTINSADDR)
+    pop(T_INVALID)
+    pop(T_INVALID) 
+end
+
+function vm_jmp()
+end
+
 --setcc
-function setz()
+function vm_setz()
     pushf()
     get_zf()
     b_push_imm(2)
@@ -428,7 +641,7 @@ function setz()
     pop(T_INVALID | T_16X)     
 end               
 
-function setnz()
+function vm_setnz()
     pushf()
     get_zf()
     b_push_imm(2)
@@ -444,7 +657,7 @@ function setnz()
     pop(T_INVALID | T_16X)
 end
 
-function sets()
+function vm_sets()
     pushf()
     get_sf()
     b_push_imm(2)
@@ -455,7 +668,7 @@ function sets()
     pop(T_INVALID | T_16X)
 end
 
-function setns()
+function vm_setns()
     pushf()
     get_sf()
     b_push_imm(2)
@@ -471,7 +684,7 @@ function setns()
     pop(T_INVALID | T_16X)
 end
 
-function setp()
+function vm_setp()
     pushf()
     get_pf()
     b_push_imm(2)
@@ -482,7 +695,7 @@ function setp()
     pop(T_INVALID | T_16X)
 end
 
-function setnp()
+function vm_setnp()
     pushf()
     get_pf()
     b_push_imm(2)
@@ -498,7 +711,7 @@ function setnp()
     pop(T_INVALID | T_16X)
 end
 
-function seto()
+function vm_seto()
     pushf()
     get_of()
     b_push_imm(2)
@@ -509,7 +722,7 @@ function seto()
     pop(T_INVALID | T_16X)
 end
 
-function setno()
+function vm_setno()
     pushf()
     get_of()
     b_push_imm(2)
@@ -525,7 +738,7 @@ function setno()
     pop(T_INVALID | T_16X)
 end
 
-function setb()
+function vm_setb()
     pushf()
     get_cf()
     b_push_imm(2)
@@ -536,7 +749,7 @@ function setb()
     pop(T_INVALID | T_16X) 
 end
 
-function setae()
+function vm_setae()
     pushf()
     get_cf()
     b_push_imm(2)
@@ -552,7 +765,7 @@ function setae()
     pop(T_INVALID | T_16X)
 end
 
-function seta()
+function vm_seta()
     pushf()
     get_cf()
     b_push_imm(2)
@@ -577,7 +790,7 @@ function seta()
     pop(T_INVALID | T_16X) 
 end
 
-function setbe()
+function vm_setbe()
     pushf()
     get_cf()
     b_push_imm(2)
@@ -604,7 +817,7 @@ function setbe()
     pop(T_INVALID | T_16X)    
 end
 
-function setg()
+function vm_setg()
     pushf()
     get_zf()
     b_push_imm(2)
@@ -636,7 +849,7 @@ function setg()
     pop(T_INVALID | T_16X)  
 end
 
-function setge()
+function vm_setge()
     pushf()
     get_sf()
     pushf()
@@ -653,7 +866,7 @@ function setge()
     pop(T_INVALID | T_16X)  
 end
 
-function setle()
+function vm_setle()
     pushf()
     get_sf()
     pushf()
@@ -675,7 +888,7 @@ function setle()
     pop(T_INVALID | T_16X)   
 end
 
-function setl()
+function vm_setl()
     pushf()
     get_sf()
     pushf()
