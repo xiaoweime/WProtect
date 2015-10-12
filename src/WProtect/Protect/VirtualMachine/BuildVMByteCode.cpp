@@ -1806,7 +1806,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
    switch(ud_insn_mnemonic(&var_ud))
    {
     //Comment ones are the ones processed by lua
-
+    /*
     case UD_Inop:
        break;
     case UD_Imov:
@@ -1896,9 +1896,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
      }
      break;
     case UD_Isub:
-     {/*{{{*/
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
-
         vm_operand(var_combos_vm_code,get_operand2(var_ud));
         read_mem(get_operand2(var_ud));
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
@@ -1916,24 +1914,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               break;
         }
         var_combos_vm_code.popf();
-
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        /*
-        switch(get_operand1_type(var_ud))
-        {
-           case UD_OP_MEM:
-              vm_operand(var_combos_vm_code,get_operand1(var_ud)); 
-              write_mem(get_operand1(var_ud));    
-              break;
-           case UD_OP_REG:
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud).base));
-              break;
-        }*/
-        
-     }/*}}}*/
+     }
      break;
+     */
     case UD_Inot:
-     {/*{{{*/
+     {
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
         read_mem(get_operand1(var_ud));
         switch (get_operand1(var_ud).size)
@@ -1948,24 +1934,13 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               var_combos_vm_code.d_not();
               break;
         }
-        //var_combos_vm_code.popf();
+
         var_combos_vm_code.popf();
-        /*
-        switch (get_operand1_type(var_ud))
-        {
-           case UD_OP_MEM:
-              vm_operand(var_combos_vm_code,get_operand1(var_ud));
-              write_mem(get_operand1(var_ud));
-              break;
-           case UD_OP_REG:
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud)));
-              break;
-        } */
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;
     case UD_Iand:
-     {/*{{{*/
+     {
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
 
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
@@ -1984,39 +1959,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               var_combos_vm_code.d_and();
               break;
         }
-        //var_combos_vm_code.popf();
         var_combos_vm_code.popf();
- 
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud)); 
-     }/*}}}*/
-     break;
-    case UD_Ixor:
-     {/*{{{*/
-        set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
-        vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        read_mem(get_operand1(var_ud));
-        vm_operand(var_combos_vm_code,get_operand2(var_ud));
-        read_mem(get_operand2(var_ud));
-        switch (get_operand1(var_ud).size)
-        {
-           case 8:
-              var_combos_vm_code.b_xor();
-              break;
-           case 16:
-              var_combos_vm_code.w_xor();
-              break;
-           case 32:
-              var_combos_vm_code.d_xor();
-              break;
-        }
-        //var_combos_vm_code.popf();
-        var_combos_vm_code.popf();
- 
-        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));  
-     }/*}}}*/
+     }
      break;
     case UD_Ior:
-     {/*{{{*/
+     {
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
         read_mem(get_operand1(var_ud));
@@ -2034,14 +1982,37 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               var_combos_vm_code.d_or();
               break;
         }
-        //var_combos_vm_code.popf();
+        var_combos_vm_code.popf();
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));   
+     }
+     break;
+     /*
+     case UD_Ixor:
+     {
+        set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
+        vm_operand(var_combos_vm_code,get_operand1(var_ud));
+        read_mem(get_operand1(var_ud));
+        vm_operand(var_combos_vm_code,get_operand2(var_ud));
+        read_mem(get_operand2(var_ud));
+        switch (get_operand1(var_ud).size)
+        {
+           case 8:
+              var_combos_vm_code.b_xor();
+              break;
+           case 16:
+              var_combos_vm_code.w_xor();
+              break;
+           case 32:
+              var_combos_vm_code.d_xor();
+              break;
+        }
         var_combos_vm_code.popf();
  
-        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));   
-     }/*}}}*/
+        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));  
+     }
      break;
     case UD_Itest:
-     {/*{{{*/
+     {
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
         read_mem(get_operand1(var_ud));
@@ -2059,7 +2030,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               var_combos_vm_code.d_and();
               break;
         }
-        //var_combos_vm_code.popf();
         var_combos_vm_code.popf();
         switch (get_operand1(var_ud).size)
         {
@@ -2073,24 +2043,19 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
               var_combos_vm_code.pop(T_INVALID|T_E32X);
               break;
         }
-     }/*}}}*/
+     }
      break;
     case UD_Ipop:
-     {/*{{{*/
-        //vm_operand(var_combos_vm_code,get_operand1(var_ud));
+     {
         ud_operand o;
         o.size = 32;
         set_imm_operand_size(get_operand1(var_ud),o);
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        //write_mem(get_operand1(var_ud));
-        //if (get_operand1_type(var_ud) )
-        //var_combos_vm_code.pop
-     }/*}}}*/
+     }
      break;
+     */
     case UD_Iinc:
-     {/*{{{*/
-
-
+     {
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
         read_mem(get_operand1(var_ud));
         switch (get_operand1(var_ud).size)
@@ -2111,31 +2076,18 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.d_push_imm(~((1 << 0) | (1 << 10)));
         var_combos_vm_code.d_and();
         var_combos_vm_code.pop(T_INVALID);
-              
         var_combos_vm_code.pushf();
         var_combos_vm_code.d_push_imm((1 << 0) | (1 << 10));
         var_combos_vm_code.d_and();
         var_combos_vm_code.pop(T_INVALID);     
         var_combos_vm_code.d_or();
         var_combos_vm_code.pop(T_INVALID);
-        //var_combos_vm_code.popf();
         var_combos_vm_code.popf();
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        /*switch (get_operand1_type(var_ud))
-        {
-           case UD_OP_REG:
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud).base));
-              break;
-           case UD_OP_MEM:
-              vm_operand(var_combos_vm_code,get_operand1(var_ud));
-              write_mem(get_operand1(var_ud));
-              break;
-        }*/
-     }/*}}}*/
+     }
      break;
     case UD_Idec:
-     {/*{{{*/
-        //read_mem(get_operand1(var_ud));
+     {
         switch (get_operand1(var_ud).size)
         {
            case 8: 
@@ -2166,21 +2118,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         var_combos_vm_code.pop(T_INVALID);
         var_combos_vm_code.popf(); 
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-        /*
-        switch (get_operand1_type(var_ud))
-        {
-           case UD_OP_REG:
-              var_combos_vm_code.pop(get_vm_register(get_operand1(var_ud).base));
-              break;
-           case UD_OP_MEM:
-              vm_operand(var_combos_vm_code,get_operand1(var_ud));
-              write_mem(get_operand1(var_ud));
-              break;
-        }  */
-     }/*}}}*/
+     }
      break;
+
+
     case UD_Ishl:
-     {/*{{{*/
+     {
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
          read_mem(get_operand1(var_ud));
          vm_operand(var_combos_vm_code, get_operand2(var_ud));
@@ -2198,13 +2141,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
          default:
              break;
          }
-         //var_combos_vm_code.popf();
          var_combos_vm_code.popf();
          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;
     case UD_Ishr:
-     {/*{{{*/
+     {
          vm_operand(var_combos_vm_code, get_operand1(var_ud));
          read_mem(get_operand1(var_ud));
          vm_operand(var_combos_vm_code, get_operand2(var_ud));
@@ -2222,24 +2164,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
          default:
              break;
          }
-         //var_combos_vm_code.popf();
          var_combos_vm_code.popf();
          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-     }/*}}}*/
+     }
      break;
     case UD_Isar:
-     {/*{{{*/
-       /*
-        * sar 10101110,2
-        * 最高位 = 1
-        * 11111111  sub 0,最高位 -> diff
-        * 11111000  shl diff << 右移位数 + 1
-        * 11111001  add diff,最高位
-        * 00000111  neg diff
-        * 11100000  shl diff,目标操作数位数(7) - 右移位数 + 1
-        * shr 目标操作数,右移位数
-        * add 目标操作数,diff
-        */
+     {
          var_combos_vm_code.impact_vmregister(false);
          read_vm_operand(var_combos_vm_code,get_operand1(var_ud));
          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
@@ -2260,226 +2190,11 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
          }
          var_combos_vm_code.popf();
          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-
-         /*
-         vm_operand(var_combos_vm_code, get_operand1(var_ud));
-         read_mem(get_operand1(var_ud));
-         int dest_reg = var_combos_vm_code.get_tmp_vmregister();
-         int highest_bit = var_combos_vm_code.get_tmp_vmregister();
-         int count_reg = var_combos_vm_code.get_tmp_vmregister();
-         int tmp_cf_reg = var_combos_vm_code.get_tmp_vmregister();
-         vm_operand(var_combos_vm_code, get_operand2(var_ud));
-         read_mem(get_operand2(var_ud));
-         switch (get_operand1(var_ud).size) {
-         case 8:
-             var_combos_vm_code.pop(count_reg|T_E32X|T_16X|T_8H);//save count
-             //and o1,10000000b
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.b_read_mem(); //copy dest
-             var_combos_vm_code.pop(dest_reg|T_E32X|T_16X|T_8H); //save dest
-             var_combos_vm_code.b_push_imm(1<<7);
-             var_combos_vm_code.b_and();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.b_push_imm(7);
-             var_combos_vm_code.b_shr();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.b_read_mem();
-             var_combos_vm_code.pop(highest_bit|T_E32X|T_16X|T_8H);
-             //neg diff
-             var_combos_vm_code.b_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //add count,1
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(1);
-             var_combos_vm_code.b_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,count+1
-             var_combos_vm_code.b_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //add diff,最高位
-             var_combos_vm_code.push(highest_bit|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //neg diff
-             var_combos_vm_code.b_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,7 - count_reg
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(8-1);
-             var_combos_vm_code.b_sub();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.b_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //shr dest_reg,count_reg
-             var_combos_vm_code.push(dest_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_shr();
-
-             //var_combos_vm_code.pop(T_INVALID);
-             //get_cf();
-             //var_combos_vm_code.d_push_imm(1);
-             var_combos_vm_code.b_push_imm_zx(1);
-             var_combos_vm_code.d_and();   //获取shr的cf标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.pop(tmp_cf_reg);
-
-             //or dest_reg,diff
-             var_combos_vm_code.b_or();
-
-             var_combos_vm_code.push(tmp_cf_reg);
-             var_combos_vm_code.d_or(); //合并shr的cf和or的其他标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.popf(); //设置标志位
-
-             write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-             break;
-         case 16:
-             var_combos_vm_code.pop(count_reg|T_E32X|T_16X|T_8H);//save count
-             //and o1,10000000b
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.w_read_mem(); //copy dest
-             var_combos_vm_code.pop(dest_reg|T_E32X|T_16X); //save dest
-             var_combos_vm_code.w_push_imm(1<<15);
-             var_combos_vm_code.w_and();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.b_push_imm(15);
-             var_combos_vm_code.w_shr();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.w_read_mem();
-             var_combos_vm_code.pop(highest_bit|T_E32X|T_16X);
-             //neg diff
-             var_combos_vm_code.w_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //add count,1
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(1);
-             var_combos_vm_code.b_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,count+1
-             var_combos_vm_code.w_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //add diff,最高位
-             var_combos_vm_code.push(highest_bit|T_E32X|T_16X);
-             var_combos_vm_code.w_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //neg diff
-             var_combos_vm_code.w_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,7 - count_reg
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(16-1);
-             var_combos_vm_code.b_sub();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.w_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //shr dest_reg,count_reg
-             var_combos_vm_code.push(dest_reg|T_E32X|T_16X);
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.w_shr();
-             //var_combos_vm_code.pop(T_INVALID);
-             //get_cf();
-             //var_combos_vm_code.d_push_imm(1);
-             var_combos_vm_code.b_push_imm_zx(1);
-             var_combos_vm_code.d_and();   //获取shr的cf标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.pop(tmp_cf_reg);
-
-             //or dest_reg,diff
-             var_combos_vm_code.w_or();
-
-             var_combos_vm_code.push(tmp_cf_reg);
-             var_combos_vm_code.d_or(); //合并shr的cf和or的其他标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.popf(); //设置标志位
-             write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-             break;
-         case 32:
-             var_combos_vm_code.pop(count_reg|T_E32X|T_16X|T_8H);//save count
-             //and o1,10000000b
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.d_read_mem(); //copy dest
-             var_combos_vm_code.pop(dest_reg|T_E32X); //save dest
-             var_combos_vm_code.d_push_imm(1<<31);
-             var_combos_vm_code.d_and();
-             var_combos_vm_code.pop(T_INVALID);
-
-             //shr o1,31
-             var_combos_vm_code.b_push_imm(31);
-             var_combos_vm_code.d_shr();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.push_vsp();
-             var_combos_vm_code.d_read_mem();
-             var_combos_vm_code.pop(highest_bit|T_E32X);
-             //neg diff
-             var_combos_vm_code.d_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //add count,1
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(1);
-             var_combos_vm_code.b_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,count+1
-             var_combos_vm_code.d_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //add diff,最高位
-             var_combos_vm_code.push(highest_bit|T_E32X);
-             var_combos_vm_code.d_add();
-             var_combos_vm_code.pop(T_INVALID);
-             //neg diff
-             var_combos_vm_code.d_neg();
-             var_combos_vm_code.pop(T_INVALID);
-             //shl diff,7 - count_reg
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.b_push_imm(32-1);
-             var_combos_vm_code.b_sub();
-             var_combos_vm_code.pop(T_INVALID);
-
-             var_combos_vm_code.d_shl();
-             var_combos_vm_code.pop(T_INVALID);
-             //shr dest_reg,count_reg
-             var_combos_vm_code.push(dest_reg|T_E32X);
-             var_combos_vm_code.push(count_reg|T_E32X|T_16X|T_8H);
-             var_combos_vm_code.d_shr();
-             //var_combos_vm_code.pop(T_INVALID);
-             //get_cf();
-             //var_combos_vm_code.d_push_imm(1);
-             var_combos_vm_code.b_push_imm_zx(1);
-             var_combos_vm_code.d_and();   //获取shr的cf标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.pop(tmp_cf_reg);
-
-             //or dest_reg,diff
-             var_combos_vm_code.d_or();
-
-             var_combos_vm_code.push(tmp_cf_reg);
-             var_combos_vm_code.d_or(); //合并shr的cf和or的其他标志位
-             var_combos_vm_code.pop(T_INVALID);
-             var_combos_vm_code.popf(); //设置标志位
-             write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
-
-             break;
-         default:
-             break;
-         }
-         var_combos_vm_code.unlock_tmp_vmregister(count_reg);
-         var_combos_vm_code.unlock_tmp_vmregister(dest_reg);
-         var_combos_vm_code.unlock_tmp_vmregister(highest_bit);
-         var_combos_vm_code.unlock_tmp_vmregister(tmp_cf_reg);
-         */
          var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Icdq:
-     {/*{{{*/
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EAX);
        var_combos_vm_code.b_push_imm(31);
@@ -2487,10 +2202,10 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDX);
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
        break;
     case UD_Icwd:
-    {/*{{{*/
+    {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_AX);
        var_combos_vm_code.b_push_imm(15);
@@ -2499,28 +2214,12 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.pop(T_DX);
 
        var_combos_vm_code.impact_vmregister(true);
-    }/*}}}*/
+    }
        break;
     case UD_Iscasb: //edi - ~df + df
-     {/*{{{*/
-       /*
-        *
-        * df = 1
-        * neg df      ;0xffffffff
-        * add edi,df
-        * not df      ;0
-        * sub edi,df
-        *
-        * df = 0
-        * neg df      ;0
-        * add edi,df
-        * not df      ;0xffffffff
-        * sub edi,df
-        *
-        */
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EDI);
-       //var_combos_vm_code.pushf();
        var_combos_vm_code.b_read_mem();
        var_combos_vm_code.push(T_AL);
        var_combos_vm_code.b_cmp();
@@ -2535,53 +2234,13 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.d_add();
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
-
-       /*
-       //sub 0,df
-       int tmp_vmregister_df = var_combos_vm_code.get_tmp_vmregister();
-       var_combos_vm_code.pushf(); //t_edi
-       var_combos_vm_code.get_df();
-       var_combos_vm_code.d_push_imm(0);
-       var_combos_vm_code.d_sub();
-       //var_combos_vm_code.int3();
-       var_combos_vm_code.pop(T_INVALID);
-       var_combos_vm_code.push_vsp();
-       var_combos_vm_code.d_read_mem();
-       var_combos_vm_code.pop(tmp_vmregister_df | T_E32X);
-
-       //add edi,df
-       int tmp_vmregister_edi = var_combos_vm_code.get_tmp_vmregister();
-       var_combos_vm_code.push(T_EDI);
-       var_combos_vm_code.d_add();
-       var_combos_vm_code.pop(T_INVALID);
-       var_combos_vm_code.pop(tmp_vmregister_edi | T_E32X);
-
-       //not df
-       //var_combos_vm_code.pushf();
-       var_combos_vm_code.push(tmp_vmregister_df | T_E32X);
-       //var_combos_vm_code.get_df();
-       var_combos_vm_code.d_not();
-       var_combos_vm_code.pop(T_INVALID);
-
-       //sub edi,df
-       var_combos_vm_code.push(tmp_vmregister_edi | T_E32X);
-       var_combos_vm_code.d_sub();
-       var_combos_vm_code.pop(T_INVALID);
-       var_combos_vm_code.pop(T_EDI);
-       //var_combos_vm_code.int3(); //
-
-       var_combos_vm_code.unlock_tmp_vmregister(tmp_vmregister_edi);
-       var_combos_vm_code.unlock_tmp_vmregister(tmp_vmregister_df);
-       //var_combos_vm_code.int3(); //sub edi,~df
-      */
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Iscasw: //edi - ~df + df
-     {/*{{{*/
+     {
        var_combos_vm_code.impact_vmregister(false);
        var_combos_vm_code.push(T_EDI);
-       //var_combos_vm_code.pushf();
        var_combos_vm_code.w_read_mem();
        var_combos_vm_code.push(T_AX);
        var_combos_vm_code.w_cmp();
@@ -2596,10 +2255,8 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        var_combos_vm_code.d_add();
        var_combos_vm_code.pop(T_INVALID);
        var_combos_vm_code.pop(T_EDI);
-
-       //var_combos_vm_code.int3(); //sub edi,~df
        var_combos_vm_code.impact_vmregister(true);
-     }/*}}}*/
+     }
      break;
     case UD_Iscasd: //edi - ~df + df
      {/*{{{*/
@@ -3778,13 +3435,6 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                //lua_getglobal(L,"run");
                lua_getglobal(build_vm_code_lua,ud_lookup_mnemonic(var_ud.mnemonic));
                //printf("调用Lua里面的%s函数\n",ud_lookup_mnemonic(var_ud.mnemonic));
-               /*if (!lua_isstring(build_vm_code_lua,1))
-       {
-           lua_pushstring(build_vm_code_lua,"lua中也没有处理这个指令\n");
-           lua_error(build_vm_code_lua);
-           printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
-           debugbreakpoint();
-       }*/
                //printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                if (lua_isfunction(build_vm_code_lua,1) == 0)
                {
