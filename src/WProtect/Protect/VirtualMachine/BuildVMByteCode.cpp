@@ -328,6 +328,18 @@ static int luai_read_vm_operand(lua_State * L)
             break;
         }
     }
+    else if(count == 2)
+    {
+        int o = lua_tonumber(build_vm_code_lua,1);
+        bool b = lua_tobool(build_vm_code,2);
+        if (b)
+        {
+            /* ReadAddress */
+        }else
+        {
+            /* ReadMemory  */
+        }
+    }
     else
     {
         printf("pop_operand Need 1 parameter\n");
