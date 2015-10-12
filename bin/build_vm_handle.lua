@@ -111,6 +111,27 @@ function dec()
     --TODO:   
 end
 
+function cnot()
+    push_operand(1)
+    size_func(1, b_not, w_not, d_not)
+    popf()
+    pop_operand(1)    
+end
+
+function cand()
+    push_operand(1)
+    size_func(1, b_and, w_and, d_and)
+    popf()
+    pop_operand(1)    
+end
+
+function cor()
+    push_operand(1)
+    size_func(1, b_or, w_or, d_or)
+    popf()
+    pop_operand(1)    
+end
+
 function xor()
     push_operand(1)
     size_func(1, b_xor, w_xor, d_xor)   
