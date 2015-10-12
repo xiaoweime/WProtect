@@ -146,7 +146,7 @@ static int luai_ ##name(lua_State * L)\
     {\
         if (!lua_isnumber(build_vm_code_lua,1))\
         {\
-            lua_pushstring(build_vm_code_lua,"不是一个整型\n");\
+            lua_pushstring(build_vm_code_lua," is not an Integer\n");\
             lua_error(build_vm_code_lua);\
         }\
         else\
@@ -154,7 +154,7 @@ static int luai_ ##name(lua_State * L)\
     }\
     else\
     {\
-        printf("%s函数调用需要一个参数\n",#name);\
+        printf("%s Need a parameter\n",#name);\
         debugbreakpoint();\
     }\
     ptr_combos_vm_code->impact_vmregister(true);\
@@ -311,7 +311,7 @@ static int luai_read_vm_operand(lua_State * L)
     {
         if (!lua_isnumber(build_vm_code_lua,1))
         {
-            lua_pushstring(build_vm_code_lua, "不是一个整型\n");
+            lua_pushstring(build_vm_code_lua, "Is Not An Integer\n");
             lua_error(build_vm_code_lua);
         }
         int o = lua_tonumber(build_vm_code_lua,1);
@@ -330,7 +330,7 @@ static int luai_read_vm_operand(lua_State * L)
     }
     else
     {
-        printf("pop_operand函数需要一个参数\n");
+        printf("pop_operand Need 1 parameter\n");
         debugbreakpoint();
     }
 }
@@ -342,7 +342,7 @@ static int luai_write_vm_operand(lua_State * L)
     {
         if (!lua_isnumber(build_vm_code_lua,1))
         {
-            lua_pushstring(build_vm_code_lua, "不是一个整型\n");
+            lua_pushstring(build_vm_code_lua, "is not an integer\n");
             lua_error(build_vm_code_lua);
         }
         int o = lua_tonumber(build_vm_code_lua,1);
@@ -361,7 +361,7 @@ static int luai_write_vm_operand(lua_State * L)
     }
     else
     {
-        printf("push_operand函数需要一个参数\n");
+        printf("push_operand need 1 parameter\n");
         debugbreakpoint();
     }
 }
@@ -557,26 +557,26 @@ void register_build_vm_bytecode_lua()
          switch (luaL_loadfile(build_vm_code_lua,"./build_vm_handle.lua"))
          {
          case LUA_ERRSYNTAX:
-             printf("Lua虚拟机指令模块预编译时碰到语法错误\n");
+             printf("Lua ErrSyntax\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRMEM:
-             printf("Lua虚拟机指令编译模块内存分配错误\n");
+             printf("Lua ErrMem\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRGCMM:
-             printf("Lua虚拟机指令编译模块运行__GC元方法时出错\n");
+             printf("Lua ErrGCMM.\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_OK:
-             printf("Lua虚拟机指令编译模块加载成功\n");
+             printf("Lua OK\n");
              lua_pcall(build_vm_code_lua, 0, LUA_MULTRET, 0);
              break;
          default:
-             printf("没有找到build_vm_handle.lua,将不加载Lua虚拟机编译模块\n");
+             printf("Can not find build_vm_handle.lua!\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
@@ -1674,14 +1674,15 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
    {
     case UD_Inop:
        break;
-    case UD_Imov:
-       {/*{{{*/
-          set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
+
+//    case UD_Imov:
+//       {/*{{{*/
+//         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
 
           //vm_operand(var_combos_vm_code,get_operand2(var_ud));
           //read_mem(get_operand2(var_ud));
-          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
-          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
+//          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
+//          write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
           /* vm_operand(var_combos_vm_code,get_operand2(var_ud));
            if (get_operand2_type(var_ud) == UD_OP_MEM)
            {
@@ -1717,8 +1718,9 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                     break;
               }
            }*/
-       }/*}}}*/
-     break;
+ //      }/*}}}*/
+//     break;
+
     case UD_Ixchg:
        {
          read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
@@ -2637,7 +2639,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
         var_combos_vm_code.pop(T_INVALID | T_8H);//
         var_combos_vm_code.impact_vmregister(true);
      }
-     break;*/
+     break;
     case UD_Isetnz: // zf = 0
      {
         var_combos_vm_code.impact_vmregister(false);
@@ -2767,7 +2769,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
         var_combos_vm_code.pop(T_INVALID | T_8H);//
         var_combos_vm_code.impact_vmregister(true);
      }
-     break;
+     break;*/
     case UD_Isetb: // cf = 1
      {
         var_combos_vm_code.impact_vmregister(false);
@@ -3732,7 +3734,7 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
                //printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                if (lua_isfunction(build_vm_code_lua,1) == 0)
                {
-                   printf("Lua没有声明%s函数\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                   printf("Lua Has Not Declare Function %s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                    printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                    debugbreakpoint();
                }
@@ -3741,17 +3743,17 @@ CF、OF、SF、ZF、AF 及 PF 标志根据结果设置。
                    switch (lua_pcall(build_vm_code_lua,0,0,0))
                    {
                    case LUA_ERRRUN:
-                       printf("Lua脚本运行时错误\n");
+                       printf("Lua ErrRun\n");
                        printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                        debugbreakpoint();
                        break;
                    case LUA_ERRMEM:
-                       printf("Lua脚本内存分配错误\n");
+                       printf("Lua ErrMem\n");
                        printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                        debugbreakpoint();
                        break;
                    case LUA_ERRERR:
-                       printf("Lua脚本运行处理函数时发生错误\n");
+                       printf("Lua ErrErr\n");
                        printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                        debugbreakpoint();
                        break;

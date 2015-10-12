@@ -1498,7 +1498,7 @@ void VMHandle::full_handle_info(handle_info & info,char flag)
         a.db(code[i]);
       }
 #ifdef DEBUG
-       printf("de地址:%x,子程序地址:%x\r\n",en.enfuc,fuc);
+       printf("deAddress:%x,FuncAddress:%x\r\n",en.enfuc,fuc);
 #endif
       
       //en.fn = function_cast<encryption::MyFn>(en.enfuc->make());
