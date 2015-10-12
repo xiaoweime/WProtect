@@ -328,16 +328,41 @@ static int luai_read_vm_operand(lua_State * L)
             break;
         }
     }
-    else if(count == 2)
+    if(count == 2)
     {
         int o = lua_tonumber(build_vm_code_lua,1);
         bool b = lua_tobool(build_vm_code,2);
         if (b)
         {
             /* ReadAddress */
+            switch (o)
+            {
+            case 1:
+                ptr_build_vm_bytecode->vm_operand(*ptr_combos_vm_code,get_operand1((*ptr_ud)));
+                break;
+            case 2:
+                ptr_build_vm_bytecode->vm_operand(*ptr_combos_vm_code,get_operand2((*ptr_ud)));
+                break;
+            case 3:
+                ptr_build_vm_bytecode->vm_operand(*ptr_combos_vm_code,ptr_ud->operand[2]);
+                break;
+            }
+            return;
+            
         }else
         {
-            /* ReadMemory  */
+            switch (o)
+            {
+            case 1:
+                ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,get_operand1((*ptr_ud)));
+                break;
+            case 2:
+                ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,get_operand2((*ptr_ud)));
+                break;
+            case 3:
+                ptr_build_vm_bytecode->read_vm_operand(*ptr_combos_vm_code,ptr_ud->operand[2]);
+                break;
+            }
         }
     }
     else
