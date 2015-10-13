@@ -683,6 +683,10 @@ void register_build_vm_bytecode_lua()
          lua_setglobal(build_vm_code_lua,"T_16X");
          lua_pushnumber(build_vm_code_lua,T_E32X);
          lua_setglobal(build_vm_code_lua,"T_E32X");
+         lua_pushnumber(build_vm_code_lua,T_NEXTINSADDR);
+         lua_setglobal(build_vm_code_lua,"T_NEXTINSADDR");
+         lua_pushnumber(build_vm_code_lua,T_JMPINSADDR);
+         lua_setglobal(build_vm_code_lua,"T_JMPINSADDR");         
 
 
          //lua_pushnumber(build_vm_code_lua,T_AL);
@@ -3436,17 +3440,17 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                    {
                    case LUA_ERRRUN:
                        printf("Lua ErrRun\n");
-                       printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                       printf("Not Handle:%s\n",luafunc);
                        debugbreakpoint();
                        break;
                    case LUA_ERRMEM:
                        printf("Lua ErrMem\n");
-                       printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                       printf("Not Handle:%s\n",luafunc);
                        debugbreakpoint();
                        break;
                    case LUA_ERRERR:
                        printf("Lua ErrErr\n");
-                       printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                       printf("Not Handle:%s\n",luafunc);
                        debugbreakpoint();
                        break;
                    default:
