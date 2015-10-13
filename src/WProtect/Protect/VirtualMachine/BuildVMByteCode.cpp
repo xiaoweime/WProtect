@@ -498,6 +498,13 @@ static int luai_get_operand_size(lua_State * L)
 
 #define luai_reg(name) lua_register(build_vm_code_lua,#name,luai_##name);
 
+void lua_printError()
+{
+    const char* error = lua_tostring(build_vm_code_lua, -1);//打印错误结果  
+    printf("%s/r/n",error);  
+    lua_pop(build_vm_code_lua, 1);   
+}
+
 void register_build_vm_bytecode_lua()
 {
     if (build_vm_code_lua == NULL)
@@ -695,16 +702,19 @@ void register_build_vm_bytecode_lua()
          {
          case LUA_ERRSYNTAX:
              printf("Lua ErrSyntax\n");
+             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRMEM:
              printf("Lua ErrMem\n");
+             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRGCMM:
              printf("Lua ErrGCMM.\n");
+             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
@@ -1362,8 +1372,6 @@ void BuildVMByteCode::copy_exec_code_to_stack(VCombosVMCode & var_combos_vm_code
                                               const uint8_t * var_code_buffer,
                                               size_t var_code_size)
 {
-    //const uint8_t *code_addr = (ud_insn_ptr(&var_ud));
-    //unsigned int code_size = ud_insn_len(&var_ud);
     var_combos_vm_code.b_push_imm(0xc3);
     for (int i = var_code_size - 1; i >= 0; i--)
     {
@@ -1921,7 +1929,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
      }
      break;
-     */
+     
     case UD_Inot:
      {
         vm_operand(var_combos_vm_code,get_operand1(var_ud));
@@ -1990,7 +1998,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
         write_vm_operand(var_combos_vm_code,get_operand1(var_ud));   
      }
      break;
-     /*
+    
      case UD_Ixor:
      {
         set_imm_operand_size(get_operand2(var_ud),get_operand1(var_ud));
@@ -3089,6 +3097,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
 
      }
      break;
+     */
     case UD_Imovzx:
      {
        for (int i = get_operand2(var_ud).size; i < get_operand1(var_ud).size;i+=8)
@@ -3100,7 +3109,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
        write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
      }
      break;
-     */
+     
     case UD_Imovsx:
      {
        read_vm_operand(var_combos_vm_code,get_operand2(var_ud));
@@ -3441,16 +3450,19 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                    case LUA_ERRRUN:
                        printf("Lua ErrRun\n");
                        printf("Not Handle:%s\n",luafunc);
+                       lua_printError();
                        debugbreakpoint();
                        break;
                    case LUA_ERRMEM:
                        printf("Lua ErrMem\n");
                        printf("Not Handle:%s\n",luafunc);
+                       lua_printError();
                        debugbreakpoint();
                        break;
                    case LUA_ERRERR:
                        printf("Lua ErrErr\n");
                        printf("Not Handle:%s\n",luafunc);
+                       lua_printError();
                        debugbreakpoint();
                        break;
                    default:
