@@ -2654,10 +2654,19 @@ handle_info VMHandle::check_stack()
   a.lea(nax,ptr(ndi,REG_NUMBER * align));
   a.cmp(nbp,nax);
   a.ja(l_dispatch);
-  a.mov(ndx,nsp);
-  a.lea(ncx,ptr(ndi,REG_NUMBER * align + 4));
-  a.sub(ncx,ndx);
-  
+  a.lea(ncx,ptr(ndi,REG_NUMBER * align));
+  a.sub(ncx,ndi);
+  a.lea(nax,ptr(nbp,-(REG_NUMBER * align * 2)));
+  a.and_(al,0xfc);
+  a.mov(nsp,nax);
+  a.push(nsi);
+  a.mov(nsi,ndi);
+  a.mov(ndi,nax);
+  a.mov(ndx,ncx);
+  a.cld();
+  a.rep_movsb();
+  a.sub(ndi,ndx);
+  a.pop(nsi);
   a.jmp(l_dispatch);
   //full_handle_info(info,FULL_END);
   info.size = a.getCodeSize()-info.size;
