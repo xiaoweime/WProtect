@@ -396,7 +396,7 @@ static int luai_write_vm_operand(lua_State * L)
     }
     else
     {
-        printf("push_operand need 1 parameter\n");
+        ptr_build_vm_bytecode->error("push_operand need 1 parameter\n");
         debugbreakpoint();
     }
 }
@@ -457,7 +457,7 @@ static int luai_resize_imm_operand(lua_State * L)
     }
     else
     {
-        printf("push_operand need 1 parameter\n");
+        ptr_build_vm_bytecode->error("push_operand need 1 parameter\n");
         debugbreakpoint();
     } 
 }
@@ -501,7 +501,7 @@ static int luai_get_operand_size(lua_State * L)
 void lua_printError()
 {
     const char* error = lua_tostring(build_vm_code_lua, -1);//打印错误结果  
-    printf("%s/r/n",error);  
+    ptr_build_vm_bytecode->error("%s/r/n",error);
     lua_pop(build_vm_code_lua, 1);   
 }
 
@@ -701,29 +701,29 @@ void register_build_vm_bytecode_lua()
          switch (luaL_loadfile(build_vm_code_lua,"./build_vm_handle.lua"))
          {
          case LUA_ERRSYNTAX:
-             printf("Lua ErrSyntax\n");
+             ptr_build_vm_bytecode->error("Lua ErrSyntax\n");
              lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRMEM:
-             printf("Lua ErrMem\n");
+             ptr_build_vm_bytecode->error("Lua ErrMem\n");
              lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRGCMM:
-             printf("Lua ErrGCMM.\n");
+             ptr_build_vm_bytecode->error("Lua ErrGCMM.\n");
              lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_OK:
-             printf("Lua OK\n");
+             ptr_build_vm_bytecode->pass("Lua OK\n");
              lua_pcall(build_vm_code_lua, 0, LUA_MULTRET, 0);
              break;
          default:
-             printf("Can not find build_vm_handle.lua!\n");
+             ptr_build_vm_bytecode->warn("Can not find build_vm_handle.lua!\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
@@ -1437,7 +1437,7 @@ void BuildVMByteCode::build_fpu(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                 }
             }
             if (find == false)
-                printf("Instruction Not Found: %s\n",mnemonic_name);
+                ptr_build_vm_bytecode->error("Instruction Not Found: %s\n",mnemonic_name);
             else
                 write_vm_operand(var_combos_vm_code,get_operand1(var_ud));
         }
@@ -3439,8 +3439,8 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                lua_getglobal(build_vm_code_lua,luafunc);
                if (lua_isfunction(build_vm_code_lua,1) == 0)
                {
-                   printf("Lua Has Not Declare Function %s\n",luafunc);
-                   printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+                   ptr_build_vm_bytecode->warn("Lua Has Not Declare Function %s\n",luafunc);
+                   ptr_build_vm_bytecode->error("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                    debugbreakpoint();
                }
                else
@@ -3448,20 +3448,20 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                    switch (lua_pcall(build_vm_code_lua,0,0,0))
                    {
                    case LUA_ERRRUN:
-                       printf("Lua ErrRun\n");
-                       printf("Not Handle:%s\n",luafunc);
+                       ptr_build_vm_bytecode->warn("Lua ErrRun\n");
+                       ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
                        lua_printError();
                        debugbreakpoint();
                        break;
                    case LUA_ERRMEM:
-                       printf("Lua ErrMem\n");
-                       printf("Not Handle:%s\n",luafunc);
+                       ptr_build_vm_bytecode->warn("Lua ErrMem\n");
+                       ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
                        lua_printError();
                        debugbreakpoint();
                        break;
                    case LUA_ERRERR:
-                       printf("Lua ErrErr\n");
-                       printf("Not Handle:%s\n",luafunc);
+                       ptr_build_vm_bytecode->warn("Lua ErrErr\n");
+                       ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
                        lua_printError();
                        debugbreakpoint();
                        break;
@@ -3473,7 +3473,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
            }
            else
            {
-               printf("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
+               ptr_build_vm_bytecode->error("Not Handle:%s\n",ud_lookup_mnemonic(var_ud.mnemonic));
                debugbreakpoint();
            }
        }

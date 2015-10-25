@@ -27,7 +27,7 @@ class CPEFile
 {
 public:
 	CPEFile();
-	bool LoadPEFile(char * file_name);
+	bool LoadPEFile(const char * file_name);
 	bool LoadPEFile(void * file_buf,unsigned long size);
 	bool IsPEFile();
 	void Free();

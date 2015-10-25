@@ -7,10 +7,10 @@
 #include "VMCodeBuffer.hpp"
 #include <Analysis.hpp>
 #include <vector>
+#include <logfunctions.h>
 
 
-
-class BuildVMByteCode{
+class BuildVMByteCode : public logfunctions{
   public:
     enum ProtectType{
         ComplexIns, //Complex Instruction Set Computer

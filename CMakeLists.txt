@@ -21,8 +21,9 @@ option(LIBRARY_TYPE_SHARED "share lib" ON)
 option(QT_GUI "gui executable" OFF)
 
 if (NOT PROTECT_X64)
-set (CMAKE_C_FLAGS -m32)
-set (CMAKE_CXX_FLAGS -m32)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+    set (BUILD_HOST "x86_32")
 endif()
 
 #编译数据库文件

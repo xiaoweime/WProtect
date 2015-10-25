@@ -5,8 +5,9 @@
 #include "VMHandle.h"
 #include "PCode.hpp"
 #include <VOperand.hpp>
+#include <logfunctions.h>
 
-class VCombosVMCode{
+class VCombosVMCode : public logfunctions{
     public:
     enum ProtectFlag{
         EncryConst = 1 << 0,//

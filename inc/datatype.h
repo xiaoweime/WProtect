@@ -42,7 +42,7 @@ typedef void                 *LPVOID;
 #define FALSE  0
 #define TRUE   1
 #ifndef null
-#define null 0
+//#define null 0
 #endif
 
 #ifndef NULL

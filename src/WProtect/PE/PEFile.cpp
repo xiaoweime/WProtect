@@ -43,7 +43,7 @@ bool CPEFile::SetInfo(PMAP_FILE_STRUCT pMapFile)
 	return true;
 }
 
-bool CPEFile::LoadPEFile(char * file_name)
+bool CPEFile::LoadPEFile(const char * file_name)
 {
 	if (m_pFile->ImageBase)
 		{

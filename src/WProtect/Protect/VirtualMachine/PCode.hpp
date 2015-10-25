@@ -19,6 +19,7 @@ using namespace std;
 #include "VMHandle.h"
 //#include "VirtualMachine.h"
 #include <VOperand.hpp>
+#include <logfunctions.h>
 //#include "CryptoPP/crc.h"
 
 typedef struct V_HANDLE_CONTEXT_
@@ -234,7 +235,7 @@ typedef struct _VMCODE_BACK_
   size_t size;
 }vmcode_back,*pvmcode_back;
   
-class PCode
+class PCode : public logfunctions
 {
 public:
   PCode();

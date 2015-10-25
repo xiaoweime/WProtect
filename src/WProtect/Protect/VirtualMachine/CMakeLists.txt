@@ -25,6 +25,7 @@ Set (
 VIRTUALMACHINE_LIBS
 AsmJit_Static
 Algorithms_Static
+Lua${Lua_Version}_Static
 #CryptoPP_Static
 )
 else()
@@ -32,6 +33,7 @@ Set (
 VIRTUALMACHINE_LIBS
 AsmJit
 Algorithms
+Lua${Lua_Version} 
 #CryptoPP
 )
 endif()

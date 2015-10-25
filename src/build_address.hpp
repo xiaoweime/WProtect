@@ -15,16 +15,24 @@ struct build_piece
 }; 
 
 class BuildCodeInfo{
-    char * build_exec_name;
+    const char * build_exec_name;
     std::list<build_piece> list_build_exec_info;
   public:
-    BuildCodeInfo(char * _filename)
+    BuildCodeInfo()
+    {
+    }
+    BuildCodeInfo(const char * _filename)
     {
         build_exec_name = _filename;
     }
     ~BuildCodeInfo()
     {}
+    void set_filename(const char * _filename)
+    {
+      build_exec_name = _filename;
+    }
     typedef std::list<build_piece>::iterator iterator;
+    typedef build_piece data_type;
     iterator begin()
     {
         return list_build_exec_info.begin();
@@ -44,7 +52,7 @@ class BuildCodeInfo{
             fuc(i);
         }
     }
-    char * get_filename()
+    const char * get_filename()
     {
       return build_exec_name;
     }

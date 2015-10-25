@@ -125,6 +125,21 @@
     </item>
    </layout>
   </widget>
+  <widget class="QTreeWidget" name="treeWidget_protectDisas">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>80</y>
+     <width>321</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string notr="true">1</string>
+    </property>
+   </column>
+  </widget>
  </widget>
  <resources/>
  <connections/>
