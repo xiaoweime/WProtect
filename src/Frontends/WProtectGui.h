@@ -1,6 +1,9 @@
+#ifndef WPROTECT_USE_QT
+#define WPROTECT_USE_QT
+#endif
+
 #ifndef WPROTECTGUI_H
 #define WPROTECTGUI_H   
-
 
 #include <QWidget>
 #include <QMap>
@@ -12,7 +15,7 @@ namespace Ui{
 
 class QMessageBox;
 
-class WProtectGui : public QWidget
+class WProtectGui : public QWidget , public logfunctions
 {
     Q_OBJECT
     public:

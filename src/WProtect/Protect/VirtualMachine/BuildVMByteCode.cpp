@@ -723,6 +723,8 @@ void register_build_vm_bytecode_lua()
              lua_pcall(build_vm_code_lua, 0, LUA_MULTRET, 0);
              break;
          default:
+             //ptr_build_vm_bytecode->warn("aa");
+             //ptr_build_vm_bytecode->error("Can not find build_vm_handle.lua!\n");
              ptr_build_vm_bytecode->warn("Can not find build_vm_handle.lua!\n");
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;

@@ -29,6 +29,29 @@ typedef class logfunctions {
     public:
     logfunctions(void){}
     ~logfunctions(void){}
+    void warn(const char *fmt,...) {
+        std::va_list arglist;
+        va_start(arglist,fmt);
+#ifndef WPROTECT_USE_QT
+        vfprintf(stdout,fmt,arglist);
+#else
+        exit(0);
+        char sz[256];
+        vsprintf(sz,fmt,arglist);
+        QString s;
+        s = "warn:";
+        s = s + sz;
+        s.replace("\n","");
+        ptr_log_list->addItem(s);
+        QMessageBox warn_info(QMessageBox::Warning,"warn",s,QMessageBox::Yes|QMessageBox::No,NULL);
+        if (warn_info.exec() == QMessageBox::No)
+        {
+            exit(0);
+        }
+#endif
+        va_end(arglist);
+    }
+
     void info(const char *fmt,...) {
         std::va_list arglist;
         va_start(arglist,fmt); 
@@ -83,27 +106,6 @@ typedef class logfunctions {
         va_end(arglist);            //exit(0);
         exit(0);
     }
-    void warn(const char *fmt,...) {
-        std::va_list arglist;
-        va_start(arglist,fmt);
-#ifndef WPROTECT_USE_QT
-        vfprintf(stdout,fmt,arglist);
-#else
-        char sz[256];
-        vsprintf(sz,fmt,arglist);
-        QString s;
-        s = "warn:";
-        s = s + sz;
-        s.replace("\n","");
-        ptr_log_list->addItem(s);
-        QMessageBox warn_info(QMessageBox::Warning,"warn",s,QMessageBox::Yes|QMessageBox::No,NULL);
-        if (warn_info.exec() == QMessageBox::No)
-        {
-            exit(0);
-        }
-#endif
-        va_end(arglist);            
-    }        
     void pass(const char *fmt,...) {
         std::va_list arglist;
         va_start(arglist,fmt);

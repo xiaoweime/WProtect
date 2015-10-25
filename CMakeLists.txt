@@ -20,6 +20,7 @@ option(LIBRARY_TYPE_STATIC "static lib" ON)
 option(LIBRARY_TYPE_SHARED "share lib" ON)
 option(QT_GUI "gui executable" OFF)
 
+
 if (NOT PROTECT_X64)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
@@ -40,7 +41,7 @@ include_directories(inc)
 include_directories(inc/coff)
 include_directories(inc/elf)
 
-set (LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/")
-set (EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/")
+set (LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin/")
+set (EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin/")
 
 add_subdirectory(src)

@@ -90,8 +90,13 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
       <property name="text">
-       <string>Log:</string>
+       <string>输入日志：</string>
       </property>
      </widget>
     </item>
@@ -99,6 +104,7 @@
      <widget class="QListWidget" name="listWidget_logOut">
       <property name="font">
        <font>
+        <family>Monaco for Powerline</family>
         <pointsize>15</pointsize>
        </font>
       </property>
@@ -124,13 +130,13 @@
     <string>保护代码</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>520</x>
      <y>80</y>
      <width>131</width>
-     <height>189</height>
+     <height>191</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">

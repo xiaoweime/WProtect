@@ -1,4 +1,6 @@
+#ifndef WPROTECT_USE_QT
 #define WPROTECT_USE_QT
+#endif
 
 #include "../vm_protect.h" 
 #include <QFileDialog>
@@ -62,7 +64,7 @@ void  WProtectGui::on_pushButton_openFile_clicked()
 
 void  WProtectGui::on_pushButton_protect_clicked()
 {
-    if (ui->lineEdit_beginAddress->text() == "")
+    if (ui->lineEdit_filePath->text() == "")
     {
         QMessageBox::warning(this,"警告","请选择一个要保护的文件");
         return;
@@ -72,8 +74,7 @@ void  WProtectGui::on_pushButton_protect_clicked()
     QString fileName = ui->lineEdit_filePath->text();
         std::map<long,long> xxx = user_protect_address.toStdMap();
     vm.protect_code(fileName.toStdString().c_str(),xxx);
-    //QMessageBox::information(this,tr("fuck"),tr("build"));
-    //QMessageBox::information()
+    QMessageBox::information(this,tr("编译成功"),tr("代码保护成功,请查看输出日志"));
 }
 
 
