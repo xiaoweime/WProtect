@@ -35,7 +35,6 @@ typedef class logfunctions {
 #ifndef WPROTECT_USE_QT
         vfprintf(stdout,fmt,arglist);
 #else
-        exit(0);
         char sz[256];
         vsprintf(sz,fmt,arglist);
         QString s;

@@ -9,13 +9,13 @@
 #include "ui_WProtectDialog.h"
 #include "WProtectGui.h"
 #include <list>
+#include <fstream>
 
 QListWidget * ptr_log_list;
 QTreeWidget * ptr_protect_address_tree;
 
 
 #define about_info "\
-\
 \
 <font color=\"blue\">&#160;&#160;&#160;&#160;ReVerSe EnGiNeeR TeAm[R.E.T]<br>\
 &#160;&#160;Name              -=TeaM RET Members=-        Comment <br>    \
@@ -40,7 +40,7 @@ WProtectGui::WProtectGui(QWidget * parent)
     ptr_log_list = ui->listWidget_logOut;
     ptr_protect_address_tree = ui->treeWidget_protectAddress;
     ui->treeWidget_protectAddress->setColumnCount(1);
-    ui->treeWidget_protectAddress->setHeaderLabel(tr("Protect Address"));
+    ui->treeWidget_protectAddress->setHeaderLabel(tr("保护地址"));
 
     QMessageBox::about(this,"WProtect By XiaoWei",about_info);
 }
@@ -52,13 +52,42 @@ WProtectGui::~WProtectGui()
 
 void  WProtectGui::on_pushButton_openFile_clicked()
 {
+    ui->treeWidget_protectAddress->clear();
+    ui->listWidget_logOut->clear();
+    user_protect_address.clear();
     QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),tr(""),tr("EXECUTABLE File(*.exe)"));
     if (fileName != "")
     {
-    ui->lineEdit_filePath->setText(fileName);
-    vm_protect vm;
-    std::map<long,long> xxx = user_protect_address.toStdMap();
-    vm.protect_address_disas(fileName.toStdString().c_str(),xxx);
+        ui->lineEdit_filePath->setText(fileName);
+
+        ifstream f;
+        QString configFileName = fileName;
+        configFileName.replace(tr(".exe"),tr(".wp"));
+        f.open(configFileName.toStdString().c_str());
+        if (f.is_open())
+        {
+            QMessageBox load_config_info(QMessageBox::Information,tr("配置文件"),tr("找到配置文件是否加载"),QMessageBox::Yes|QMessageBox::No,NULL) ;
+            if (load_config_info.exec() != QMessageBox::No)
+            {
+                info("load prject config file : %s",configFileName.toStdString().c_str());
+                int key;
+                int value;
+                while (!f.eof())
+                {
+                    f.read((char*)(&key),sizeof(key));
+
+                    warn("%d",key);
+                    //warn("a");
+                    //f >> key >> value;
+                    //user_protect_address.insert(key,value);
+                }
+
+            }
+            f.close();
+        }
+        vm_protect vm;
+        std::map<long,long> xxx = user_protect_address.toStdMap();
+        vm.protect_address_disas(fileName.toStdString().c_str(),xxx);
     }
 }
 
@@ -72,9 +101,30 @@ void  WProtectGui::on_pushButton_protect_clicked()
     ui->listWidget_logOut->clear();
     vm_protect vm;
     QString fileName = ui->lineEdit_filePath->text();
-        std::map<long,long> xxx = user_protect_address.toStdMap();
+    std::map<long,long> xxx = user_protect_address.toStdMap();
     vm.protect_code(fileName.toStdString().c_str(),xxx);
-    QMessageBox::information(this,tr("编译成功"),tr("代码保护成功,请查看输出日志"));
+    QMessageBox save_config_info(QMessageBox::Information,tr("编译成功"),tr("代码保护成功,是否保存配置文件"),QMessageBox::Yes|QMessageBox::No,NULL);
+    if (save_config_info.exec() == QMessageBox::Yes)
+    {
+        fileName.replace(tr("\.exe"),tr(".wp"));
+        ofstream f;
+        f.open(fileName.toStdString().c_str(),ios_base::binary);
+        if (f.is_open())
+        {
+            for (QMap<long,long>::iterator iter = user_protect_address.begin();
+                 iter != user_protect_address.end();iter++)
+            {
+                warn("save key:%d",iter.key());
+                warn("save value:%d",iter.value());
+                f << iter.key();
+                f << iter.value();
+            }
+            f.close();
+        }
+    }
+
+
+
 }
 
 
