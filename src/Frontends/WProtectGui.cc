@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QAbstractItemModel>
 #include <QSettings>
+#include <QTextCodec>
 #include "ui_WProtectDialog.h"
 #include "WProtectGui.h"
 #include <list>
@@ -38,6 +39,10 @@ WProtectGui::WProtectGui(QWidget * parent)
     ui(new Ui::WProtectDialog)
 {
     ui->setupUi(this);
+#if defined(WIN32) || defined _WINDOWS_
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("gb2312"));
+#endif
+
     ptr_log_list = ui->listWidget_logOut;
     ptr_protect_address_tree = ui->treeWidget_protectAddress;
     ui->treeWidget_protectAddress->setColumnCount(1);
@@ -57,6 +62,7 @@ void  WProtectGui::on_pushButton_openFile_clicked()
     ui->listWidget_logOut->clear();
     user_protect_address.clear();
     QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),tr(""),tr("EXECUTABLE File(*.exe)"));
+
     if (fileName != "")
     {
         ui->lineEdit_filePath->setText(fileName);

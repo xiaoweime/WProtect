@@ -22,7 +22,6 @@ Set(QT_PATH "/usr/lib32")
 Set(Qt5Core_DIR "/usr/lib32/cmake/Qt5Core")
 Set(Qt5Gui_DIR "/usr/lib32/cmake/Qt5Gui")
 Set(Qt5Widgets_DIR "/usr/lib32/cmake/Qt5Widgets")
-Message("unix aa")
 endif()  
 
 link_directories(${QT_PATH}"/plugins/")
