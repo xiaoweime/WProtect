@@ -67,26 +67,27 @@ void  WProtectGui::on_pushButton_openFile_clicked()
         f.open(configFileName.toStdString().c_str());
         if (f.is_open())
         {
-
-
             QMessageBox load_config_info(QMessageBox::Information,tr("配置文件"),tr("找到配置文件是否加载"),QMessageBox::Yes|QMessageBox::No,NULL) ;
             if (load_config_info.exec() != QMessageBox::No)
             {
                 QSettings s(configFileName, QSettings::IniFormat);
                 //s.setValue();
                 info("load prject config file : %s",configFileName.toStdString().c_str());
-                int key;
-                int value;
-                while (!f.eof())
+                long key;
+                long value;
+                s.beginGroup("Procedure");
+                QStringList key_list = s.allKeys();
+                for(int i = 0; i < key_list.size(); ++i)
                 {
-                    f.read((char*)(&key),sizeof(key));
-
-                    warn("%d",key);
-                    //warn("a");
-                    //f >> key >> value;
-                    //user_protect_address.insert(key,value);
+                    QString str_key = key_list.at(i);
+                    //warn("key : %s",str_key.toStdString().c_str());
+                    key = str_key.toLong(NULL,16);
+                    QString str_value = s.value(str_key).toString();
+                    //warn("value : %s",str_value.toStdString().c_str());
+                    value = str_value.toLong(NULL,16);
+                    user_protect_address.insert(key,value);
                 }
-
+                s.endGroup();
             }
             f.close();
         }
@@ -108,18 +109,22 @@ void  WProtectGui::on_pushButton_protect_clicked()
     QString fileName = ui->lineEdit_filePath->text();
     std::map<long,long> xxx = user_protect_address.toStdMap();
     vm.protect_code(fileName.toStdString().c_str(),xxx);
+    if (user_protect_address.empty())
+    {
+        QMessageBox::information(this,tr("编译成功"),tr("代码保护成功,请查看输出日志"));
+        return;
+    }
     QMessageBox save_config_info(QMessageBox::Information,tr("编译成功"),tr("代码保护成功,是否保存配置文件"),QMessageBox::Yes|QMessageBox::No,NULL);
     if (save_config_info.exec() == QMessageBox::Yes)
     {
         fileName.replace(tr(".exe"),tr(".wp"));
         QSettings *s = new QSettings(fileName,QSettings::IniFormat);
         s->beginGroup("Procedure");
+        s->clear();
         for (QMap<long,long>::iterator iter = user_protect_address.begin();
              iter != user_protect_address.end();iter++)
         {
-            warn("save key:%d",iter.key());
-            warn("save value:%d",iter.value());
-            s->setValue(iter.key(), iter.value());
+            s->setValue(QString::number(iter.key(),16).toStdString().c_str(), QString::number(iter.value(),16).toStdString().c_str());
         }
         s->endGroup();
         delete s;
