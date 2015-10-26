@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QAbstractItemModel>
+#include <QSettings>
 #include "ui_WProtectDialog.h"
 #include "WProtectGui.h"
 #include <list>
@@ -66,9 +67,13 @@ void  WProtectGui::on_pushButton_openFile_clicked()
         f.open(configFileName.toStdString().c_str());
         if (f.is_open())
         {
+
+
             QMessageBox load_config_info(QMessageBox::Information,tr("配置文件"),tr("找到配置文件是否加载"),QMessageBox::Yes|QMessageBox::No,NULL) ;
             if (load_config_info.exec() != QMessageBox::No)
             {
+                QSettings s(configFileName, QSettings::IniFormat);
+                //s.setValue();
                 info("load prject config file : %s",configFileName.toStdString().c_str());
                 int key;
                 int value;
@@ -106,25 +111,19 @@ void  WProtectGui::on_pushButton_protect_clicked()
     QMessageBox save_config_info(QMessageBox::Information,tr("编译成功"),tr("代码保护成功,是否保存配置文件"),QMessageBox::Yes|QMessageBox::No,NULL);
     if (save_config_info.exec() == QMessageBox::Yes)
     {
-        fileName.replace(tr("\.exe"),tr(".wp"));
-        ofstream f;
-        f.open(fileName.toStdString().c_str(),ios_base::binary);
-        if (f.is_open())
+        fileName.replace(tr(".exe"),tr(".wp"));
+        QSettings *s = new QSettings(fileName,QSettings::IniFormat);
+        s->beginGroup("Procedure");
+        for (QMap<long,long>::iterator iter = user_protect_address.begin();
+             iter != user_protect_address.end();iter++)
         {
-            for (QMap<long,long>::iterator iter = user_protect_address.begin();
-                 iter != user_protect_address.end();iter++)
-            {
-                warn("save key:%d",iter.key());
-                warn("save value:%d",iter.value());
-                f << iter.key();
-                f << iter.value();
-            }
-            f.close();
+            warn("save key:%d",iter.key());
+            warn("save value:%d",iter.value());
+            s->setValue(iter.key(), iter.value());
         }
+        s->endGroup();
+        delete s;
     }
-
-
-
 }
 
 
