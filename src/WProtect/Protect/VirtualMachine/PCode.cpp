@@ -1067,9 +1067,9 @@ void PCode::v_push_register(long _register,bool _disable)
 #ifdef DEBUG
       set_register_name(_register);
 
-    cout << "没有找到寄存器"  << reg_name << endl;
+    cout << "Register not found"  << reg_name << endl;
     //throw;
-    __asm__("int3");
+    //__asm__("int3");
 #endif
   }
 }
