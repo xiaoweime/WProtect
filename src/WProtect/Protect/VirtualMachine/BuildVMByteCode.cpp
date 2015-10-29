@@ -461,6 +461,7 @@ static int luai_resize_imm_operand(lua_State * L)
     } 
 }
 
+
 static int luai_get_operand_size(lua_State * L)
 {
     int count = lua_gettop(build_vm_code_lua);
@@ -500,8 +501,15 @@ static int luai_get_operand_size(lua_State * L)
 void lua_printError()
 {
     const char* error = lua_tostring(build_vm_code_lua, -1);//打印错误结果  
-    ptr_build_vm_bytecode->error("%s/r/n",error);
+    ptr_build_vm_bytecode->error("%s\n",error);
     lua_pop(build_vm_code_lua, 1);   
+}
+
+void lua_printError(const char * sz)
+{
+    const char* error = lua_tostring(build_vm_code_lua, -1);//打印错误结果
+    ptr_build_vm_bytecode->error("%s,%s\n",sz,error);
+    lua_pop(build_vm_code_lua, 1);
 }
 
 void register_build_vm_bytecode_lua()
@@ -700,20 +708,20 @@ void register_build_vm_bytecode_lua()
          switch (luaL_loadfile(build_vm_code_lua,"./build_vm_handle.lua"))
          {
          case LUA_ERRSYNTAX:
+             lua_printError("Lua ErrSyntax\n");
              ptr_build_vm_bytecode->error("Lua ErrSyntax\n");
-             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRMEM:
+             lua_printError("Lua ErrMem\n");
              ptr_build_vm_bytecode->error("Lua ErrMem\n");
-             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
          case LUA_ERRGCMM:
+             lua_printError("Lua ErrGCMM.\n");
              ptr_build_vm_bytecode->error("Lua ErrGCMM.\n");
-             lua_printError();
              lua_close(build_vm_code_lua);
              build_vm_code_lua = NULL;
              break;
@@ -1102,6 +1110,40 @@ void BuildVMByteCode::register_mapped_init()
 }
 
 
+void BuildVMByteCode::call_lua_functions(const char * lua_fuc_name)
+{
+    lua_getglobal(build_vm_code_lua,lua_fuc_name);
+    if (lua_isfunction(build_vm_code_lua,1) == 0)
+    {
+        ptr_build_vm_bytecode->error("Lua Has Not Declare Function %s\n",lua_fuc_name);
+        lua_printError();
+
+    }
+    else
+    {
+        switch (lua_pcall(build_vm_code_lua,0,0,0))
+        {
+        case LUA_ERRRUN:
+            ptr_build_vm_bytecode->error("Lua ErrRun\n");
+            lua_printError();
+            break;
+        case LUA_ERRMEM:
+            lua_printError();
+            ptr_build_vm_bytecode->error("Lua ErrMem\n");
+            break;
+        case LUA_ERRERR:
+            lua_printError();
+            ptr_build_vm_bytecode->error("Lua Not Functions:%s\n",lua_fuc_name);
+            break;
+        default:
+            //printf("运行成功\n");
+            break;
+        }
+    }
+
+
+}
+
 
 
 BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
@@ -1136,8 +1178,12 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
 
     long vm_byte_code_head  = 0;
 
+    call_lua_functions("on_pre_compile");
     vm_byte_code_head = build_vmcode(true);
+    call_lua_functions("on_compile");
     build_vmcode(false);
+    call_lua_functions("on_after_compile");
+
     ptr_address_table->copy();
     long init_vm_key = 0x12345678;
     bool t_sign = ptr_address_table->get_sign();
@@ -1189,9 +1235,12 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
     printf_map_register_store(var_map_label_vmreg_store_in,var_map_label_vmreg_store_out);
     
     long vm_byte_code_head  = 0;
-                
+
+    call_lua_functions("on_pre_compile");
     vm_byte_code_head = build_vmcode(true);
+    call_lua_functions("on_compile");
     build_vmcode(false);
+    call_lua_functions("after_compile");
     ptr_address_table->copy();  
     long init_vm_key = 0x12345678;
     bool t_sign = ptr_address_table->get_sign();
@@ -1994,7 +2043,11 @@ void BuildVMByteCode::build_fpu(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
             //printf ("mnemonic :%s\n",mnemonic_name);
 			for (index = 0; index < instruction_table_count; index++)
             {
+#ifdef _MSC_VER
 				if (stricmp(instruction_table[index], mnemonic_name) == 0)
+#else
+                if (strcasecmp(instruction_table[index], mnemonic_name) == 0)
+#endif
                 {
                     read_vm_operand(var_combos_vm_code,get_operand1(var_ud));
 
@@ -4034,22 +4087,21 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                    switch (lua_pcall(build_vm_code_lua,0,0,0))
                    {
                    case LUA_ERRRUN:
+                       lua_printError("Lua ErrRun\n");
                        ptr_build_vm_bytecode->warn("Lua ErrRun\n");
                        ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
-                       lua_printError();
-                       debugbreakpoint();
                        break;
                    case LUA_ERRMEM:
+                       lua_printError("Lua ErrMem\n");
                        ptr_build_vm_bytecode->warn("Lua ErrMem\n");
                        ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
                        lua_printError();
-                       debugbreakpoint();
                        break;
                    case LUA_ERRERR:
+                       lua_printError("Lua ErrErr");
                        ptr_build_vm_bytecode->warn("Lua ErrErr\n");
                        ptr_build_vm_bytecode->error("Not Handle:%s\n",luafunc);
                        lua_printError();
-                       debugbreakpoint();
                        break;
                    default:
                        //printf("运行成功\n");

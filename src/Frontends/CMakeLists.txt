@@ -11,7 +11,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 If (WIN32)
-Set(QT_PATH "D:/Qt/5.5/msvc2013/lib/") 
+Set(QT_PATH "D:/Qt/5.5/mingw492_32/lib/") 
 Set(Qt5Core_DIR ${QT_PATH}"/cmake/Qt5Core")
 Set(Qt5Gui_DIR ${QT_PATH}"/cmake/Qt5Gui")
 Set(Qt5Widgets_DIR ${QT_PATH}"/cmake/Qt5Widgets")

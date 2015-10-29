@@ -73,7 +73,7 @@ class BuildVMByteCode : public logfunctions{
                                               const uint8_t * var_code_buffer,
                                               size_t var_code_size);
   void register_mapped_init();
-
+  void call_lua_functions(const char * lua_fuc_name);
   long build_vmcode(bool b_allocator);
   std::map<ud_type,long> mapped_vm_register;
   long get_vm_register(ud_type _register);
