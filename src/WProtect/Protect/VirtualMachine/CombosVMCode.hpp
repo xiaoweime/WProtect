@@ -6,7 +6,7 @@
 #include "PCode.hpp"
 #include <VOperand.hpp>
 #include <logfunctions.h>
-
+#include <opcode_table.h>
 class VCombosVMCode : public logfunctions{
     public:
     enum ProtectFlag{
@@ -44,7 +44,7 @@ class VCombosVMCode : public logfunctions{
         void impact_vmregister(bool _change_vmregister)
         {
             change_vmregister_flag = _change_vmregister;
-        }
+		};
 
         long get_tmp_vmregister()
         {
@@ -61,7 +61,7 @@ class VCombosVMCode : public logfunctions{
                 }
             }
             printf("没有可用的临时寄存器\n");
-            __asm("int3");
+            //__asm("int3");
         }
         void unlock_tmp_vmregister(long _tmp_register)
         {

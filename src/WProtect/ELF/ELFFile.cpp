@@ -237,7 +237,7 @@ void * CELFFile::VaToPtr(long va)
         if (va <= shdr->sh_addr + shdr->sh_size &&
                 va >= shdr->sh_addr)
         {
-            return  GetImage() + shdr->sh_offset + (va - shdr->sh_addr);
+            return  (char *)GetImage() + shdr->sh_offset + (va - shdr->sh_addr);
         }
     }
     return NULL;
@@ -283,7 +283,7 @@ long CELFFile::GetSectionMinAddress()
 
 long CELFFile::GetEntry()
 {
-
+	return 0;
 }
 
 Elf32_Shdr * CELFFile::GetFirstSectionHeader()

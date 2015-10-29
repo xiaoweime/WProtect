@@ -35,7 +35,7 @@ public:
   }space;
   struct space_sort_cmp 
   { 
-    bool operator () (const AddressTable<T>::space& a,const AddressTable<T>::space& b) 
+	  bool operator () (const typename AddressTable<T>::space& a, const typename AddressTable<T>::space& b)
     { 
       return a.begin < b.begin; 
     }

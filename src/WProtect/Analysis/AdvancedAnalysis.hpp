@@ -1,3 +1,5 @@
+
+
 #ifndef ADVANCEDANALYSIS_HPP_2IOLFAJY
 #define ADVANCEDANALYSIS_HPP_2IOLFAJY
 
@@ -179,7 +181,7 @@ struct X86AnalysisOption
  //read write chang(read+write)  000 000 000
 };
 
-
+/*
 X86AnalysisOption X86AnalysisTable[] = {
     //{UD_Iinvalid,0x00000000,0x000000000,OERROR},
     //{UD_I3dnow,0x00000000,0x000000000,OERROR},
@@ -877,5 +879,5 @@ class X86CodeAnalysis : public Analysis
  typedef X86AnalysisOption AnalysisOption;
 };
 
-
+*/
 #endif /* end of include guard: ADVANCEDANALYSIS_HPP_2IOLFAJY */

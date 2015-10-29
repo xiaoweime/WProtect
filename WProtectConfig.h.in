@@ -17,7 +17,7 @@
 
 
 #ifdef _MSC_VER
-#define debugbreakpoint() asm { int 3;}
+#define debugbreakpoint() //asm { int 3;}
 #endif
 
 #ifdef __GNUC__

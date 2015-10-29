@@ -253,11 +253,11 @@ void Analysis::set_label_address(pCodeBufferInfo pinfo,
   {
      if (ud_obj.insn_offset > _addra[label])
      {
-       printf("当前地址不可能比分支地址大");
+       //printf("当前地址不可能比分支地址大");
      }
      if (ud_obj.insn_offset == _addra[label])
      {
-       _map.insert(std::make_pair<long,int>(ud_obj.insn_offset,label));
+       _map.insert(std::make_pair(ud_obj.insn_offset,label));
        //printf("地址:%08x,标签:%d\n",ud_obj.insn_offset,label);
        label++;
      }
@@ -778,7 +778,7 @@ AddressArray Analysis::analysis_code_piece_address(pCodeBufferInfo pinfo)
         {
           printf("%x:跳转的地址无法找到:",ud_obj.insn_offset);
           printf("%x\n",addr);
-          __asm("int3");         //表示跳转地址是一个jcc指令
+         // __asm("int3");         //表示跳转地址是一个jcc指令
         }
         else
         {

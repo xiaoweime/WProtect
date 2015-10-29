@@ -9,7 +9,6 @@
 #include <vector>
 #include <logfunctions.h>
 
-
 class BuildVMByteCode : public logfunctions{
   public:
     enum ProtectType{
@@ -89,4 +88,7 @@ extern BuildVMByteCode * ptr_build_vm_bytecode;
 extern VCombosVMCode * ptr_combos_vm_code;
 
 extern ud_t  * ptr_ud;
+
+
+
 #endif /* end of include guard: BUILDVMBYTECODE_HPP_PTATXLUJ */

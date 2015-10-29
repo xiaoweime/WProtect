@@ -107,7 +107,7 @@ void  WProtectGui::on_pushButton_protect_clicked()
 {
     if (ui->lineEdit_filePath->text() == "")
     {
-        QMessageBox::warning(this,"警告","请选择一个要保护的文件");
+        QMessageBox::warning(this,"Warning","Please Select One File TO Protect");
         return;
     }
     ui->listWidget_logOut->clear();
@@ -117,10 +117,10 @@ void  WProtectGui::on_pushButton_protect_clicked()
     vm.protect_code(fileName.toStdString().c_str(),xxx);
     if (user_protect_address.empty())
     {
-        QMessageBox::information(this,tr("编译成功"),tr("代码保护成功,请查看输出日志"));
+        QMessageBox::information(this,tr("Protect Success"),tr("Protect Success, Check Log"));
         return;
     }
-    QMessageBox save_config_info(QMessageBox::Information,tr("编译成功"),tr("代码保护成功,是否保存配置文件"),QMessageBox::Yes|QMessageBox::No,NULL);
+    QMessageBox save_config_info(QMessageBox::Information,tr("Protect Success"),tr("Protect Success, Do you want to save config files"),QMessageBox::Yes|QMessageBox::No,NULL);
     if (save_config_info.exec() == QMessageBox::Yes)
     {
         fileName.replace(tr(".exe"),tr(".wp"));
@@ -156,7 +156,7 @@ void WProtectGui::on_pushButton_addProtectAddress_clicked()
     QString endAddress = ui->lineEdit_endAddress->text();
     if (beginAddress == "" || endAddress == "")
     {
-        QMessageBox::warning(this,"警告","请输入正确地址");
+        QMessageBox::warning(this,"Warning ","Please input correct address");
         return;
     }
     user_protect_address.insert(beginAddress.toLong(0,16),endAddress.toLong(0,16));
