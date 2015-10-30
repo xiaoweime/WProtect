@@ -1381,9 +1381,11 @@ void BuildVMByteCode::vm_operand(
                    var_combos_vm_code.b_push_imm(3);
                    break;
                }
-
-               var_combos_vm_code.d_shl();
-               var_combos_vm_code.pop(T_INVALID);
+               if(var_operand.scale != 0)
+               {
+                   var_combos_vm_code.d_shl();
+                   var_combos_vm_code.pop(T_INVALID);
+               }
                count++;
             }
             if (var_operand.lval.sdword)

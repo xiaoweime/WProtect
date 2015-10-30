@@ -1,8 +1,10 @@
 --Junks
+jfunc_count = 10
+max_junc_count = 10
 math.randomseed = randomseed
 math.random = random
-
 function on_pre_compile()
+ r_key = os.time()
  math.randomseed(0)
 end
 
@@ -12,28 +14,179 @@ end
 
 function on_after_compile()
  math.randomseed(os.time())
-end 
+end
+function push_random_reg( ... )
+	local index = math.random(8)
+	if (index == 1) then
+		push(T_EAX)
+	elseif(index == 2) then
+		push(T_ECX)
+	elseif(index == 3) then
+		push(T_EDX)
+	elseif(index == 4) then
+		push(T_EBX)
+	elseif(index == 5) then
+		push(T_ESP)
+	elseif(index == 6) then
+		push(T_EBP)
+	elseif(index == 7) then
+		push(T_ESI)
+	elseif(index == 8) then
+		push(T_EDI)
+	end	
+end
+
+function GetJunkFunc1( index )
+	local jfunc = pushf
+
+	if (index == 1) then
+		jfunc = push_random_reg
+--	elseif(index == 2) then
+--	elseif(index == 3) then
+--	elseif(index == 4) then
+--	elseif(index == 5) then
+--	elseif(index == 6) then
+--	elseif(index == 7) then
+--	elseif(index == 8) then
+--	elseif(index == 9) then
+	else
+		jfunc = pushf
+	end
+	return jfunc
+end
+function GetJunkFunc2( index )
+	local jfunc = popf
+	if (index == 1) then
+		jfunc = pop_operand(T_INVALID)
+--	elseif(index == 2) then
+--	elseif(index == 3) then
+--	elseif(index == 4) then
+--	elseif(index == 5) then
+--	elseif(index == 6) then
+--	elseif(index == 7) then
+--	elseif(index == 8) then
+--	elseif(index == 9) then
+	else
+		jfunc = popf
+	end
+	return jfunc
+end
+
+function DoSomeJunk(  )
+	local index = math.random(5)
+	if (index == 1) then
+		local d = math.random(max_junc_count)
+		local j = math.random(jfunc_count)
+		LoopDoFunc0(GetJunkFunc1(j), d)
+		LoopDoFunc0(GetJunkFunc2(j), d)
+	elseif(index == 2) then
+	elseif(index == 3) then
+	elseif(index == 4) then
+	elseif(index == 5) then
+	elseif(index == 6) then
+	elseif(index == 7) then
+	elseif(index == 8) then
+	elseif(index == 9) then
+	elseif(index == 10) then
+	end
+end
+
+function AddJunk0( func )
+	local rand = math.random(10)
+	if (rand == 1) then
+		DoSomeJunk()
+		func()
+		DoSomeJunk()
+	elseif(rand == 2) then
+		DoSomeJunk()
+		DoSomeJunk()
+		func()
+	elseif(rand == 3) then
+		DoSomeJunk()
+		func()
+	elseif(rand == 4) then
+		func()
+		DoSomeJunk()
+	elseif(rand == 5) then
+		func()
+		DoSomeJunk()
+		DoSomeJunk()
+	elseif(rand == 6) then
+		func()
+	elseif(rand == 7) then
+		func()
+	elseif(rand == 8) then
+		func()
+	elseif(rand == 9) then
+		func()
+	elseif(rand == 10) then
+		func()
+	end
+end
+
+function AddJunk1( func, par )
+	--push_operand
+	--pop_operand
+	local rand = math.random(10)
+	if (rand == 1) then
+		DoSomeJunk()
+		func(par)
+		DoSomeJunk()
+	elseif(rand == 2) then
+		DoSomeJunk()
+		DoSomeJunk()
+		func(par)
+	elseif(rand == 3) then
+		DoSomeJunk()
+		func(par)
+	elseif(rand == 4) then
+		func(par)
+		DoSomeJunk()
+	elseif(rand == 5) then
+		func(par)
+		DoSomeJunk()
+		DoSomeJunk()
+	elseif(rand == 6) then
+		func(par)
+	elseif(rand == 7) then
+		func(par)
+	elseif(rand == 8) then
+		func(par)
+	elseif(rand == 9) then
+		func(par)
+	elseif(rand == 10) then
+		func(par)
+	end
+end
+
+--Detailed JunkCode
 
 --utilities
+function LoopDoFunc0( func, looptime )
+	for i=1,looptime do
+		func()
+	end	
+end
+
 function size_func( op, b_func, w_func, d_func)
     local i = get_operand_size(op)
     if (i == 8) then
-        b_func()
+        AddJunk0(b_func)
     elseif(i == 16) then
-        w_func()
+        AddJunk0(w_func)
     elseif(i == 32) then
-        d_func()      
+        AddJunk0(d_func)      
     end
 end
 
 function size_func1( op, b_func, w_func, d_func, param)
     local i = get_operand_size(op)
     if (i == 8) then
-        b_func(param)
+        AddJunk1(b_func, param)
     elseif(i == 16) then
-        w_func(param)
+        AddJunk1(w_func, param)
     elseif(i == 32) then
-        d_func(param)      
+        AddJunk1(d_func, param)      
     end
 end
 
@@ -53,155 +206,155 @@ function vm_nop()
 end
 function vm_mov()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(2)
-  pop_operand(1)
+  AddJunk1(push_operand, 2)
+  AddJunk1(pop_operand, 1)
 end
 
 function vm_xchg()
-  push_operand(2)
-  push_operand(1)
-  pop_operand(2)
-  pop_operand(1)
+  AddJunk1(push_operand, 2)
+  AddJunk1(push_operand, 1)
+  AddJunk1(pop_operand, 2)
+  AddJunk1(pop_operand, 1)
 end
 function vm_lea()
   push_operand(2,true)
-  pop_operand(1)
+  AddJunk1(pop_operand, 1)
 end
 function vm_push()
   resize_imm_operand(1)
-  push_operand(1)
+  AddJunk1(push_operand, 1)
 end 
 function vm_cmp()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(2)
-  push_operand(1)
+  AddJunk1(push_operand, 2)
+  AddJunk1(push_operand, 1)
   size_func(1, b_sub, w_sub, d_sub)
-  popf()
+  AddJunk0(popf)
   size_pop_invalid(1)
 end 
-function vm_ret()
-  ret()
+function vm_AddJunk0(ret)
+  AddJunk0(ret)
 end
 function vm_add()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(2)
-  push_operand(1)
+  AddJunk1(push_operand, 2)
+  AddJunk1(push_operand, 1)
   size_func(1, b_add, w_add, d_add)
-  popf()
-  pop_operand(1)
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)
 end
 function vm_sub()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(2)
-  push_operand(1)
+  AddJunk1(push_operand, 2)
+  AddJunk1(push_operand, 1)
   size_func(1, b_sub, w_sub, d_sub)
-  popf()
-  pop_operand(1)
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)
 end
 function vm_not()
-  push_operand(1)
+  AddJunk1(push_operand, 1)
   size_func(1, b_not, w_not, d_not)
-  popf()
-  pop_operand(1)
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)
 end
 function vm_and()
-  push_operand(1)
+  AddJunk1(push_operand, 1)
   size_func(1, b_and, w_and, d_and)
-  popf()
-  pop_operand(1)
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)
 end
 function vm_or()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(1)
-  push_operand(2)
+  AddJunk1(push_operand, 1)
+  AddJunk1(push_operand, 2)
   size_func(1, b_or, w_or, d_or)
-  popf()
-  pop_operand(1) 
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1) 
 end
 function vm_xor()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(1)
-  push_operand(2)
+  AddJunk1(push_operand, 1)
+  AddJunk1(push_operand, 2)
   size_func(1, b_xor, w_xor, d_xor)
-  popf()
-  pop_operand(1) 
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1) 
 end
 function vm_test()
   resize_imm_operand(2, get_operand_size(1))
-  push_operand(1)
-  push_operand(2)
+  AddJunk1(push_operand, 1)
+  AddJunk1(push_operand, 2)
   size_func(1, b_and, w_and, d_and)
-  popf()
+  AddJunk0(popf)
   size_pop_invalid(1)
 end
 function vm_pop()
   resize_imm_operand(1)
-  pop_operand(1)
+  AddJunk1(pop_operand, 1)
 end
 function vm_inc()
-  push_operand(1)
+  AddJunk1(push_operand, 1)
   size_func1(1, b_push_imm, w_push_imm, d_push_imm,1)
   size_func(1, b_add, w_add, d_add)
   d_push_imm(~((1 << 0) | (1 << 10)))
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pushf()
+  AddJunk0(pushf)
   d_push_imm((1 << 0) | (1 << 10))
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID) 
-  d_or()
+  AddJunk0(d_or)
   pop(T_INVALID)
-  popf()
-  pop_operand(1)
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)
 end
 function vm_dec()
   size_func1(1, b_push_imm, w_push_imm, d_push_imm,1)
-  push_operand(1)
+  AddJunk1(push_operand, 1)
   size_func(1, b_sub, w_sub, d_sub)
   d_push_imm(~((1 << 0) | (1 << 10)))
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pushf()
+  AddJunk0(pushf)
   d_push_imm((1 << 0) | (1 << 10))
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID) 
-  d_or()
+  AddJunk0(d_or)
   pop(T_INVALID)
-  popf() 
-  pop_operand(1)
+  AddJunk0(popf) 
+  AddJunk1(pop_operand, 1)
 end
 function vm_shl()
-  push_operand(1) 
-  push_operand(2)
+  AddJunk1(push_operand, 1) 
+  AddJunk1(push_operand, 2)
   size_func(1, b_shl, w_shl, d_shl)
-  popf()
-  pop_operand(1)   
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)   
 end
 function vm_shr()
-  push_operand(1) 
-  push_operand(2)
+  AddJunk1(push_operand, 1) 
+  AddJunk1(push_operand, 2)
   size_func(1, b_shr, w_shr, d_shr)
-  popf()
-  pop_operand(1)   
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)   
 end
 function vm_sar()
-  push_operand(1) 
-  push_operand(2)
+  AddJunk1(push_operand, 1) 
+  AddJunk1(push_operand, 2)
   size_func(1, b_sar, w_sar, d_sar)
-  popf()
-  pop_operand(1)   
+  AddJunk0(popf)
+  AddJunk1(pop_operand, 1)   
 end
 function vm_cdq()
   push(T_EAX)
   b_push_imm(31)
-  d_sar()
+  AddJunk0(d_sar)
   pop(T_INVALID)
   pop(T_EDX)
 end
 function vm_cwd()
   push(T_AX)
   b_push_imm(15)
-  w_sar()
+  AddJunk0(w_sar)
   pop(T_INVALID)
   pop(T_DX)
 end
@@ -209,14 +362,14 @@ function vm_scasb()
   push(T_EDI)
   b_read_mem()
   push(T_AL)
-  b_cmp()
-  popf()
+  AddJunk0(b_cmp)
+  AddJunk0(popf)
   get_string_ins_diff()
   b_push_imm(0)
-  d_shl()
+  AddJunk0(d_shl)
   pop(T_INVALID)
   push(T_EDI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_EDI)
 end
@@ -224,14 +377,14 @@ function vm_scasw() --edi - ~df + df
   push(T_EDI)
   w_read_mem()
   push(T_AX)
-  w_cmp()
-  popf()
+  AddJunk0(w_cmp)
+  AddJunk0(popf)
   get_string_ins_diff()
   b_push_imm(1)
-  d_shl()
+  AddJunk0(d_shl)
   pop(T_INVALID)
   push(T_EDI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_EDI)
 end
@@ -239,14 +392,14 @@ function vm_scasd() --edi - ~df + df
   push(T_EDI)
   d_read_mem()
   push(T_EAX)
-  d_cmp()
-  popf()
+  AddJunk0(d_cmp)
+  AddJunk0(popf)
   get_string_ins_diff()
   b_push_imm(2)
-  d_shl()
+  AddJunk0(d_shl)
   pop(T_INVALID)
   push(T_EDI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_EDI)
 end
@@ -259,11 +412,11 @@ function vm_movsb()
   push_vsp()
   d_read_mem()
   push(T_ESI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_ESI)
   push(T_EDI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_EDI)
 end
@@ -274,286 +427,286 @@ function vm_movsd()
   d_write_mem()
   get_string_ins_diff()
   b_push_imm(2)
-  d_shl()
+  AddJunk0(d_shl)
   pop(T_INVALID)
   push_vsp()
   d_read_mem()
   push(T_ESI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_ESI)
   push(T_EDI)
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   pop(T_EDI)
 end
 function vm_setz() -- zf = 1
-  pushf()
+  AddJunk0(pushf)
   get_zf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setnz() -- zf = 0
-  pushf()
+  AddJunk0(pushf)
   get_zf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_sets() -- sf = 1
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setns() -- sf = 0
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setnp() -- pf = 0
-  pushf()
+  AddJunk0(pushf)
   get_pf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not() 
+  AddJunk0(d_not) 
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setp() -- pf = 1
-  pushf()
-  get_pf()--这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
-  b_push_imm(2) --这里把刚刚获取的那个数据右移三位
-  d_shr()--右移
+  AddJunk0(pushf)
+  get_pf()
+  b_push_imm(2) 
+  AddJunk0(d_shr)--右移
   pop(T_INVALID)--删除shr那个eflag我们并不需要
-  pop_operand(1) --把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位 
+  AddJunk1(pop_operand, 1) --把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位 
   pop(T_INVALID | T_16X)--上面用了8位还剩24位(这24位都为0)先删除16位
   pop(T_INVALID | T_8H)--在删除8位 
 end 
 function vm_seto() -- of = 1
-  pushf()
+  AddJunk0(pushf)
   get_of()--这里获取一个dword的zf标志位 zf=1的时候 数据为4(二进制100) zf=0的时候 数据为0
   b_push_imm(2) --这里把刚刚获取的那个数据右移三位
-  d_shr()--右移
+  AddJunk0(d_shr)--右移
   pop(T_INVALID)--删除shr那个eflag我们并不需要
-  pop_operand(1) --把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位
+  AddJunk1(pop_operand, 1) --把刚刚那个数据写入第一个操作数,因为第一个操作数只会是8位
   pop(T_INVALID | T_16X)--上面用了8位还剩24位(这24位都为0)先删除16位
   pop(T_INVALID | T_8H)--在删除8位
 end
 function vm_setno() -- of = 0
-  pushf()
+  AddJunk0(pushf)
   get_of()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setb() -- cf = 1
-  pushf()
+  AddJunk0(pushf)
   get_cf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setae() -- cf = 0
-  pushf()
+  AddJunk0(pushf)
   get_cf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_seta() -- cf = 0 && zf = 0
-  pushf()
+  AddJunk0(pushf)
   get_cf()
   b_push_imm(2)
-  d_shr()
+  AddJunk0(d_shr)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
-  pushf()
+  AddJunk0(pushf)
   get_zf()
   b_push_imm(2)
-  d_shr()
+  AddJunk0(d_shr)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setbe() -- cf = 1 && zf = 1
-  pushf()
+  AddJunk0(pushf)
   get_cf()
   b_push_imm(2)
-  d_shr()
+  AddJunk0(d_shr)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
-  pushf()
+  AddJunk0(pushf)
   get_zf()
   b_push_imm(2)
-  d_shr()
+  AddJunk0(d_shr)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setg()-- zf = 0 && sf = of
-  pushf()
+  AddJunk0(pushf)
   get_zf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
 
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pushf()
+  AddJunk0(pushf)
   get_of()--
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  d_xor()
+  AddJunk0(d_xor)
   pop(T_INVALID)
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
 
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
 
   b_push_imm_zx(1)
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
 
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
  function vm_setle() -- zf = 1 && sf != of
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
 
-  pushf()
+  AddJunk0(pushf)
   get_of()
 
-  d_xor()
+  AddJunk0(d_xor)
   pop(T_INVALID)
 
-  pushf()
+  AddJunk0(pushf)
   get_zf()
 
-  d_and()
+  AddJunk0(d_and)
   pop(T_INVALID)
 
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setl() -- sf != of
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
 
-  pushf()
+  AddJunk0(pushf)
   get_of()
 
-  d_xor()
+  AddJunk0(d_xor)
   pop(T_INVALID)
 
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
 function vm_setge() -- sf = OF
-  pushf()
+  AddJunk0(pushf)
   get_sf()--
 
-  pushf()
+  AddJunk0(pushf)
   get_of()
 
-  d_xor()
+  AddJunk0(d_xor)
   pop(T_INVALID)
 
-  d_not()
+  AddJunk0(d_not)
   pop(T_INVALID)
 
   b_push_imm(2) --
-  d_shr()--
+  AddJunk0(d_shr)--
   pop(T_INVALID)--
-  pop_operand(1) --
+  AddJunk1(pop_operand, 1) --
   pop(T_INVALID | T_16X)--
   pop(T_INVALID | T_8H)--
 end
@@ -565,15 +718,15 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 d_push_imm(0x40)
-d_and()
+AddJunk0(d_and)
 pop(T_INVALID)
 
 b_push_imm(4)
-d_shr()
+AddJunk0(d_shr)
 pop(T_INVALID)
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -590,15 +743,15 @@ push(T_NEXTINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 d_push_imm(0x40)
-d_and()
+AddJunk0(d_and)
 pop(T_INVALID)
 
 b_push_imm(4)
-d_shr()
+AddJunk0(d_shr)
 pop(T_INVALID)
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -615,14 +768,14 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_cf()
-pushf()
+AddJunk0(pushf)
 get_zf()
-d_or()
+AddJunk0(d_or)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -639,10 +792,10 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_cf()
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -659,10 +812,10 @@ push(T_NEXTINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_cf()
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -679,16 +832,16 @@ push(T_NEXTINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_cf()
 
-pushf()
+AddJunk0(pushf)
 get_zf()
 
-d_or()
+AddJunk0(d_or)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -707,10 +860,10 @@ push(T_NEXTINSADDR)
 push_vsp()
 w_push_imm(0)
 push(T_CX)
-w_cmp()
+AddJunk0(w_cmp)
 get_zf()
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -727,20 +880,20 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_zf()
 
-pushf()
+AddJunk0(pushf)
 get_sf()
-pushf()
+AddJunk0(pushf)
 get_of()
-d_xor()
+AddJunk0(d_xor)
 pop(T_INVALID)
 
-d_or()
+AddJunk0(d_or)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -757,14 +910,14 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_sf()
-pushf()
+AddJunk0(pushf)
 get_of()
-d_xor()
+AddJunk0(d_xor)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -782,14 +935,14 @@ push(T_NEXTINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_of()
-pushf()
+AddJunk0(pushf)
 get_sf()
-d_xor()
+AddJunk0(d_xor)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -807,20 +960,20 @@ push(T_NEXTINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_zf()
 
-pushf()
+AddJunk0(pushf)
 get_sf()
-pushf()
+AddJunk0(pushf)
 get_of()
-d_xor()
+AddJunk0(d_xor)
 pop(T_INVALID)
 
-d_or()
+AddJunk0(d_or)
 pop(T_INVALID)
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -837,10 +990,10 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_of()
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -857,10 +1010,10 @@ push(T_JMPINSADDR)
 
 push_vsp()
 
-pushf()
+AddJunk0(pushf)
 get_pf()
 
-d_add()
+AddJunk0(d_add)
 pop(T_INVALID)
 d_read_mem()
 pop(T_NEXTINSADDR)
@@ -875,10 +1028,10 @@ function vm_jns() -- SF = 0
 
   push_vsp()
 
-  pushf()
+  AddJunk0(pushf)
   get_sf()
 
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   d_read_mem()
   pop(T_NEXTINSADDR)
@@ -889,9 +1042,9 @@ function vm_jo()-- OF = 1
   push(T_JMPINSADDR)
   push(T_NEXTINSADDR)
   push_vsp()
-  pushf()
+  AddJunk0(pushf)
   get_of()
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   d_read_mem()
   pop(T_NEXTINSADDR)
@@ -902,9 +1055,9 @@ function vm_jp()-- PF = 1
   push(T_JMPINSADDR)
   push(T_NEXTINSADDR) 
   push_vsp()
-  pushf()
+  AddJunk0(pushf)
   get_pf()
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   d_read_mem()
   pop(T_NEXTINSADDR)
@@ -915,9 +1068,9 @@ function vm_js()
   push(T_JMPINSADDR)
   push(T_NEXTINSADDR) 
   push_vsp()
-  pushf()
+  AddJunk0(pushf)
   get_sf()
-  d_add()
+  AddJunk0(d_add)
   pop(T_INVALID)
   d_read_mem()
   pop(T_NEXTINSADDR)
