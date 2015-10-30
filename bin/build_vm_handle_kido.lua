@@ -258,6 +258,8 @@ function vm_not()
   AddJunk1(pop_operand, 1)
 end
 function vm_and()
+  resize_imm_operand(2, get_operand_size(1))
+  AddJunk1(push_operand, 2)
   AddJunk1(push_operand, 1)
   size_func(1, b_and, w_and, d_and)
   AddJunk0(popf)

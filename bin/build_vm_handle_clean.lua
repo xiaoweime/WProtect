@@ -105,6 +105,8 @@ function vm_not()
   pop_operand(1)
 end
 function vm_and()
+  resize_imm_operand(2, get_operand_size(1))
+  push_operand(2)
   push_operand(1)
   size_func(1, b_and, w_and, d_and)
   popf()
