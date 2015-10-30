@@ -13,9 +13,9 @@ https://github.com/xiaoweime/WProtect
 To build this project, you need:
 git : to get the source code.
 cmake : to configure the project.
-gcc or mingw32 to compile it.
+gcc or mingw32 or MSVC10 to compile it.
 
-Currently, MSVC compilers and OSX-Clang are not supported.
+Currently,other MSVC compilers and OSX-Clang are not supported.
 
 Please report bugs/features in this post.
 You are welcomed to join the project and contribute to it.
