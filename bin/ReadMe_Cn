@@ -1,0 +1,3 @@
+build_vm_handle_clean.lua      是一个干净的PCode生成脚本模板
+build_vm_handle_kido.lua       是一个加了各种复杂操作的PCode生成脚本
+如果需要使用他 请复制脚本文件到WProtect目录 并重命名为build_vm_handle.lua
