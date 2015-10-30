@@ -8,6 +8,7 @@
 #include <Analysis.hpp>
 #include <vector>
 #include <logfunctions.h>
+#include <random.hpp>
 
 class BuildVMByteCode : public logfunctions{
   public:
@@ -80,6 +81,7 @@ class BuildVMByteCode : public logfunctions{
 #ifdef DEBUG
   bool vmdebug_out_file_directory;
 #endif
+  RandomEngender random_engender;
   //lua interface 
 };
 

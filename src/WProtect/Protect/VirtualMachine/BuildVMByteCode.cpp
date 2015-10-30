@@ -20,6 +20,8 @@
 #include <vector>
 #include "OutDetailedInformation.hpp"
 #include <string.h>
+#include <fstream>
+
 
 #ifndef LUA_H
 #define LUA_H
@@ -35,7 +37,7 @@ BuildVMByteCode * ptr_build_vm_bytecode;
 VCombosVMCode * ptr_combos_vm_code;
 ud_t * ptr_ud;
 lua_State * build_vm_code_lua;
-
+RandomEngender random_engender_lua;
 
 #define get_operand1_type(x) x.operand[0].type
 #define get_operand2_type(x) x.operand[1].type
@@ -46,7 +48,6 @@ lua_State * build_vm_code_lua;
               switch (x.size)\
               {\
                  case 0:\
-                    printf("Size is 0\n");\
                     break;\
                  case 8:\
                     var_combos_vm_code.b_read_mem();\
@@ -159,6 +160,57 @@ static int luai_ ##name(lua_State * L)\
     return 0;\
 };\
 
+static int lua_randomseed(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    if (count == 1)
+    {
+        if (!lua_isnumber(build_vm_code_lua,1))
+        {
+            lua_pushstring(build_vm_code_lua, " is not an Interget\n");
+            lua_error(build_vm_code_lua);
+        }
+        random_engender_lua.randomseed(lua_tonumber(build_vm_code_lua,1));
+    }
+    else
+    {
+        printf("randseed Need a parameter\n");
+    }
+    return 0;
+}
+
+static int lua_random(lua_State * L)
+{
+    int count = lua_gettop(build_vm_code_lua);
+    switch (count)
+    {
+    case 0:
+        {
+            lua_pushnumber(L,random_engender_lua.random());
+        }
+        break;
+    case 1:
+        {
+            if (!lua_isnumber(L,1))
+            {
+                lua_pushstring(build_vm_code_lua, " is not an Interget\n");
+                lua_error(L);
+            }
+            int n = (lua_tonumber(L,1));
+            long rn = random_engender_lua.random() ;
+            if (n == 0)
+                lua_pushnumber(L,rn);
+            else
+                lua_pushnumber(L,(rn % n));
+        }
+        break;
+    default:
+        lua_pushstring(build_vm_code_lua, "random Need 1 or 2 parameter\\n");
+        lua_error(build_vm_code_lua);
+        break;
+    }
+    return 1;
+}
 
 /*
 static int luai_b_push_imm(lua_State * L)
@@ -521,6 +573,9 @@ void register_build_vm_bytecode_lua()
          //lua_register(build_vm_code_lua,"b_not",luai_b_not);
          //luai_reg(b_not);
 
+         lua_register(build_vm_code_lua,"randomseed",lua_randomseed);
+         lua_register(build_vm_code_lua,"random",lua_random);
+
          luai_reg(run_stack)
          luai_reg(pushf)
          luai_reg(popf)
@@ -647,7 +702,7 @@ void register_build_vm_bytecode_lua()
          lua_register(build_vm_code_lua,"push_operand",luai_read_vm_operand);
          lua_register(build_vm_code_lua,"pop_operand",luai_write_vm_operand);
          lua_register(build_vm_code_lua,"get_operand_size",luai_get_operand_size);
-         lua_register(build_vm_code_lua,"resize_imm_operand",luai_resize_imm_operand); 
+         lua_register(build_vm_code_lua,"resize_imm_operand",luai_resize_imm_operand);
 
  
 #define luai_setglobalnumber(name) lua_pushnumber(build_vm_code_lua,T_##name);\
@@ -1155,6 +1210,19 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
      ,vmdebug_out_file_directory(false)
 #endif
 {
+    /*
+    random_engender.randomseed(123456);
+    for (int i = 0;i < 10;i++)
+    {
+        std::cout << random_engender.random() << std::endl;
+    }
+    std::cout << "-------------" << std::endl;
+    random_engender.randomseed(123456);
+    for (int i = 0;i < 10;i++)
+    {
+        std::cout << random_engender.random() << std::endl;
+    }
+    debugbreakpoint();*/
    register_build_vm_bytecode_lua();
    var_entry_address = entry_address;
    if (!ptr_info->size)
@@ -1240,7 +1308,7 @@ BuildVMByteCode::BuildVMByteCode(VirtualMachineManage * ptr_vmmanage,
     vm_byte_code_head = build_vmcode(true);
     call_lua_functions("on_compile");
     build_vmcode(false);
-    call_lua_functions("after_compile");
+    call_lua_functions("on_after_compile");
     ptr_address_table->copy();  
     long init_vm_key = 0x12345678;
     bool t_sign = ptr_address_table->get_sign();
@@ -4104,6 +4172,7 @@ void BuildVMByteCode::build(VCombosVMCode & var_combos_vm_code,ud_t &var_ud)
                        lua_printError();
                        break;
                    default:
+                       //std::cout <<  luafunc << std::endl;
                        //printf("运行成功\n");
                        break;
                    }

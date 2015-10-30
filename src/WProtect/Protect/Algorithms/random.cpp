@@ -19,6 +19,8 @@ long m_random()
   }
   return r;
 }
+
+
 /*
 long m_random(long max_size)
 {
