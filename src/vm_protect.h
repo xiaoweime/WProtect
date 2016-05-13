@@ -160,9 +160,9 @@ class vm_protect : public logfunctions
                                 DWORD section_size;
                                 BYTE * ptr_section_data = section.GetSectionData(index,&section_size);
                                 if (ptr_section_data == NULL)
-								                        {
-									                         continue;
-								                        }
+				{
+					continue;
+				}
                                 info("\nSection No.%02d Size 0x%04X Flags 0x%8X IsExecute: %s\n",index,section_size,section.GetCharacteristics(index),(section.GetCharacteristics(index) & 0x20000000)?"true":"false");
                                 if (! (section.GetCharacteristics(index) & 0x20000000))
                                 {
