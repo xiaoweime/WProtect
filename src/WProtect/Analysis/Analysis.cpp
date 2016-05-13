@@ -281,7 +281,8 @@ void Analysis::disasm(pCodeBufferInfo pinfo,std::vector<CodePiece> & code)
 
     base = pinfo->addr;
     size = pinfo->size;
-    AddressArray a_array = analysis_code_piece_address(pinfo);
+	AddressArray a_array;
+	analysis_code_piece_address(pinfo, a_array);
 
     int point = 0;
     const bool begin = true;
@@ -728,7 +729,7 @@ pAssemblerTree Analysis::disasm(pCodeBufferInfo pinfo)
 
  //分析代码块地址
 
-AddressArray Analysis::analysis_code_piece_address(pCodeBufferInfo pinfo)
+void Analysis::analysis_code_piece_address(pCodeBufferInfo pinfo, AddressArray& a_array)
 {
   ud_t ud_obj;
   ud_init(&ud_obj);
@@ -798,7 +799,7 @@ AddressArray Analysis::analysis_code_piece_address(pCodeBufferInfo pinfo)
   long count = 0;
   
   size_t address_size = address_array.size();
-  AddressArray a_array(address_size);  
+  a_array.init(address_size);
   for (std::vector <long>::iterator iter = address_array.begin() ;
        iter != address_array.end() ; ++iter)
   {
@@ -836,5 +837,5 @@ AddressArray Analysis::analysis_code_piece_address(pCodeBufferInfo pinfo)
 //__asm ("int3");
 #endif
   
-  return a_array;
+  return;
 } 
