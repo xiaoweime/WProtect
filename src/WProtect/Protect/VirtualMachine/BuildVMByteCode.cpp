@@ -450,6 +450,7 @@ static int luai_write_vm_operand(lua_State * L)
         ptr_build_vm_bytecode->error("push_operand need 1 parameter\n");
         debugbreakpoint();
     }
+	return 0;
 }
 
 static int luai_resize_imm_operand(lua_State * L)
@@ -511,6 +512,7 @@ static int luai_resize_imm_operand(lua_State * L)
         ptr_build_vm_bytecode->error("push_operand need 1 parameter\n");
         debugbreakpoint();
     } 
+	return 0;
 }
 
 

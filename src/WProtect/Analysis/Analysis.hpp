@@ -92,6 +92,16 @@ typedef struct _AddressArray
    long * a_array;
    size_t a_size; 
   public:
+	  _AddressArray()
+	  {
+		  a_array = NULL;
+		  a_size = 0;
+	  }
+	  void init(int _size)
+	  {
+		  a_array = new long[_size];
+		  a_size = _size;
+	  }
    _AddressArray(int _size) {
      a_array = new long[_size];
      a_size = _size;
@@ -114,6 +124,7 @@ typedef struct _AddressArray
    ~_AddressArray(){
      if(a_array != NULL)
        delete [] a_array;
+	 a_array = NULL;
    }
    long &operator[](size_t _index)
    {
@@ -216,7 +227,7 @@ public:
 public:
   size_t reloc_asm_address(long old_address,long new_address); //返回一个成功重定位个数 0为没找到
   size_t reloc_asm_address();
-  AddressArray analysis_code_piece_address(pCodeBufferInfo pinfo); 
+  void analysis_code_piece_address(pCodeBufferInfo pinfo, AddressArray& a_array);
   void disasm(pCodeBufferInfo pinfo,std::vector<CodePiece> & code);
   void printf_piece(std::vector<CodePiece>& var_piece);
   pAssemblerTree add_tree(pAssemblerTree parent, pAssemblerTree child,bool l_r);
