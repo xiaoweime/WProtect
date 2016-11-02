@@ -206,6 +206,17 @@ class VCombosVMCode : public logfunctions{
         void d_mult();
         void q_mult();
         
+        void b_rol();
+        void w_rol();
+        void d_rol();
+        void q_rol();
+
+        void b_ror();
+        void w_ror();
+        void d_ror();
+        void q_ror();
+
+
         void b_shr();
         void w_shr();
         void d_shr();

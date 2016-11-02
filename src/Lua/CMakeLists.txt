@@ -36,7 +36,7 @@ ltable.c
 ltablib.c
 ltm.c
 lua.c
-luac.c
+#luac.c
 luaconf.h
 lundump.c
 lutf8lib.c

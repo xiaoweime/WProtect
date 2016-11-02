@@ -929,3 +929,24 @@ end
 
 function vm_jmp()
 end
+
+function vm_ret()
+    ret()
+end
+
+function vm_rol()
+    push_operand(1)
+    push_operand(2)
+    size_func(1,b_rol,w_rol,d_rol)
+    popf()
+    pop_operand(1)
+end
+
+function vm_ror()
+    push_operand(1)
+    push_operand(2)
+    size_func(1,b_ror,w_ror,d_ror)
+    popf()
+    pop_operand(1)
+end
+

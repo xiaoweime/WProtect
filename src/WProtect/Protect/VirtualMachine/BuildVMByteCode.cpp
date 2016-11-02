@@ -322,6 +322,14 @@ luai_def(w_shl)
 luai_def(d_shl)
 //luai_def(q_shl)
 
+luai_def(b_rol)
+luai_def(w_rol)
+luai_def(d_rol)
+
+luai_def(b_ror)
+luai_def(w_ror)
+luai_def(d_ror)
+
 luai_def(b_sar)
 luai_def(w_sar)
 luai_def(d_sar)
@@ -668,6 +676,15 @@ void register_build_vm_bytecode_lua()
          luai_reg(w_shl)
          luai_reg(d_shl)
          //luai_reg(q_shl)
+         luai_reg(b_rol)
+         luai_reg(w_rol)
+         luai_reg(d_rol)
+
+         luai_reg(b_ror)
+         luai_reg(w_ror)
+         luai_reg(d_ror)
+
+
 
          luai_reg(b_sar)
          luai_reg(w_sar)

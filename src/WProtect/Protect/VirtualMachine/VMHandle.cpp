@@ -3116,6 +3116,7 @@ handle_info VMHandle::b_rol()
   a.mov(al,byte_ptr(nbp));
   
   a.rol(al,cl);
+  a.mov(byte_ptr(nbp),al);
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3142,6 +3143,7 @@ handle_info VMHandle::w_rol()
   a.inc(nbp);
   a.mov(ax,word_ptr(nbp));
   a.rol(ax,cl);
+  a.mov(word_ptr(nbp),ax);
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3168,6 +3170,8 @@ handle_info VMHandle::d_rol()
   a.inc(nbp);
   a.mov(eax,dword_ptr(nbp));
   a.rol(eax,cl);
+  a.mov(dword_ptr(nbp),eax);
+
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3194,6 +3198,7 @@ handle_info VMHandle::q_rol()
   a.inc(nbp);
   a.mov(nax,qword_ptr(nbp));
   a.rol(nax,cl);
+  a.mov(qword_ptr(nbp),nax);
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3224,6 +3229,7 @@ handle_info VMHandle::b_ror()
   a.mov(al,byte_ptr(nbp));
   
   a.ror(al,cl);
+  a.mov(byte_ptr(nbp),al);
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3250,6 +3256,8 @@ handle_info VMHandle::w_ror()
   a.inc(nbp);
   a.mov(ax,word_ptr(nbp));
   a.ror(ax,cl);
+  a.mov(word_ptr(nbp),ax);
+
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3276,6 +3284,8 @@ handle_info VMHandle::d_ror()
   a.inc(nbp);
   a.mov(eax,dword_ptr(nbp));
   a.ror(eax,cl);
+  a.mov(dword_ptr(nbp),eax);
+
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);
@@ -3302,6 +3312,8 @@ handle_info VMHandle::q_ror()
   a.inc(nbp);
   a.mov(nax,qword_ptr(nbp));
   a.ror(nax,cl);
+  a.mov(qword_ptr(nbp),nax);
+
   a.pushf();
 #ifdef PROTECT_X64
   a.sub(nbp,8);

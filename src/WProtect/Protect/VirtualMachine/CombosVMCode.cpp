@@ -458,6 +458,50 @@ void VCombosVMCode::q_shr()
 }
 #endif                      
 
+void VCombosVMCode::b_rol()
+{
+    build_vm_mnemonic(get_handle(b_rol));
+}
+
+void VCombosVMCode::w_rol()
+{
+    build_vm_mnemonic(get_handle(w_rol));
+}
+
+void VCombosVMCode::d_rol()
+{
+    build_vm_mnemonic(get_handle(d_rol));
+}
+
+#ifdef PROTECT_X64
+void VCombosVMCode::q_rol()
+{
+    build_vm_mnemonic(get_handle(q_rol));
+}
+#endif                      
+
+
+void VCombosVMCode::b_ror()
+{
+    build_vm_mnemonic(get_handle(b_ror));
+}
+
+void VCombosVMCode::w_ror()
+{
+    build_vm_mnemonic(get_handle(w_ror));
+}
+
+void VCombosVMCode::d_ror()
+{
+    build_vm_mnemonic(get_handle(d_ror));
+}
+
+#ifdef PROTECT_X64
+void VCombosVMCode::q_ror()
+{
+    build_vm_mnemonic(get_handle(q_ror));
+}
+#endif                      
 
 void VCombosVMCode::b_sar()
 {

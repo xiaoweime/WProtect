@@ -17,7 +17,7 @@
 
 #ifndef WINDOWS_H
 #define WINDOWS_H
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #endif
